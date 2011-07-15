@@ -98,8 +98,7 @@ public class Program
 		// look for matching "]" - keep track of nesting level to know when match is found
 		int nestingLevel = 0;
 		
-		do
-		{
+		do {
 			char nextChar = getNextChar();
 			if (nextChar == ']')
 			{
@@ -112,7 +111,7 @@ public class Program
 					nestingLevel--;
 				}
 			}
-			else if (nextChar == ']')
+			else if (nextChar == '[')
 			{
 				nestingLevel++;
 			}
@@ -129,8 +128,7 @@ public class Program
 	{
 		// look for matching '[' - using nesting level to know when match is found
 		int nestingLevel = -1;
-		do
-		{
+		do {
 			char prevChar = getPreviousChar();
 			if (prevChar == '[')
 			{
