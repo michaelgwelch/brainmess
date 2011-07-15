@@ -38,7 +38,7 @@ public class ExecutionContext
 	 */
 	public static void main(String[] args)
 	{
-		Program p = new Program("/Users/mgwelch/helloworld.bm");
+		Program p = new Program(args[0]);
 		ExecutionContext context = new ExecutionContext(p, System.out, System.in);
 		
 		while (!p.isEndOfProgram())
