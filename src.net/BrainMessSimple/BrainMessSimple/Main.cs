@@ -187,6 +187,33 @@ output #12 even if it’s zero
 			programCounter -= 2;
 			int nestLevel = 1;
 			
+			
+			// discuss how to do LOOPS/ALGORITHMS PROPERY
+			// precondition/postcondition
+			// -- making progress and terminates
+			// -- loop invariant
+			// -- induction (base case, inductive case)
+			
+			// PreCondition - program counter is pointing at the character to "left" of ']' and nestLevel equals 1
+			// Loop Invariant: the nestLevel indicates how deeply nested inside of loops we are relative to the loop
+			//                 signfied by the ']' instruction that we are executing. Level 1 means this loop.
+			//                 0 means we are not inside of this loop. 2 means we are nested one loop deeper than
+			//                 this loop. After an iteration of the loop, the program counter is decreased by 1.
+			//
+			// Base Case: When we first encounter the loop nestLevel is 1 and we guarantee that 
+			//            Debug.Assert and the initialization above. We know we are inside of 1 loop.
+			// Inductive Case: Assume we are at nest level n and program counter q. If the current instruction is a
+			//                 ']' then we increment the nestLevel to (n+1). If the current instruction is a '['
+			//                  then we decrement the nestLevel to (n-1). For both cases the loop invariant holds.
+			// Termination: The loop is not guaranteed to terminate "gracefully". If the program has semantic errors
+			//              (like a non-matching '[' for a ']') this loop will terminate with an index out of bounds
+			//              exception. If the program has no semantic errors (all loop chars have matches) then
+			//              we will find the matching '[' and the program counter will be pointing to the character
+			//              preceding it when we exit the loop (Note: this means if the match is at program counter 0,
+			//              then the program counter will actually be -1 when we leave the loop.) And by the loop
+			//              invariant we know that the nestLevel will then be 0 and we will exit the loop. 
+			//              Since the instruction is supposed to leave the program counter pointing at the '['
+			//              we must increment it by 1.
 			while(nestLevel > 0)
 			{
 				var currentInstruction = program[programCounter];
