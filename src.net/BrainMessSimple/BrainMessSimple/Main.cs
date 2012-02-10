@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 namespace BrainMessSimple
 {
+	// Note: Testing is important. But so is thinking. In this program I've proved the correctness
+	// of the only two "algorithms" I had to write. Testing is great to try to make sure you 
+	// didn't miss anything. But the upfront thinking and proof will help you construct a better solution.
 	class MainClass
 	{
 		public static void Main (string[] args)
