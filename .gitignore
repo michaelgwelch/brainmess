@@ -2,5 +2,6 @@
 *.userprefs
 
 *.pidb
-
+*.suo
 bin/
+obj/
