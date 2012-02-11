@@ -87,16 +87,14 @@ output #12 even if it’s zero
 >
 ++++++++++++++++++++++++++++++++++++++++++++++++.");
 	
-			/*
+			
 			instance._program = new ProgramStream( @"
 ++++++++[<+++++++++>-]<.>+++++[<++++++>-]<-.
 +++++++..+++.>++++++++[<<++++>>-]<<.
 >>++++[<------>-]<.>++++[<++++++>-]<.
 +++.------.--------.<+.
-");*/
-			
-			instance.tape = new LinkedList<int>();
-			instance.currentCell = instance.tape.AddFirst(0);
+");
+			instance._tape = new Tape();
 			
 			instance.input = Console.In;
 			instance.output = Console.Out;
@@ -110,12 +108,14 @@ output #12 even if it’s zero
 		
 		private ProgramStream _program;
 		
-		// This sorta feels like a class, for same reasons.
-		LinkedList<int> tape;
-		LinkedListNode<int> currentCell;
+		private Tape _tape;
+		
+
 		
 		TextWriter output;
 		TextReader input;
+
+
 		
 		// uses "program" data, "tape" data, has information about instructions. Seems
 		// like an interaction between instructions, tape, and program.
@@ -132,30 +132,28 @@ output #12 even if it’s zero
 				switch (currentInstruction)
 				{
 				case '>':
-					currentCell = currentCell.Next;
-					if (currentCell == null) currentCell = tape.AddLast(0);
+					_tape.MoveForward();
 					break;
 				case '<':
-					currentCell = currentCell.Previous;
-					if (currentCell == null) currentCell = tape.AddFirst(0);
+					_tape.MoveBackward();
 					break;
 				case '+':
-					currentCell.Value++;
+					_tape.Increment();
 					break;
 				case '-':
-					currentCell.Value--;
+					_tape.Decrement();
 					break;
 				case '.':
-					output.Write((char)currentCell.Value);
+					output.Write((char)_tape.Current);
 					break;
 				case ',':
-					currentCell.Value = input.Read();
+					_tape.Current = input.Read();
 					break;
 				case '[':
-					if (currentCell.Value == 0) _program.JumpForward();
+					if (_tape.Current == 0) _program.JumpForward();
 					break;
 				case ']':
-					if (currentCell.Value != 0) _program.JumpBackward();
+					if (_tape.Current != 0) _program.JumpBackward();
 					break;
 				default:
 					break;
