@@ -19,11 +19,11 @@ namespace BrainMessSimple
 		}
 		
 		// Should be part of program class.
-		public char Fetch()
+		public Instruction Fetch()
 		{
 			var instruction = _program[_programCounter];
 			_programCounter++;
-			return instruction;
+			return Instruction.FromInt(instruction);
 		}
 		
 		// should be part of program class.
@@ -131,6 +131,7 @@ namespace BrainMessSimple
 			_programCounter++;
 			
 		}
+
 
 	}
 }

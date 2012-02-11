@@ -9,7 +9,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>BrainMessSimple</RootNamespace>
     <AssemblyName>BrainMessSimple</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -45,6 +44,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ProgramStream.cs" />
     <Compile Include="Tape.cs" />
+    <Compile Include="Instruction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

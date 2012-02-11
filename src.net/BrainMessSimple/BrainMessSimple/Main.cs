@@ -128,36 +128,8 @@ output #12 even if it’s zero
 		{
 			while(!_program.EndOfProgram)
 			{
-				char currentInstruction = _program.Fetch();
-				switch (currentInstruction)
-				{
-				case '>':
-					_tape.MoveForward();
-					break;
-				case '<':
-					_tape.MoveBackward();
-					break;
-				case '+':
-					_tape.Increment();
-					break;
-				case '-':
-					_tape.Decrement();
-					break;
-				case '.':
-					output.Write((char)_tape.Current);
-					break;
-				case ',':
-					_tape.Current = input.Read();
-					break;
-				case '[':
-					if (_tape.Current == 0) _program.JumpForward();
-					break;
-				case ']':
-					if (_tape.Current != 0) _program.JumpBackward();
-					break;
-				default:
-					break;
-				}
+				Instruction currentInstruction = _program.Fetch();
+				currentInstruction.Execute(_program, _tape, input, output);
 			}
 			
 		}
