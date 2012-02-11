@@ -10,9 +10,8 @@ namespace BrainMessSimple
 	{
 		public static void Main (string[] args)
 		{
-			var instance = new MainClass();
 			
-			instance._program = new ProgramStream(
+			var program = new ProgramStream(
 				@"+++++++++++ number of digits to output
 > #1
 + initial number
@@ -81,58 +80,34 @@ output #12 even if it’s zero
   [>>+>+<<<-]>>>[<<<+>>>-]<<[<+>-]>[<+>-]<<<-
 ]");
 			
-			instance._program = new ProgramStream(@",
+			program = new ProgramStream(@",
 ------------------------------------------------
 [->++<]
 >
 ++++++++++++++++++++++++++++++++++++++++++++++++.");
 	
-			
-			instance._program = new ProgramStream( @"
+		/*	
+			program = new ProgramStream( @"
 ++++++++[<+++++++++>-]<.>+++++[<++++++>-]<-.
 +++++++..+++.>++++++++[<<++++>>-]<<.
 >>++++[<------>-]<.>++++[<++++++>-]<.
 +++.------.--------.<+.
-");
-			instance._tape = new Tape();
+");*/
+			var tape = new Tape();
 			
-			instance.input = Console.In;
-			instance.output = Console.Out;
+			var input = Console.In;
+			var output = Console.Out;
 			
-			instance.Interpret();
-			
-			instance.output.Close();
-			instance.input.Close();
-		}
-		
-		
-		private ProgramStream _program;
-		
-		private Tape _tape;
-		
-
-		
-		TextWriter output;
-		TextReader input;
-
-
-		
-		// uses "program" data, "tape" data, has information about instructions. Seems
-		// like an interaction between instructions, tape, and program.
-		
-		// Refactorings you can use. Extract method on each case body.
-		
-		// Unit testing this requires that you write "programs" to exercise all possibilities.
-		// Which is probably doable but tricky. 
-		public void Interpret()
-		{
-			while(!_program.EndOfProgram)
-			{
-				Instruction currentInstruction = _program.Fetch();
-				currentInstruction.Execute(_program, _tape, input, output);
-			}
+			Interpreter interpreter = new Interpreter(program, tape, input, output);
+			interpreter.Run();
+			/*
+			output.Close();
+			input.Close();*/
 			
 		}
+		
+		
+
 		
 		
 
