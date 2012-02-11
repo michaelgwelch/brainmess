@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-namespace BrainMessSimple
+namespace Welch.Brainmess
 {
 	// Note: Testing is important. But so is thinking. In this program I've proved the correctness
 	// of the only two "algorithms" I had to write. Testing is great to try to make sure you 
@@ -79,7 +79,7 @@ output #12 even if it’s zero
   << #1
   [>>+>+<<<-]>>>[<<<+>>>-]<<[<+>-]>[<+>-]<<<-
 ]");
-			
+		/*	
 			program = new ProgramStream(@",
 ------------------------------------------------
 [->++<]

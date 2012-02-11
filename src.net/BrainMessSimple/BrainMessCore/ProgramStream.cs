@@ -1,6 +1,6 @@
 using System;
 
-namespace BrainMessSimple
+namespace Welch.Brainmess
 {
 	/// <summary>
 	/// A stream of Brainmess instructions.

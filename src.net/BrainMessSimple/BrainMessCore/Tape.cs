@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BrainMessSimple
+namespace Welch.Brainmess
 {
 	public class Tape
 	{

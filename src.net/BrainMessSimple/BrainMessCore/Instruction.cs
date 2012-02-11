@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace BrainMessSimple
+namespace Welch.Brainmess
 {
 	public class Instruction
 	{
