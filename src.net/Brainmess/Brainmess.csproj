@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BrainMessCore\BrainMessCore.csproj">
+    <ProjectReference Include="..\BrainMessCore\BrainmessCore.csproj">
       <Project>{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}</Project>
-      <Name>BrainMessCore</Name>
+      <Name>BrainmessCore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
