@@ -1,0 +1,224 @@
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{courier}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{xspace}
+\usepackage{synttree}
+
+\lstset{language={[Sharp]C}}
+\lstset{upquote=true}
+\lstset{basicstyle=\footnotesize\ttfamily,keywordstyle=\color{blue},extendedchars=true}
+\newcommand{\inlcsharp}{\lstinline[breaklines=true}
+
+\begin{document}
+
+\title{Proof of Jump Algorithms Correctness}
+\author{Michael Welch}
+\maketitle
+
+\section*{Introduction}
+In this Refactoring study group the emphasis is on making existing code
+better and having tests in place to prove that a refactoring did not
+break the code.
+
+However, when writing new code, one should not rely solely on testing
+to prove their code is correct (no matter how much TDD proponents may say
+so). One should think about their code ahead of time. In particular,
+for any algorithm one writes, one can sketch out
+the code and write a proof that the algorithm is correct.
+
+In my implementation of Brainmess, there were only two methods that
+were not completely trivial, and therefore I thought about the proofs.
+The two methods are JumpForward and JumpBackward on my ProgramStream
+class.
+
+\section*{Loop Invariant Proofs}
+The proofs of each of my methods, employs a technique called the
+proof by loop invariant. This technique requires that one
+identify some important property that the loop has, show that this
+property is true initially and after every iteration of the loop,
+and finally because of this property proves the algorithm. It is very
+much like an inductive proof.
+
+The proof must show three things
+
+\begin{enumerate}
+\item Initialization: The property holds before executing the loop, after initilization is complete.
+
+\item Maintenance: The property holds after each iteration of the loop.
+
+\item Termindation: The loop eventually terminates.
+\end{enumerate}
+
+Let's take a look at my algorithm for JumpForward. First it is important
+to note that the algorithm is accessing 2 fields: \_program and 
+\_programCounter. The first is a string which holds the whol program.
+The second is an integer which holds the index value of the current
+instruction in \_program. The listing for the algorithm is in
+figure~\ref{fig:jumpforward}.
+
+\begin{figure}
+\caption{The listing of JumpForward}
+\label{fig:jumpforward}
+\begin{lstlisting}[numbers=left]
+internal void JumpForward()
+{
+    Debug.Assert(_program [_programCounter - 1] == '[');
+    int nestLevel = 1;
+
+    while (nestLevel > 0)
+    {
+        var currentInstruction = _program [_programCounter];
+        
+        if (currentInstruction == ']') nestLevel--;
+        else if (currentInstruction == '[') nestLevel++;
+        
+        _programCounter++;
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+\subsection*{Preconditions and Postconditions}
+First, we need to identify the preconditions and postconditions. The 
+precondition is that there is a `[' character at index value $q$,
+and that the \_programCounter currently has a value of $q+1$. The
+character at index $q$ represents the location we are jumping from.
+
+Another precondition is that \_program is a well-formed program with
+matching jump bracket characters. While we can (and will) say something
+about what will happen in the presence of non-matching brackets, we
+don't really care if the algorithm works or not in that case.
+
+Given the second precondition we know that the character at index value
+$q$ has a matching `]' character at some index value $r$.
+
+The postcondition is that when we are done the \_programCounter will
+be contain the value $r+1$ (or in the case of a malformed program
+the program eventually terminates with an index out of bounds exception).
+
+\subsection*{Loop Invariant Property}
+The property of the loop that is important to our proof is the following: The
+\verb!nestLevel! has a value, lets' call it $n$ that indicates how deeply
+nested we are with regard to the loop identified by location $q$. A value of 0
+means that we are outside of that loop. A value of 1 means we are inside of
+that loop, but not nested inside of any other loops. A value of 2 means we are
+inside of a loop that is inside of the loop identified by the $q$ location.
+etc. In addition, if \verb!nestLevel! changes during an iteration then
+\verb!_programCounter! has a value one larger than the index value
+of the character that caused the \verb!nestLevel! to change. This last
+part of the invariant could be captured in the program if I had a 
+\verb!nestLevelChanged! variable to capture if the current iteration
+changed the level. But that doesn't add anything useful to the program,
+(only to the proof), and in anyway I only need that bit to be true
+when we exit the loop and we know it's always true, or we would
+have exited the loop previously. See figure~\ref{fig:jumpforwardlong}.
+
+\begin{figure}
+\caption{The long version of jump forward}
+\label{fig:jumpforwardlong}
+\begin{lstlisting}
+internal void JumpForward()
+{
+    Debug.Assert(_program [_programCounter - 1] == '[');
+    int nestLevel = 1;
+    bool nestLevelChanged = true;
+
+    while (nestLevel > 0)
+    {
+        var currentInstruction = _program [_programCounter];
+        
+        if (currentInstruction == ']') 
+        {
+            nestLevel--; 
+            nestLevelChanged=true;
+        }
+        else if (currentInstruction == '[') 
+        {
+            nestLevel++;
+            nestLevelChanged=true;
+        }
+        else
+        {
+            nextLevelChanged = false;
+        }
+        
+        _programCounter++;
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+This is the invariant property. We will show that it holds before
+entering the loop and after each iteration of the loop (assuming
+it help for the previous iteration).
+
+\subsection*{Initialization}
+The invariant is trivially true after initialization. The 
+\verb!Assert! on line 3 checks to make sure that the first precondition holds.
+And since the precondition holds we set \verb!nestLevel! equal to 1 and the 
+invariant is true before entering the loop.
+
+\subsection*{Maintenance}
+We assume that \verb!nestLevel! has the value $n$ and that it accurately
+reflects our current nesting level at beginning of an iteration.
+
+We test the condition that \verb!nestLevel > 0! is true. Inside of the loop
+we get the instruction at the program counter.
+
+We then have 3 cases to consider. The instruction is a `[', or a ']' or some
+other character. No matter which case we increment \verb!_programCounter!
+on line 13.
+
+So the 3 cases are:
+
+\begin{enumerate}
+\item If the instruction is a `[' then we are entering a nested loop and
+\verb!nestLevel! is incremented to reflect that. See line 10. Also,
+note that the \verb!_programCounter! is just to the right of the character
+that caused the nest level to change.
+
+\item If the instruction is a `]' then we are leaving a nest loop and
+\verb!nestLevel! is decremented to reflect that. See line 11. Again,
+the program counter when we leave the iteraiton is one larger than
+the index value of the character that caused the nest leve to change.
+
+\item If we see any other instruction the nesting doesn't change and
+the \verb!nestLevel! is not modified.
+\end{enumerate}
+
+Note, there is a fourth case which only happens if a program is
+malformed. It is possible that the program counter has been incremented
+off the end of the program and we get an exception when retrieving the 
+insruction. This is guaranteed (by definition and this proof) not to happen 
+if the program is well-formed. 
+
+\subsection*{Termination}
+We must show that the loop eventually terminates. At each iteration
+there are 2 cases: 1) the match was found or 2) the match was not found.
+If the match was found then the nest level will go to 0 and we exit the loop.
+If the match was not found then we increment the program counter and try
+again. If there is a match, we must therefore find it an terminate. If 
+there is not a match then the program will terminate ungracefully due
+to an exception.
+
+\subsection*{Putting it all Together}
+There are lots of individual pieces to put together to see the end proof.
+We have shown that our loop has an important property. It keeps the value
+of \verb!nestLevel! so that it always correctly indicates our nesting level
+relative to our start character. Also, the program counter is known to be just
+to the right of a jump character at the end of an iteration if the nest 
+level changed during that iteration.
+
+So we know we can trust the nest level variable. As soon as well see
+that is is no longer greater than 0, we exit the loop and we know that our
+program counter is just to the right of the matching `]' character.
+
+
+\end{document}

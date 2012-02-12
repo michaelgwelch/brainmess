@@ -1,7 +1,10 @@
 
 *.userprefs
-
+*.log
+*.pdf
 *.pidb
 *.suo
+*.out
+*.aux
 bin/
 obj/
