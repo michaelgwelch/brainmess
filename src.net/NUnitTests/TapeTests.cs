@@ -8,6 +8,14 @@ namespace Welch.Brainmess
 	[TestFixture()]
 	public class TapeTests
 	{
+		
+		// Some bad smells. Several of my tests require that my Act phase uses two different methods
+		// The one I'm testing and another one to cause a side effect.
+		
+		// Another thing that permeates all of this is that I construct tapes in Assembly phases
+		// But I don't really have any tests of the static constructors.
+		
+		
 		[Test()]
 		public void Current_ConstructDefault_ExpectCurrentIsZero()
 		{
@@ -20,7 +28,7 @@ namespace Welch.Brainmess
 		{
 			// Assemble
 			int expectedValue = 55;		
-			var list = new LinkedList<int>();
+			var list = new LinkedList<int> ();
 			list.AddFirst(expectedValue);
 			
 			// Act
@@ -29,9 +37,6 @@ namespace Welch.Brainmess
 			// Assert - The first value in the list should equal the value of the current cell on the tape.
 			Assert.AreEqual(expectedValue, tape.Current);
 		}
-		
-		
-		
 
 		[Test]
 		public void Increment_ConstructFromValues_ExpectIncrementToIncrementTheCell()
@@ -39,7 +44,7 @@ namespace Welch.Brainmess
 			// Assemble
 			int expectedValue = 23;
 			
-			var list = new LinkedList<int>();
+			var list = new LinkedList<int> ();
 			var firstCell = list.AddFirst(expectedValue - 1);
 			
 			var tape = Tape.Wrap(list);
@@ -58,7 +63,7 @@ namespace Welch.Brainmess
 			// Assemble
 			int expectedValue = 45;
 			
-			var list = new LinkedList<int>();
+			var list = new LinkedList<int> ();
 			var firstCell = list.AddFirst(expectedValue + 1);
 			
 			var tape = Tape.Wrap(list);
@@ -79,7 +84,7 @@ namespace Welch.Brainmess
 
 			// Assemble
 			var expectedValue = -234;
-			var list = new LinkedList<int>();
+			var list = new LinkedList<int> ();
 			var tape = Tape.Wrap(list);
 			
 			// Act
@@ -96,15 +101,15 @@ namespace Welch.Brainmess
 		public void MoveForward_ConstructFromMultiCellListMoveForwardAndMutate_ExpectSecondCellMatchesValue()
 		{
 			// Assemble
-			var initialList  = new int[] {1,3,5,7,11,13,17,19};
+			var initialList = new int[] {1,3,5,7,11,13,17,19};
 			var expectedList = new int[] {1,9,5,7,11,13,17,19}; // expect second element to change.
 			
-			var list = new LinkedList<int>(initialList);
+			var list = new LinkedList<int> (initialList);
 			var tape = Tape.Wrap(list);
 			
 			// Act
 			tape.MoveForward();
-			tape.Current = expectedList[1]; // grap the value from second cell
+			tape.Current = expectedList [1]; // grap the value from second cell
 			
 			// Assert
 			CollectionAssert.AreEqual(expectedList, list.ToArray());
@@ -118,12 +123,12 @@ namespace Welch.Brainmess
 			var initialList = new int[] {19,17,13,11,7,5,3,1};
 			var expectedList = new int[]{19,17,13,11,7,5,9,1};
 			
-			var list = new LinkedList<int>(initialList);
+			var list = new LinkedList<int> (initialList);
 			var tape = Tape.Wrap(list, Tape.InitialCursorPosition.Tail);
 			
 			// Act
 			tape.MoveBackward();
-			tape.Current = expectedList[expectedList.Length - 2]; // grab the value second from the end
+			tape.Current = expectedList [expectedList.Length - 2]; // grab the value second from the end
 			
 			// Assert
 			CollectionAssert.AreEqual(expectedList, list.ToArray());
@@ -134,7 +139,7 @@ namespace Welch.Brainmess
 		{
 			// Assemble
 			var expectedValue = -456;
-			var list = new LinkedList<int>();
+			var list = new LinkedList<int> ();
 			var tape = Tape.Wrap(list);
 			
 			// Act
@@ -153,8 +158,7 @@ namespace Welch.Brainmess
 			{
 				Tape.Wrap(null);
 				Assert.Fail("Expect ArgumentNullException");
-			}
-			catch(ArgumentNullException)
+			} catch (ArgumentNullException)
 			{
 			}
 		}
@@ -164,10 +168,9 @@ namespace Welch.Brainmess
 		{
 			try
 			{
-				Tape.Wrap(new LinkedList<int>(), (Tape.InitialCursorPosition) 55);
+				Tape.Wrap(new LinkedList<int> (), (Tape.InitialCursorPosition)55);
 				Assert.Fail("Expected an ArgumentOutOfRangeException");
-			}
-			catch(ArgumentOutOfRangeException)
+			} catch (ArgumentOutOfRangeException)
 			{
 			}
 		}
