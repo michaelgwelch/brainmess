@@ -10,11 +10,14 @@
 \usepackage{hyperref}
 \usepackage{xspace}
 \usepackage{synttree}
+\usepackage{amsthm}
+\usepackage{fourier-orns}
 
 \lstset{language={[Sharp]C}}
 \lstset{upquote=true}
 \lstset{basicstyle=\footnotesize\ttfamily,keywordstyle=\color{blue},extendedchars=true}
-\newcommand{\inlcsharp}{\lstinline[breaklines=true}
+\newcommand{\inl}{\lstinline[breaklines=true]}
+\newtheorem*{invariant}{Invariant}
 
 \begin{document}
 
@@ -36,189 +39,190 @@ the code and write a proof that the algorithm is correct.
 In my implementation of Brainmess, there were only two methods that
 were not completely trivial, and therefore I thought about the proofs.
 The two methods are JumpForward and JumpBackward on my ProgramStream
-class.
+class. We will not write proofs for our code. I'm not that academic.
+However, you should be going thru a thought process like this as you decide
+if your algorithms are correct. It actually takes less time to think 
+thru all of this, then it does to type it all up and explain it.
 
 \section*{Loop Invariant Proofs}
-The proofs of each of my methods, employs a technique called the
+The proof of my JumpForward method, employs a technique called the
 proof by loop invariant. This technique requires that one
 identify some important property that the loop has, show that this
 property is true initially and after every iteration of the loop,
-and finally because of this property proves the algorithm. It is very
+and finally show that the loop terminates. It is very
 much like an inductive proof.
 
-The proof must show three things
+The proof must show three things:
 
 \begin{enumerate}
 \item Initialization: The property holds before executing the loop, after initilization is complete.
 
 \item Maintenance: The property holds after each iteration of the loop.
 
-\item Termindation: The loop eventually terminates.
+\item Termination: The loop eventually terminates.
 \end{enumerate}
 
-Let's take a look at my algorithm for JumpForward. First it is important
-to note that the algorithm is accessing 2 fields: \_program and 
-\_programCounter. The first is a string which holds the whol program.
-The second is an integer which holds the index value of the current
-instruction in \_program. The listing for the algorithm is in
-figure~\ref{fig:jumpforward}.
+Let's take a look at my algorithm for JumpForward. This algorithm
+is written as a function. (My actual implementation is a method
+that accesses fields. This implementation stands alone and is easier
+to talk about.) The function takes a program as a string, and
+the current program counter as an int. It returns the new value to use
+for the program counter after the jump is executed.
+
+The listing for the algorithm is in figure~\ref{fig:jumpforward}.
 
 \begin{figure}
 \caption{The listing of JumpForward}
 \label{fig:jumpforward}
 \begin{lstlisting}[numbers=left]
-internal void JumpForward()
+internal int JumpForward(string prog, int pc)
 {
-    Debug.Assert(_program [_programCounter - 1] == '[');
     int nestLevel = 1;
 
     while (nestLevel > 0)
     {
-        var currentInstruction = _program [_programCounter];
+        var instruction = prog[pc];
         
-        if (currentInstruction == ']') nestLevel--;
-        else if (currentInstruction == '[') nestLevel++;
+        if (instruction == ']') nestLevel--;
+        else if (instruction == '[') nestLevel++;
         
-        _programCounter++;
+        pc++;
     }
+	
+    return pc;
 }
 \end{lstlisting}
 \end{figure}
 
-\subsection*{Preconditions and Postconditions}
-First, we need to identify the preconditions and postconditions. The 
-precondition is that there is a `[' character at index value $q$,
-and that the \_programCounter currently has a value of $q+1$. The
-character at index $q$ represents the location we are jumping from.
+\begin{proof}
+The following sections will lay out the proof.
 
-Another precondition is that \_program is a well-formed program with
+\subsection*{Preconditions and Postconditions}
+First, we need to identify the preconditions and postconditions. The
+precondition is that there is a \inl!'['! character at index value $q$, and
+that \inl!pc! currently has a value of $q + 1$. The
+character at index $q$ represents the location we are jumping from.
+(I used a \inl!Debug.Assert! in my actual code to make sure this condition
+always holds.) 
+
+Another precondition is that \inl!program! is a well-formed program with
 matching jump bracket characters. While we can (and will) say something
 about what will happen in the presence of non-matching brackets, we
 don't really care if the algorithm works or not in that case.
 
 Given the second precondition we know that the character at index value
-$q$ has a matching `]' character at some index value $r$.
+$q$ has a matching \inl!']'! character at some index value. We'll name
+this location $r$ even though we don't know its specific value (that
+is what we will determine).
 
-The postcondition is that when we are done the \_programCounter will
-be contain the value $r+1$ (or in the case of a malformed program
+The postcondition is that when we are done \inl!pc! will
+contain the value $r + 1$ (or in the case of a malformed program
 the program eventually terminates with an index out of bounds exception).
+This is what we will prove.
 
 \subsection*{Loop Invariant Property}
-The property of the loop that is important to our proof is the following: The
-\verb!nestLevel! has a value, lets' call it $n$ that indicates how deeply
-nested we are with regard to the loop identified by location $q$. A value of 0
-means that we are outside of that loop. A value of 1 means we are inside of
-that loop, but not nested inside of any other loops. A value of 2 means we are
-inside of a loop that is inside of the loop identified by the $q$ location.
-etc. In addition, if \verb!nestLevel! changes during an iteration then
-\verb!_programCounter! has a value one larger than the index value
-of the character that caused the \verb!nestLevel! to change. This last
-part of the invariant could be captured in the program if I had a 
-\verb!nestLevelChanged! variable to capture if the current iteration
-changed the level. But that doesn't add anything useful to the program,
-(only to the proof), and in anyway I only need that bit to be true
-when we exit the loop and we know it's always true, or we would
-have exited the loop previously. See figure~\ref{fig:jumpforwardlong}.
+The property of the loop that is important to our proof is the following: 
 
-\begin{figure}
-\caption{The long version of jump forward}
-\label{fig:jumpforwardlong}
-\begin{lstlisting}
-internal void JumpForward()
-{
-    Debug.Assert(_program [_programCounter - 1] == '[');
-    int nestLevel = 1;
-    bool nestLevelChanged = true;
+\begin{invariant}
+The \inl!nestLevel! always correctly indicates the nesting level of the
+program counter relative to the character at position $q$. 
+\end{invariant}
 
-    while (nestLevel > 0)
-    {
-        var currentInstruction = _program [_programCounter];
-        
-        if (currentInstruction == ']') 
-        {
-            nestLevel--; 
-            nestLevelChanged=true;
-        }
-        else if (currentInstruction == '[') 
-        {
-            nestLevel++;
-            nestLevelChanged=true;
-        }
-        else
-        {
-            nextLevelChanged = false;
-        }
-        
-        _programCounter++;
-    }
-}
-\end{lstlisting}
-\end{figure}
+A value of 0 means
+we are outside of the loop. A value of 1 means we are inside the loop.
+A value of 2 means we are inside of a loop that is nested inside
+of the loop.
 
-This is the invariant property. We will show that it holds before
-entering the loop and after each iteration of the loop (assuming
-it help for the previous iteration).
+This is the invariant property. We will show that it holds before entering the
+loop.  We will also show that if it holds at the beginning of an
+iteration then it will still hold after each iteration of the loop.
+
 
 \subsection*{Initialization}
-The invariant is trivially true after initialization. The 
-\verb!Assert! on line 3 checks to make sure that the first precondition holds.
-And since the precondition holds we set \verb!nestLevel! equal to 1 and the 
-invariant is true before entering the loop.
+The invariant is trivially true after initialization. By the precondition,
+we know that the program counter is at $q + 1$ and therefore we are at a
+nesting level of 1 and thefore we initialize \inl!nestLevel! to the value 1
+on line 3.
 
 \subsection*{Maintenance}
-We assume that \verb!nestLevel! has the value $n$ and that it accurately
+We assume that \inl!nestLevel! accurately
 reflects our current nesting level at beginning of an iteration.
 
-We test the condition that \verb!nestLevel > 0! is true. Inside of the loop
+We test the condition that \inl!nestLevel > 0! is true. Inside of the loop
 we get the instruction at the program counter.
 
-We then have 3 cases to consider. The instruction is a `[', or a ']' or some
-other character. No matter which case we increment \verb!_programCounter!
-on line 13.
+We then have 3 cases to consider. The instruction is a \inl!'['!, or a
+\inl!']'! or some other character. No matter what we increment \inl!pc!  on
+line 12.
 
 So the 3 cases are:
 
 \begin{enumerate}
-\item If the instruction is a `[' then we are entering a nested loop and
-\verb!nestLevel! is incremented to reflect that. See line 10. Also,
-note that the \verb!_programCounter! is just to the right of the character
-that caused the nest level to change.
+\item If the instruction is a \inl!'['! then we are entering a nested loop and
+\inl!nestLevel! is incremented to reflect that. See line 9. 
 
-\item If the instruction is a `]' then we are leaving a nest loop and
-\verb!nestLevel! is decremented to reflect that. See line 11. Again,
-the program counter when we leave the iteraiton is one larger than
-the index value of the character that caused the nest leve to change.
+\item If the instruction is a \inl!`]'! then we are leaving a nested loop and
+\inl!nestLevel! is decremented to reflect that. See line 10.
 
 \item If we see any other instruction the nesting doesn't change and
-the \verb!nestLevel! is not modified.
+the \inl!nestLevel! is not modified.
 \end{enumerate}
 
+So we see that no matter what happens in the loop, the \inl!nestLevel!
+accurately represents the nesting level when we end the iteration.
+
+\begin{center}
+\framebox[4in]{
+\begin{minipage}[t]{3.5in}
+{\Large{\bomb}}
 Note, there is a fourth case which only happens if a program is
 malformed. It is possible that the program counter has been incremented
 off the end of the program and we get an exception when retrieving the 
 insruction. This is guaranteed (by definition and this proof) not to happen 
 if the program is well-formed. 
+\end{minipage}
+}
+\end{center}
 
 \subsection*{Termination}
-We must show that the loop eventually terminates. At each iteration
-there are 2 cases: 1) the match was found or 2) the match was not found.
-If the match was found then the nest level will go to 0 and we exit the loop.
-If the match was not found then we increment the program counter and try
-again. If there is a match, we must therefore find it an terminate. If 
-there is not a match then the program will terminate ungracefully due
-to an exception.
+In general a bounding function will give us an upper bound on how many 
+iterations are left to execute and allows us to show that our algorithm isn't
+an infinite loop. After each iteration of the loop the value of this 
+function must get smaller. If it every stays the same (or gets bigger) then
+there is a chance that we have an infinitie loop.
+
+Recall that based on our preconditions there is a \inl!'['! at index $q$,
+that \inl!pc! has a value of $q + 1$ and that we know there is a matching
+\inl!']'! at some index value $r$. On each iteration, we get one step closer
+to the matching bracket. So our bounding function is $r - pc + 1$.
+
+This bounding function tells us that we will execute the loop a finite
+number of times. And it tells us that it gets smaller with each iteration.
+This can be seen by remembering that the program counter is incremented on
+every iteration.
+
+Let's check this on the trivial case. Assume we have the program
+\inl!"[]"!. In this case $q=0$, $pc=1$, and $r=1$. Then at the beginning
+of the loop the value of our bounding function is $r - pc + 1$ or
+$1 - 1 + 1 = 1$. This is correct. We will run the loop one time before
+finding our match.
+
 
 \subsection*{Putting it all Together}
-There are lots of individual pieces to put together to see the end proof.
-We have shown that our loop has an important property. It keeps the value
-of \verb!nestLevel! so that it always correctly indicates our nesting level
-relative to our start character. Also, the program counter is known to be just
-to the right of a jump character at the end of an iteration if the nest 
-level changed during that iteration.
+We have shown that our loop has an important property. It maintains the value
+of \inl!nestLevel! so that it always correctly indicates our nesting level
+relative to our start character. 
 
-So we know we can trust the nest level variable. As soon as well see
-that is is no longer greater than 0, we exit the loop and we know that our
-program counter is just to the right of the matching `]' character.
+We also know by inspection that we exit the loop as soon as the nesting
+level hits 0. And this only happens after we have processed the
+matching \inl!']'! character at position $r$. We also know that 
+\inl!pc! will have the value of $r+1$ at this time. (To see this fact
+let's consider our last iteration. We read the \inl!']'! character at position
+$r$ on line 7. On line 9 we decrement the nest level to 0. Then on line 12 we
+update the program counter to $r+1$.)
 
-
+This is the postcondition we meant to demonstrate. So we have shown that this
+algorithm successfully locates and returns the instruction after the matching
+bracket character.
+\end{proof}
 \end{document}
