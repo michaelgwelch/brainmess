@@ -42,6 +42,5 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TapeTests.cs" />
-    <Compile Include="InstructionTests.cs" />
   </ItemGroup>
 </Project>

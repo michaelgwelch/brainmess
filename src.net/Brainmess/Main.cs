@@ -93,7 +93,7 @@ output #12 even if it’s zero
 >>++++[<------>-]<.>++++[<++++++>-]<.
 +++.------.--------.<+.
 ");*/
-			var tape = new Tape();
+			var tape = Tape.Zeros();
 			
 			var input = Console.In;
 			var output = Console.Out;
