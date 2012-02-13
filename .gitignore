@@ -1,6 +1,12 @@
-*.suo
 *.userprefs
-
+*.log
+*.pdf
 *.pidb
-
+*.suo
+*.out
+*.aux
 bin/
+obj/
+*.xml
+*.test-cache
+*.swp

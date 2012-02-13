@@ -1,0 +1,90 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainmessCore", "BrainMessCore\BrainmessCore.csproj", "{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainmess", "Brainmess\Brainmess.csproj", "{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainmessCoreTests", "BrainmessCoreTests\BrainmessCoreTests.csproj", "{2B47777F-2A3A-4C2B-8262-871D1185564D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AB765630-2250-4E2C-AE64-1365F918895B}"
+	ProjectSection(SolutionItems) = preProject
+		Brainmess.vsmdi = Brainmess.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTests", "NUnitTests\NUnitTests.csproj", "{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{15F9E2C0-17C1-48B1-9A1D-954CB4A49976}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2B47777F-2A3A-4C2B-8262-871D1185564D}.Release|x86.ActiveCfg = Release|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Debug|x86.Build.0 = Debug|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Release|x86.ActiveCfg = Release|Any CPU
+		{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}.Release|x86.Build.0 = Release|Any CPU
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Debug|Any CPU.Build.0 = Debug|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Debug|x86.ActiveCfg = Debug|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Debug|x86.Build.0 = Debug|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Release|Any CPU.ActiveCfg = Release|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Release|Mixed Platforms.Build.0 = Release|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Release|x86.ActiveCfg = Release|x86
+		{DEAD6BB4-AFB6-409C-B229-0135E6A9AD98}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Brainmess\Brainmess.csproj
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.FileWidth = 120
+		$1.inheritsSet = VisualStudio
+		$1.inheritsScope = text/plain
+		$1.scope = text/plain
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Brainmess.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
