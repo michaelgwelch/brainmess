@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ACF16A8B-DBBA-452D-98DE-D628A52DD78C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>NUnitTests</RootNamespace>
+    <RootNamespace>Welch.Brainmess</RootNamespace>
     <AssemblyName>NUnitTests</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -42,5 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TapeTests.cs" />
+    <Compile Include="BracketsTests.cs" />
+    <Compile Include="LinkedListNodeTests.cs" />
   </ItemGroup>
 </Project>

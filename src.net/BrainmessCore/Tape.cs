@@ -32,10 +32,6 @@ namespace Welch.Brainmess
 			/// </summary>
 			Tail
 		}
-		
-		
-		// Immutable "State" - we always reference the same list
-		private readonly LinkedList<int> _cells;
         
 		// Mutabale State
 		private LinkedListNode<int> _currentCell;
@@ -95,7 +91,6 @@ namespace Welch.Brainmess
 			Debug.Assert(cells.Any());
 			Debug.Assert(Enum.IsDefined(typeof(InitialCursorPosition), position));
 			
-			_cells = cells;
 			_currentCell = (position == InitialCursorPosition.Head ? cells.First : cells.Last);
 		}
 		
@@ -104,11 +99,7 @@ namespace Welch.Brainmess
 		/// </summary>
 		public void MoveForward()
 		{
-			_currentCell = _currentCell.Next;
-			if (_currentCell == null)
-			{
-				_currentCell = _cells.AddLast(0);
-			}
+            _currentCell = _currentCell.MoveForward();
 		}
 		
 		/// <summary>
@@ -116,11 +107,7 @@ namespace Welch.Brainmess
 		/// </summary>
 		public void MoveBackward()
 		{
-			_currentCell = _currentCell.Previous;
-			if (_currentCell == null)
-			{
-				_currentCell = _cells.AddFirst(0);
-			}
+			_currentCell = _currentCell.MoveBackward();
 		}
 		
 		/// <summary>
