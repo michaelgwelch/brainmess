@@ -10,3 +10,6 @@ obj/
 *.xml
 *.test-cache
 *.swp
+_ReSharper.*/
+TestResults/
+*.ReSharper.user
