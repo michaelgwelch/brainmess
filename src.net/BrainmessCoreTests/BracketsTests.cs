@@ -21,7 +21,7 @@ namespace Welch.Brainmess
             try
             {
                 // Act
-                var matchIndex = Brackets.FindMatch(sequence, 3);
+                var matchIndex = String.FindMatch(sequence, 3);
 
                 // Assert
                 Assert.Fail("Expected ArgumentException");
@@ -41,7 +41,7 @@ namespace Welch.Brainmess
             string sequence = "abcd[   djskd dksj] dsksld";
 
             // Act
-            var matchIndex = Brackets.FindMatch(sequence, 4);
+            var matchIndex = String.FindMatch(sequence, 4);
 
             // Assert
             Assert.AreEqual(18, matchIndex);
@@ -56,7 +56,7 @@ namespace Welch.Brainmess
             string sequence = "abcd[   [jskd ]ksj] dsksld";
 
             // Act
-            var matchIndex = Brackets.FindMatch(sequence, 4);
+            var matchIndex = String.FindMatch(sequence, 4);
 
             // Assert
             Assert.AreEqual(18, matchIndex);
@@ -71,7 +71,7 @@ namespace Welch.Brainmess
             string sequence = "a[cd[  ][jskd lksj] dsks]d";
 
             // Act
-            var matchIndex = Brackets.FindMatch(sequence, 1);
+            var matchIndex = String.FindMatch(sequence, 1);
 
             // Assert
             Assert.AreEqual(24, matchIndex);
@@ -86,7 +86,7 @@ namespace Welch.Brainmess
             string sequence = "abcd[   [j[kd ]ks]h] dsksld";
 
             // Act
-            var matchIndex = Brackets.FindMatch(sequence, 4);
+            var matchIndex = String.FindMatch(sequence, 4);
 
             // Assert
             Assert.AreEqual(19, matchIndex);
@@ -102,7 +102,7 @@ namespace Welch.Brainmess
             string sequence = "abcd[   djskd dksj] dsksld";
 
             // Act
-            var matchIndex = Brackets.FindMatch(sequence, 18);
+            var matchIndex = String.FindMatch(sequence, 18);
 
             // Assert
             Assert.AreEqual(4, matchIndex);
@@ -117,7 +117,7 @@ namespace Welch.Brainmess
             string sequence = "abcd[   [jskd ]ksj] dsksld";
 
             // Act
-            var matchIndex = Brackets.FindMatch(sequence, 18);
+            var matchIndex = String.FindMatch(sequence, 18);
 
             // Assert
             Assert.AreEqual(4, matchIndex);
@@ -132,7 +132,7 @@ namespace Welch.Brainmess
             string sequence = "a[cd[  ][jskd lksj] dsks]d";
 
             // Act
-            var matchIndex = Brackets.FindMatch(sequence, 24);
+            var matchIndex = String.FindMatch(sequence, 24);
 
             // Assert
             Assert.AreEqual(1, matchIndex);
@@ -147,7 +147,7 @@ namespace Welch.Brainmess
             string sequence = "abcd[   [j[kd ]ks]h] dsksld";
 
             // Act
-            var matchIndex = Brackets.FindMatch(sequence, 19);
+            var matchIndex = String.FindMatch(sequence, 19);
 
             // Assert
             Assert.AreEqual(4, matchIndex);
