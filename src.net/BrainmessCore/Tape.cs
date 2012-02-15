@@ -11,18 +11,17 @@ namespace Welch.Brainmess
     /// Brainmess program. The tape maintains a cursor which points to a cell. This cell is considered the "current" cell.
     /// The methods MoveForward, MoveBackward, Current, Increment, and Decrement all take action relative to the current' cell.
     /// (Do the methods on this really match a tape or a "tape drive"? Perhaps the name of this class
-    /// is not exactly correct. One doesn't think of a tape moving itself forward or backward, something does that to the 
+    /// is not exactly correct. One doesn't think of a tape moving itself forward or backward. Something does that to the 
     /// tape. In any case, it is a convenient name, but if it were to cause confusion it should be changed.)
     /// </summary>
     public class Tape
     {
 
-        // Mutabale State
+        // Mutable State
         private LinkedListNode<int> _currentCell;
 
         /// <summary>
-        /// Creates a tape with a value of 0 in every cell. The tape is "infinite" in both directions. The
-        /// cursor is set to somewhere in the "middle".
+        /// Creates a tape with a value of 0 in every cell. 
         /// </summary>
         public static Tape Default()
         {
@@ -31,41 +30,32 @@ namespace Welch.Brainmess
 
         /// <summary>
         /// Creates a tape that has the specified values located sequentially somewhere in the middle
-        /// of the tape. The cursor is set to point to the first value or last value in the list according
-        /// to the <paramref name="position"/> parameter.
+        /// of the tape. The cursor is set to point to the cell indicated by <paramref name="position"/>.
         /// </summary>
-        /// <remarks>
-        /// The instance of Tape that is returned maintains a reference to <paramref name="cells"/>. This means
-        /// that any changes to the list affect the Tape and vice versa. This is useful for
-        /// testing purposes but strictly speaking isn't what one expects to find when running a Brainmess program.
-        /// </remarks>
-        /// <exception cref='ArgumentNullException'>
-        /// Is thrown when cells is <see langword="null" /> .
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// If a value other than <see cref="InitialCursorPosition.Head"/> or <see cref="InitialCursorPosition.Tail"/>
-        /// is passed in for position.
-        /// </exception>
-        public static Tape LoadState(IEnumerable<int> cells, int currentCell = 0)
+        /// <param name="cells">A sequence of integers to load onto the new tape.</param>
+        /// <param name="position">An "index" into <paramref name="cells"/> that indicates which one should
+        /// be considered the current cell for the initial state of the tape.</param>
+        public static Tape LoadState(IEnumerable<int> cells, int position = 0)
         {
             if (cells == null) throw new ArgumentNullException("cells");
             var array = cells.ToArray(); 
             
             if (array.Length == 0) throw new ArgumentException("This collection is expected to have at least one element. Use Tape.Default if you don't want to customize the state.", "cells");
-            if (currentCell < 0) throw new ArgumentOutOfRangeException("currentCell");
-            if (currentCell > array.Length - 1) throw new ArgumentOutOfRangeException("currentCell");
+            if (position < 0) throw new ArgumentOutOfRangeException("position");
+            if (position > array.Length - 1) throw new ArgumentOutOfRangeException("position");
 
             var list = new LinkedList<int>(array);
-            int counter = currentCell;
+            int counter = position;
             var currentNode = list.First;
             
             while(counter > 0)
             {
+                Debug.Assert(currentNode != null); // This is used to remove Resharper warning. Our checks above gaurantee this will never throw.
                 currentNode = currentNode.Next;
                 counter--;
             }
 
-            return new Tape(list, currentNode);
+            return new Tape(currentNode);
         }
 
         public State GetState()
@@ -84,11 +74,12 @@ namespace Welch.Brainmess
                 var position = 0;
                 while(node != tape._currentCell)
                 {
+                    Debug.Assert(node != null); // This quiets the Resharper warning. We no for sure this will never be null.
                     node = node.Next;
                     position++;
                 }
 
-                return new State()
+                return new State
                            {
                                Cells = new ReadOnlyCollection<int>(tape._currentCell.List.ToArray()),
                                Position = position
@@ -96,15 +87,15 @@ namespace Welch.Brainmess
             }
         }
 
-        private Tape(LinkedList<int> cells, LinkedListNode<int> position)
+        private Tape(LinkedListNode<int> startingCell)
         {
-            // This is a private constructor so I expect I'm calling it properly.
-            // However, these asserts are to make sure I don't forget. They document the constraints.
-            Debug.Assert(cells != null);
-            Debug.Assert(cells.Any());
-            Debug.Assert(position.List == cells);
+            // This is a private constructor so I assume that I'll always call it correctly.
+            // The Debug.Assert leaves a check in place that documents the assumption and catches
+            // any errors during unit tests in case I refactor and forget.
 
-            _currentCell = position;
+            // make sure that startingCell is linked into a list.
+            Debug.Assert(startingCell.List != null);
+            _currentCell = startingCell;
         }
 
         /// <summary>
