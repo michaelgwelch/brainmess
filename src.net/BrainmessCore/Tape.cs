@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Welch.Brainmess
@@ -15,23 +16,6 @@ namespace Welch.Brainmess
     /// </summary>
     public class Tape
     {
-        /// <summary>
-        /// Used to indicate the initial cursor position when initializing a tape with a set of values from a list.
-        /// </summary>
-        public enum InitialCursorPosition
-        {
-            /// <summary>
-            /// Indicates that the initial cursor position should be located on the cell that corresponds
-            /// to the first value in the list used to initialize a tape.
-            /// </summary>
-            Head,
-
-            /// <summary>
-            /// Inidicates that the initial cursor position should be located on the cell that corresponds
-            /// to the last value in the list used to initialize a tape.
-            /// </summary>
-            Tail
-        }
 
         // Mutabale State
         private LinkedListNode<int> _currentCell;
@@ -42,9 +26,7 @@ namespace Welch.Brainmess
         /// </summary>
         public static Tape Default()
         {
-            var cells = new LinkedList<int>();
-
-            return Wrap(cells);
+            return LoadState(Enumerable.Range(0,1));
         }
 
         /// <summary>
@@ -64,34 +46,65 @@ namespace Welch.Brainmess
         /// If a value other than <see cref="InitialCursorPosition.Head"/> or <see cref="InitialCursorPosition.Tail"/>
         /// is passed in for position.
         /// </exception>
-        public static Tape Wrap(LinkedList<int> cells, InitialCursorPosition position = InitialCursorPosition.Head)
+        public static Tape LoadState(IEnumerable<int> cells, int currentCell = 0)
         {
-            if (cells == null)
+            if (cells == null) throw new ArgumentNullException("cells");
+            var array = cells.ToArray(); 
+            
+            if (array.Length == 0) throw new ArgumentException("This collection is expected to have at least one element. Use Tape.Default if you don't want to customize the state.", "cells");
+            if (currentCell < 0) throw new ArgumentOutOfRangeException("currentCell");
+            if (currentCell > array.Length - 1) throw new ArgumentOutOfRangeException("currentCell");
+
+            var list = new LinkedList<int>(array);
+            int counter = currentCell;
+            var currentNode = list.First;
+            
+            while(counter > 0)
             {
-                throw new ArgumentNullException("cells");
-            }
-            if (!Enum.IsDefined(typeof(InitialCursorPosition), position))
-            {
-                throw new ArgumentOutOfRangeException("position");
+                currentNode = currentNode.Next;
+                counter--;
             }
 
-            if (!cells.Any())
-            {
-                cells.AddFirst(0);
-            }
-
-            return new Tape(cells, position);
+            return new Tape(list, currentNode);
         }
 
-        private Tape(LinkedList<int> cells, InitialCursorPosition position)
+        public State GetState()
+        {
+            return State.From(this);
+        }
+
+        public class State
+        {
+            public int Position { get; private set; }
+            public ReadOnlyCollection<int> Cells { get; private set; }
+            public static State From(Tape tape)
+            {
+                var list = tape._currentCell.List;
+                var node = list.First;
+                var position = 0;
+                while(node != tape._currentCell)
+                {
+                    node = node.Next;
+                    position++;
+                }
+
+                return new State()
+                           {
+                               Cells = new ReadOnlyCollection<int>(tape._currentCell.List.ToArray()),
+                               Position = position
+                           };
+            }
+        }
+
+        private Tape(LinkedList<int> cells, LinkedListNode<int> position)
         {
             // This is a private constructor so I expect I'm calling it properly.
             // However, these asserts are to make sure I don't forget. They document the constraints.
             Debug.Assert(cells != null);
             Debug.Assert(cells.Any());
-            Debug.Assert(Enum.IsDefined(typeof(InitialCursorPosition), position));
+            Debug.Assert(position.List == cells);
 
-            _currentCell = (position == InitialCursorPosition.Head ? cells.First : cells.Last);
+            _currentCell = position;
         }
 
         /// <summary>

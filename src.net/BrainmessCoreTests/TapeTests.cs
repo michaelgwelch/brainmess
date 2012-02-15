@@ -32,7 +32,7 @@ namespace Welch.Brainmess
             list.AddFirst(expectedValue);
 
             // Act
-            var tape = Tape.Wrap(list);
+            var tape = Tape.LoadState(list);
 
             // Assert - The first value in the list should equal the value of the current cell on the tape.
             Assert.AreEqual(expectedValue, tape.Current);
@@ -42,18 +42,15 @@ namespace Welch.Brainmess
         public void Increment_ConstructFromValues_ExpectIncrementToIncrementTheCell()
         {
             // Assemble
-            int expectedValue = 23;
-
-            var list = new LinkedList<int>();
-            var firstCell = list.AddFirst(expectedValue - 1);
-
-            var tape = Tape.Wrap(list);
+            var list = new LinkedList<int>(new [] {22});
+            var tape = Tape.LoadState(list);
 
             // Act
             tape.Increment();
 
             // Assert - Note I am using firstCell to check the result rather than Current (because I don't want this test to rely on Current)
-            Assert.AreEqual(expectedValue, firstCell.Value);
+            Tape.State state = tape.GetState();
+            Assert.AreEqual(23, state.Cells[state.Position]);
 
         }
 
@@ -61,38 +58,29 @@ namespace Welch.Brainmess
         public void Decrement_ConstructFromValues_ExpectDecrementToDecrementTheCell()
         {
             // Assemble
-            int expectedValue = 45;
-
-            var list = new LinkedList<int>();
-            var firstCell = list.AddFirst(expectedValue + 1);
-
-            var tape = Tape.Wrap(list);
+            var list = new LinkedList<int>(new[] {45});
+            var tape = Tape.LoadState(list);
 
             // Act
             tape.Decrement();
 
             // Assert
-            Assert.AreEqual(expectedValue, firstCell.Value);
+            Tape.State state = tape.GetState();
+            Assert.AreEqual(44, state.Cells[state.Position]);
         }
 
         [Test]
-        public void MoveForward_ConstructFromSingleCellListMoveFowardAndMutate_ExpectLastCellMatchedMutatedValue()
+        public void MoveForward_ConstructDefaultAndMoveFoward_ExpectPositionToEqualOne()
         {
-            // This test is going to use Current setter to mutate a known cell to help us validate that
-            // MoveForward did work correctly by checking that the correct cell was mutated. 
-
-
             // Assemble
-            var expectedValue = -234;
-            var list = new LinkedList<int>();
-            var tape = Tape.Wrap(list);
+            var tape = Tape.Default();
 
             // Act
             tape.MoveForward(); // Method being tested.
-            tape.Current = expectedValue; // use Current to mutate tape 
 
             // Assert
-            Assert.AreEqual(expectedValue, list.Last.Value);
+            Tape.State state = tape.GetState();
+            Assert.AreEqual(1, state.Position);
 
 
         }
@@ -101,18 +89,16 @@ namespace Welch.Brainmess
         public void MoveForward_ConstructFromMultiCellListMoveForwardAndMutate_ExpectSecondCellMatchesValue()
         {
             // Assemble
-            var initialList = new int[] { 1, 3, 5, 7, 11, 13, 17, 19 };
-            var expectedList = new int[] { 1, 9, 5, 7, 11, 13, 17, 19 }; // expect second element to change.
-
-            var list = new LinkedList<int>(initialList);
-            var tape = Tape.Wrap(list);
+            var initialList = new [] { 1, 3, 5, 7, 11, 13, 17, 19 };
+            const int position = 4;
+            var tape = Tape.LoadState(initialList, position);
 
             // Act
             tape.MoveForward();
-            tape.Current = expectedList[1]; // grap the value from second cell
 
             // Assert
-            CollectionAssert.AreEqual(expectedList, list.ToArray());
+            var state = tape.GetState();
+            Assert.AreEqual(5, state.Position);
 
         }
 
@@ -120,34 +106,31 @@ namespace Welch.Brainmess
         public void MoveBackward_ConstructFromMutiCellListMoveBackwardAndMutate_ExpectSecondFromLastCellMatchesValue()
         {
             // Assemble - construct a tape from a list and set current cell to last value in list.
-            var initialList = new int[] { 19, 17, 13, 11, 7, 5, 3, 1 };
-            var expectedList = new int[] { 19, 17, 13, 11, 7, 5, 9, 1 };
-
-            var list = new LinkedList<int>(initialList);
-            var tape = Tape.Wrap(list, Tape.InitialCursorPosition.Tail);
+            var initialList = new [] { 19, 17, 13, 11, 7, 5, 3, 1 };
+            const int startPosition = 7;
+            var tape = Tape.LoadState(initialList, startPosition);
 
             // Act
             tape.MoveBackward();
-            tape.Current = expectedList[expectedList.Length - 2]; // grab the value second from the end
 
             // Assert
-            CollectionAssert.AreEqual(expectedList, list.ToArray());
+            var state = tape.GetState();
+            const int endingPosition = 6;
+            Assert.AreEqual(endingPosition, state.Position);
         }
 
         [Test]
         public void MoveBackward_ConstructFromSingleCellListMoveBackwardAndMutate_ExpectFirstCellToMatch()
         {
             // Assemble
-            var expectedValue = -456;
-            var list = new LinkedList<int>();
-            var tape = Tape.Wrap(list);
+            var tape = Tape.Default();
 
             // Act
             tape.MoveBackward();
-            tape.Current = expectedValue;
 
             // Assert
-            Assert.AreEqual(expectedValue, list.First.Value);
+            var state = tape.GetState();
+            Assert.AreEqual(0, state.Position);
 
         }
 
@@ -156,7 +139,7 @@ namespace Welch.Brainmess
         {
             try
             {
-                Tape.Wrap(null);
+                Tape.LoadState(null);
                 Assert.Fail("Expect ArgumentNullException");
             }
             catch (ArgumentNullException)
@@ -164,14 +147,14 @@ namespace Welch.Brainmess
         }
 
         [Test]
-        public void Wrap_PassBadPosition_ExpectArgumentOutOfRangeException()
+        public void Wrap_PassBadPosition_ExpectArgumentException()
         {
             try
             {
-                Tape.Wrap(new LinkedList<int>(), (Tape.InitialCursorPosition)55);
-                Assert.Fail("Expected an ArgumentOutOfRangeException");
+                Tape.LoadState(new LinkedList<int>(), 55);
+                Assert.Fail("Expected an ArgumentException");
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentException)
             { }
         }
 
