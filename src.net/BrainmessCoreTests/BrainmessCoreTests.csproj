@@ -62,7 +62,6 @@
     <Compile Include="BracketsTests.cs" />
     <Compile Include="LinkedListNodeTests.cs" />
     <Compile Include="TapeTests.cs" />
-    <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
