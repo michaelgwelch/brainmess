@@ -20,7 +20,7 @@ namespace Welch.Brainmess
         public void Current_ConstructDefault_ExpectCurrentIsZero()
         {
             // The "simplest" test. We create an instance and expect that Current is 0
-            Assert.AreEqual(0, Tape.Zeros().Current);
+            Assert.AreEqual(0, Tape.Default().Current);
         }
 
         [Test]

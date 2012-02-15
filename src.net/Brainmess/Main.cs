@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 namespace Welch.Brainmess
@@ -93,7 +93,7 @@ output #12 even if it’s zero
 >>++++[<------>-]<.>++++[<++++++>-]<.
 +++.------.--------.<+.
 ");*/
-			var tape = Tape.Zeros();
+			var tape = Tape.Default();
 			
 			var input = Console.In;
 			var output = Console.Out;

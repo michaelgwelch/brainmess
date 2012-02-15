@@ -40,7 +40,7 @@ namespace Welch.Brainmess
         /// Creates a tape with a value of 0 in every cell. The tape is "infinite" in both directions. The
         /// cursor is set to somewhere in the "middle".
         /// </summary>
-        public static Tape Zeros()
+        public static Tape Default()
         {
             var cells = new LinkedList<int>();
 
