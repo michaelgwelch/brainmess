@@ -57,7 +57,7 @@ namespace Welch.Brainmess
         internal void JumpForward()
         {
             Debug.Assert(_program[_programCounter - 1] == '[');
-            _programCounter = Brackets.FindMatch(_program, _programCounter - 1) + 1;
+            _programCounter = _program.FindMatch(_programCounter - 1) + 1;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Welch.Brainmess
         internal void JumpBackward()
         {
             Debug.Assert(_program[_programCounter - 1] == ']');
-            _programCounter = Brackets.FindMatch(_program, _programCounter - 1);
+            _programCounter = _program.FindMatch(_programCounter - 1);
         }
 
     }
