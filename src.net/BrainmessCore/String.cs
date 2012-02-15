@@ -5,13 +5,13 @@ namespace Welch.Brainmess
     /// <summary>
     /// A utility class for finding matching braces. 
     /// </summary>
-    public class Brackets
+    public static class String
     {
 
         /// <summary>
         /// Returns the index of the brace that matches the brace at the specified index of sequence.
         /// </summary>
-        public static int FindMatch(string sequence, int index)
+        public static int FindMatch(this string sequence, int index)
         {
             if (sequence[index] == '[') return JumpForward(sequence, index);
             if (sequence[index] == ']') return JumpBackward(sequence, index);
