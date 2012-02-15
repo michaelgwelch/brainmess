@@ -7,7 +7,6 @@ namespace Welch.Brainmess
     /// </summary>
     public class Brackets
     {
-        // Clean this up.
 
         /// <summary>
         /// Returns the index of the brace that matches the brace at the specified index of sequence.
@@ -19,6 +18,11 @@ namespace Welch.Brainmess
             throw new ArgumentException("The character at index " + index + " is not a jump character");
 
         }
+
+        // Note: JumpForward and JumpBackward are mirror images of each other.
+        // We could a) write one method that takes delegates for each of the differences
+        // b) In one of them, reverse the string and calculate the index and call the otehr
+        // c) leave as is
 
         private static int JumpForward(string sequence, int index)
         {
