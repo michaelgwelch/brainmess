@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[10pt]{amsart}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{url}
@@ -18,6 +18,7 @@
 \lstset{basicstyle=\footnotesize\ttfamily,keywordstyle=\color{blue},extendedchars=true}
 \newcommand{\inl}{\lstinline[breaklines=true]}
 \newtheorem*{invariant}{Invariant}
+\newcommand{\defined}{\mathrel{\text{::=}}}
 
 \begin{document}
 
@@ -225,4 +226,33 @@ This is the postcondition we meant to demonstrate. So we have shown that this
 algorithm successfully locates and returns the instruction after the matching
 bracket character.
 \end{proof}
+
+\section*{Definition of Matching Brackets}
+I claimed that I proved my algorithm. But that proof assumed we had a 
+program with matching brackets, but I never defined what matching brackets
+are. If your definition differs from mine, then you might determine
+that my algorithm fails.
+
+See figure~\ref{fig:grammar} for a context free grammar that formally defines
+what I mean by matching brackets. 
+
+
+\begin{figure}
+\caption{The grammar for matching brackets}
+\label{fig:grammar}
+\begin{align*}
+program & \defined concatexpr \\
+concatexpr & \defined basicexpr (concatexpr \mathop{|} \epsilon) \\
+basicexpr & \defined bracketexpr \mathop{|} charexpr \\
+bracketexpr & \defined \text{{\bf[} }concatexpr\text{ {\bf]}} \\
+charexpr & \defined regchar \\
+regchar & \defined \text{any character except [ or ]}
+\end{align*}
+\end{figure}
+
+\section{Why Software is Hard}
+Look how many pages it took to prove this trivial algorithm. We needed
+to understand what matching brackets are. We needed to understand nesting level.
+We needed to understand every case inside of our loop. We needed to make
+sure our loop terminated.
 \end{document}
