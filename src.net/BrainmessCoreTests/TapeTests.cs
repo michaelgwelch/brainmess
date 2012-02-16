@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
 
@@ -9,6 +8,8 @@ namespace Welch.Brainmess
     [TestClass]
     public class TapeTests
     {
+        // ReSharper disable InconsistentNaming
+
         // Some bad smells. Several of my tests require that my Act phase uses two different methods
         // The one I'm testing and another one to cause a side effect.
 
@@ -27,7 +28,7 @@ namespace Welch.Brainmess
         public void Current_ConstructPrePopulatedTape_ExpectCurrentToMatch()
         {
             // Assemble
-            int expectedValue = 55;
+            const int expectedValue = 55;
             var list = new LinkedList<int>();
             list.AddFirst(expectedValue);
 
@@ -36,6 +37,19 @@ namespace Welch.Brainmess
 
             // Assert - The first value in the list should equal the value of the current cell on the tape.
             Assert.AreEqual(expectedValue, tape.Current);
+        }
+
+        [Test]
+        public void SetCurrent_StateShouldChange()
+        {
+            // Arrange
+            var tape = Tape.LoadState(new[] { 1, 2, 1 }, 1);
+
+            // Act
+            tape.Current = 23;
+
+            // Assert
+            CollectionAssert.AreEqual(new[] { 1, 23, 1 }, tape.GetState().Cells);
         }
 
         [Test]
@@ -48,7 +62,7 @@ namespace Welch.Brainmess
             // Act
             tape.Increment();
 
-            // Assert - Note I am using firstCell to check the result rather than Current (because I don't want this test to rely on Current)
+            // Assert
             Tape.State state = tape.GetState();
             Assert.AreEqual(23, state.Cells[state.Position]);
 
@@ -157,6 +171,37 @@ namespace Welch.Brainmess
             catch (ArgumentException)
             { }
         }
+
+        [Test]
+        public void LoadState_WithPositionLessThanZero_ShouldThrowException()
+        {
+            try
+            {
+                // Act
+                Tape.LoadState(new[] { 1, 3, 5 }, -1);
+                Assert.Fail("Expected ArgumentOutOfRangeException");
+
+            }
+            catch (ArgumentOutOfRangeException)
+            {}
+        }
+
+        [Test]
+        public void LoadState_WithPositionSetToLengthOfArray_ShouldThrowException()
+        {
+            try
+            {
+                // Act
+                Tape.LoadState(new[] { 0 }, 1);
+
+                Assert.Fail("Expected ArgumentOutOfRangeException");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+            }
+        }
+
+        // ReSharper restore InconsistentNaming
 
 
         // bugs: if increment or decrement wrap. But that's a limitation of our design. Not of any of our methods. 

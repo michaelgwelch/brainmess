@@ -13,8 +13,8 @@ namespace Welch.Brainmess
         /// </summary>
         public static int FindMatch(this string sequence, int index)
         {
-            if (sequence[index] == '[') return JumpForward(sequence, index);
-            if (sequence[index] == ']') return JumpBackward(sequence, index);
+            if (sequence[index] == '[') return MatchForward(sequence, index);
+            if (sequence[index] == ']') return MatchBackward(sequence, index);
             throw new ArgumentException("The character at index " + index + " is not a jump character");
 
         }
@@ -24,7 +24,7 @@ namespace Welch.Brainmess
         // b) In one of them, reverse the string and calculate the index and call the otehr
         // c) leave as is
 
-        private static int JumpForward(string sequence, int index)
+        private static int MatchForward(string sequence, int index)
         {
             int counter = index + 1;
             int nestLevel = 1;
@@ -42,7 +42,7 @@ namespace Welch.Brainmess
             return counter - 1;
         }
 
-        private static int JumpBackward(string sequence, int index)
+        private static int MatchBackward(string sequence, int index)
         {
             int counter = index - 1;
             int nestLevel = 1;

@@ -10,7 +10,7 @@ namespace Welch.Brainmess
     /// are tested 3) JumpForward and JumpBackward require they are called only in certain conditions
     /// which the Interpreter guarantees. 
     /// </summary>
-    public class ProgramStream
+    public class ProgramStream : IProgramStream
     {
         // Mutable State
         int _programCounter; // = 0;
@@ -31,7 +31,7 @@ namespace Welch.Brainmess
         /// <summary>
         /// Reads the Instruction at the program counter and returns it.
         /// </summary>
-        internal Instruction Fetch()
+        public Instruction Fetch()
         {
             var instruction = _program[_programCounter];
             _programCounter++;
@@ -45,7 +45,7 @@ namespace Welch.Brainmess
         /// <value>
         /// <c>true</c> if end of program; otherwise, <c>false</c>.
         /// </value>
-        internal bool EndOfProgram { get { return _programCounter >= _program.Length; } }
+        public bool EndOfProgram { get { return _programCounter >= _program.Length; } }
 
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Welch.Brainmess
         /// executing a TestAndJumpForward instruction. If that is not the case, the results
         /// are not predictable.
         /// </summary>
-        internal void JumpForward()
+        public void JumpForward()
         {
             Debug.Assert(_program[_programCounter - 1] == '[');
             _programCounter = _program.FindMatch(_programCounter - 1) + 1;
@@ -66,12 +66,25 @@ namespace Welch.Brainmess
         /// executing a TestAndJumpBackward instruction. If that is not the case, the results
         /// are not predictable.
         /// </summary>
-        internal void JumpBackward()
+        public void JumpBackward()
         {
             Debug.Assert(_program[_programCounter - 1] == ']');
             _programCounter = _program.FindMatch(_programCounter - 1);
         }
 
+        public int ProgramCounter
+        {
+            get { return _programCounter; }
+        }
+
+        public static ProgramStream LoadState(string s, int i)
+        {
+            ProgramStream program = new ProgramStream(s)
+                                        {
+                                            _programCounter = i
+                                        };
+            return program;
+        }
     }
 }
 

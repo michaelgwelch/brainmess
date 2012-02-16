@@ -5,13 +5,13 @@ namespace Welch.Brainmess
 {
     public class Instruction
     {
-        private readonly Action<ProgramStream, Tape, TextReader, TextWriter> _action;
-        private Instruction(Action<ProgramStream, Tape, TextReader, TextWriter> action)
+        private readonly Action<IProgramStream, Tape, TextReader, TextWriter> _action;
+        private Instruction(Action<IProgramStream, Tape, TextReader, TextWriter> action)
         {
             _action = action;
         }
 
-        public void Execute(ProgramStream program, Tape tape, TextReader input, TextWriter output)
+        public void Execute(IProgramStream program, Tape tape, TextReader input, TextWriter output)
         {
             _action(program, tape, input, output);
         }

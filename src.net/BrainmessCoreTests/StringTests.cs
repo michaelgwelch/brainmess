@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Welch.Brainmess
 {
+    /// <summary>
+    /// Tests Welch.Brainmess.String extension methods.
+    /// </summary>
     [TestClass]
-    public class BracketsTests
+    public class StringTests
     {
+        // ReSharper disable InconsistentNaming
         [TestMethod]
         public void FindMatch_StartingAtNonJumpCharacter_ExpectArgumentException()
         {
@@ -16,12 +17,12 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "abcd[   djskd dksj] dsksld";
+            const string sequence = "abcd[   djskd dksj] dsksld";
 
             try
             {
                 // Act
-                var matchIndex = String.FindMatch(sequence, 3);
+                sequence.FindMatch(3);
 
                 // Assert
                 Assert.Fail("Expected ArgumentException");
@@ -38,10 +39,10 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "abcd[   djskd dksj] dsksld";
+            const string sequence = "abcd[   djskd dksj] dsksld";
 
             // Act
-            var matchIndex = String.FindMatch(sequence, 4);
+            var matchIndex = sequence.FindMatch(4);
 
             // Assert
             Assert.AreEqual(18, matchIndex);
@@ -53,10 +54,10 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "abcd[   [jskd ]ksj] dsksld";
+            const string sequence = "abcd[   [jskd ]ksj] dsksld";
 
             // Act
-            var matchIndex = String.FindMatch(sequence, 4);
+            var matchIndex = sequence.FindMatch(4);
 
             // Assert
             Assert.AreEqual(18, matchIndex);
@@ -68,10 +69,10 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "a[cd[  ][jskd lksj] dsks]d";
+            const string sequence = "a[cd[  ][jskd lksj] dsks]d";
 
             // Act
-            var matchIndex = String.FindMatch(sequence, 1);
+            var matchIndex = sequence.FindMatch(1);
 
             // Assert
             Assert.AreEqual(24, matchIndex);
@@ -83,10 +84,10 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "abcd[   [j[kd ]ks]h] dsksld";
+            const string sequence = "abcd[   [j[kd ]ks]h] dsksld";
 
             // Act
-            var matchIndex = String.FindMatch(sequence, 4);
+            var matchIndex = sequence.FindMatch(4);
 
             // Assert
             Assert.AreEqual(19, matchIndex);
@@ -99,10 +100,10 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "abcd[   djskd dksj] dsksld";
+            const string sequence = "abcd[   djskd dksj] dsksld";
 
             // Act
-            var matchIndex = String.FindMatch(sequence, 18);
+            var matchIndex = sequence.FindMatch(18);
 
             // Assert
             Assert.AreEqual(4, matchIndex);
@@ -114,10 +115,10 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "abcd[   [jskd ]ksj] dsksld";
+            const string sequence = "abcd[   [jskd ]ksj] dsksld";
 
             // Act
-            var matchIndex = String.FindMatch(sequence, 18);
+            var matchIndex = sequence.FindMatch(18);
 
             // Assert
             Assert.AreEqual(4, matchIndex);
@@ -129,10 +130,10 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "a[cd[  ][jskd lksj] dsks]d";
+            const string sequence = "a[cd[  ][jskd lksj] dsks]d";
 
             // Act
-            var matchIndex = String.FindMatch(sequence, 24);
+            var matchIndex = sequence.FindMatch(24);
 
             // Assert
             Assert.AreEqual(1, matchIndex);
@@ -144,14 +145,15 @@ namespace Welch.Brainmess
             // Arrange
             //                           1111111111222222
             //                 01234567890123456789012345
-            string sequence = "abcd[   [j[kd ]ks]h] dsksld";
+            const string sequence = "abcd[   [j[kd ]ks]h] dsksld";
 
             // Act
-            var matchIndex = String.FindMatch(sequence, 19);
+            var matchIndex = sequence.FindMatch(19);
 
             // Assert
             Assert.AreEqual(4, matchIndex);
         }
+        // ReSharper restore InconsistentNaming
 
     }
 }

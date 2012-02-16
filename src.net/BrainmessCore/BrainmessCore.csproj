@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Instruction.cs" />
     <Compile Include="Interpreter.cs" />
+    <Compile Include="IProgramStream.cs" />
     <Compile Include="ProgramStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tape.cs" />
