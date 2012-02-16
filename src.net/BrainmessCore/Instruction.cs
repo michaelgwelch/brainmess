@@ -33,12 +33,14 @@ namespace Welch.Brainmess
         /// <summary>
         /// Returns a MoveForward instruction which when executed, moves the tape forward.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction MoveForward =
             new Instruction((program, tape, input, output) => tape.MoveForward());
 
         /// <summary>
         /// Returns a MoveBackward instruction which when executed, moves the tape backward.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction MoveBackward =
             new Instruction((program, tape, input, output) => tape.MoveBackward());
 
@@ -46,6 +48,7 @@ namespace Welch.Brainmess
         /// Returns an Increment instruction which when executed increments the value of the current tape cell
         /// by one.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction Increment =
             new Instruction((program, tape, input, output) => tape.Increment());
 
@@ -53,6 +56,7 @@ namespace Welch.Brainmess
         /// Returns a Decrement instruction which when executed decrements the value of the current tape cell
         /// by one.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction Decrement =
             new Instruction((program, tape, input, output) => tape.Decrement());
 
@@ -60,6 +64,7 @@ namespace Welch.Brainmess
         /// Returns an Input instruction which when exectued reads one character from the input
         /// and writes its ASCII value to the tape.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction Input =
             new Instruction((program, tape, input, output) => tape.Current = input.Read());
 
@@ -67,6 +72,7 @@ namespace Welch.Brainmess
         /// Returns an Output instruction which when executed gets the integer value from
         /// the current tape cell, converts it to its character value and writes that to output.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction Output =
             new Instruction((program, tape, input, output) => output.Write((char)tape.Current));
 
@@ -75,6 +81,7 @@ namespace Welch.Brainmess
         /// value of the current tape cell, and if it is non-zero it does nothing. If the value is zero,
         /// then it advances the program to the instruction following the loop.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction TestAndJumpForward =
             new Instruction((program, tape, input, output) => { if (tape.Current == 0) program.JumpForward(); });
 
@@ -83,12 +90,14 @@ namespace Welch.Brainmess
         /// the value of the current tape cell and if it is zero it does nothing. If the value is non-zero,
         /// then it moves the tape back to the beginning of the loop.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction TestAndJumpBackward =
             new Instruction((program, tape, input, output) => { if (tape.Current != 0) program.JumpBackward(); });
 
         /// <summary>
         /// Returns a NoOperation instruction which does nothing when it is executed.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static readonly Instruction NoOperation =
             new Instruction((program, tape, input, output) => { });
 
