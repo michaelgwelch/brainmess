@@ -6,7 +6,7 @@ namespace Welch.Brainmess
     public class Instruction
     {
         private readonly Action<IProgramStream, Tape, TextReader, TextWriter> _action;
-        private Instruction(Action<IProgramStream, Tape, TextReader, TextWriter> action)
+        protected Instruction(Action<IProgramStream, Tape, TextReader, TextWriter> action)
         {
             _action = action;
         }

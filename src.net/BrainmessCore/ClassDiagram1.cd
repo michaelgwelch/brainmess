@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Welch.Brainmess.Interpreter">
+    <Position X="3.25" Y="1.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAQAAIAAAAAAABAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Interpreter.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_program" />
+      <Field Name="_tape" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Welch.Brainmess.Tape">
+    <Position X="7" Y="1.25" Width="2.75" />
+    <Members>
+      <Field Name="_currentCell" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Welch.Brainmess.Tape.State">
+        <TypeIdentifier>
+          <NewMemberFileName>Tape.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAIACIIBAAAAEAIAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Tape.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Welch.Brainmess.Instruction">
+    <Position X="10.25" Y="1.25" Width="4.25" />
+    <Members>
+      <Field Name="_action" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAQIAAAQAIAAIABAAEAEAIAAAAAAAiAAAAAA=</HashCode>
+      <FileName>Instruction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Welch.Brainmess.ProgramStream" Collapsed="true">
+    <Position X="3.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAJEIAAAAAgBAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>ProgramStream.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Welch.Brainmess.IProgramStream">
+    <Position X="3.25" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABEAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>IProgramStream.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

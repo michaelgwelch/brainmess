@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
+
 namespace Welch.Brainmess
 {
-	// Note: Testing is important. But so is thinking. In this program I've proved the correctness
-	// of the only two "algorithms" I had to write. Testing is great to try to make sure you 
-	// didn't miss anything. But the upfront thinking and proof will help you construct a better solution.
-	class MainClass
-	{
-		public static void Main (string[] args)
-		{
-			
-			var program = new ProgramStream(
-				@"+++++++++++ number of digits to output
+    // Note: Testing is important. But so is thinking. In this program I've proved the correctness
+    // of the only two "algorithms" I had to write. Testing is great to try to make sure you 
+    // didn't miss anything. But the upfront thinking and proof will help you construct a better solution.
+    class MainClass
+    {
+        public static void Main(string[] args)
+        {
+
+            var program = new ProgramStream(
+                @"+++++++++++ number of digits to output
 > #1
 + initial number
 >>>> #5
@@ -79,37 +78,37 @@ output #12 even if it’s zero
   << #1
   [>>+>+<<<-]>>>[<<<+>>>-]<<[<+>-]>[<+>-]<<<-
 ]");
-		/*	
-			program = new ProgramStream(@",
-------------------------------------------------
-[->++<]
->
-++++++++++++++++++++++++++++++++++++++++++++++++.");
-	
-		/*	
-			program = new ProgramStream( @"
+            /*	
+                program = new ProgramStream(@",
+    ------------------------------------------------
+    [->++<]
+    >
+    ++++++++++++++++++++++++++++++++++++++++++++++++.");
+        */
+
+            program = new ProgramStream(@"
 ++++++++[<+++++++++>-]<.>+++++[<++++++>-]<-.
 +++++++..+++.>++++++++[<<++++>>-]<<.
 >>++++[<------>-]<.>++++[<++++++>-]<.
 +++.------.--------.<+.
-");*/
-			var tape = Tape.Default();
-			
-			var input = Console.In;
-			var output = Console.Out;
-			
-			Interpreter interpreter = new Interpreter(program, tape, input, output);
-			interpreter.Run();
-			/*
-			output.Close();
-			input.Close();*/
-			
-		}
-		
-		
+");
+            var tape = Tape.Default();
 
-		
-		
+            var input = Console.In;
+            var output = Console.Out;
 
-	}
+            Interpreter interpreter = new Interpreter(program, tape, input, output);
+            interpreter.Run();
+            /*
+            output.Close();
+            input.Close();*/
+
+        }
+
+
+
+
+
+
+    }
 }

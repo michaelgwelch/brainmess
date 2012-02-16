@@ -62,6 +62,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterpreterTests.cs" />
     <Compile Include="ProgramStreamTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="InstructionTests.cs" />
