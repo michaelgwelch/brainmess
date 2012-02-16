@@ -1,9 +1,13 @@
 namespace Welch.Brainmess
 {
+    /// <summary>
+    /// Defines the members of a ProgramStream object.
+    /// </summary>
     public interface IProgramStream
     {
         /// <summary>
         /// Reads the Instruction at the program counter and returns it.
+        /// An exception is thrown if this is called when EndOfProgram is true.
         /// </summary>
         Instruction Fetch();
 
