@@ -6,7 +6,7 @@ namespace Welch.Brainmess
     /// <summary>
     /// A utility class for finding matching braces. 
     /// </summary>
-    public static class String
+    public static class StringExtensions
     {
 
         /// <summary>

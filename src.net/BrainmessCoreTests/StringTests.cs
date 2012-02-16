@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Welch.Brainmess
 {
     /// <summary>
-    /// Tests Welch.Brainmess.String extension methods.
+    /// Tests Welch.Brainmess.StringExtensions extension methods.
     /// </summary>
     [TestClass]
     public class StringTests

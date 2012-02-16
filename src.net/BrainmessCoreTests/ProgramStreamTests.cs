@@ -8,7 +8,7 @@ namespace Welch.Brainmess
     {
         // White box testing. Each method only needs one test because there are no alternative paths.
 
-        // The "hard" testing is done in String.FindMatch, and Instruction.FromInt
+        // The "hard" testing is done in StringExtensions.FindMatch, and Instruction.FromInt
 
 
         [TestMethod]
