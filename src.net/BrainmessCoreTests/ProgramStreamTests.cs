@@ -75,7 +75,7 @@ namespace Welch.Brainmess
         [TestMethod]
         public void Fetch_CurrentInstructionIsNoOpAndWeAreAtEndOfProgram_ShouldReturnNoOp()
         {
-            ProgramStream program = new ProgramStream("a");
+            var program = new ProgramStream("a");
 
             // Act
             var instruction = program.Fetch();

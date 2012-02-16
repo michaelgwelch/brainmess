@@ -121,7 +121,7 @@ namespace Welch.Brainmess
             var tape = Tape.LoadState(cells, pos);
 
             // Act
-            Instruction.TestAndJumpFoward.Execute(_nullProgram, tape, _nullInput, _nullOutput);
+            Instruction.TestAndJumpForward.Execute(_nullProgram, tape, _nullInput, _nullOutput);
 
             // Assert
             var state = tape.GetState();
@@ -138,7 +138,7 @@ namespace Welch.Brainmess
             mock.Setup(program => program.JumpForward());
 
             // Act
-            Instruction.TestAndJumpFoward.Execute(mock.Object, tape, _nullInput, _nullOutput);
+            Instruction.TestAndJumpForward.Execute(mock.Object, tape, _nullInput, _nullOutput);
 
             // Assert
             mock.VerifyAll();
@@ -232,7 +232,7 @@ namespace Welch.Brainmess
         [TestMethod]
         public void FromInt_WithTestAndJumpForwardChar_ExpectTestAndJumpForwardInstruction()
         {
-            AssertInstructionReturnedForChar(Instruction.TestAndJumpFoward, '[');
+            AssertInstructionReturnedForChar(Instruction.TestAndJumpForward, '[');
         }
 
         [TestMethod]
