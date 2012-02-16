@@ -7,7 +7,6 @@
 *.aux
 bin/
 obj/
-*.xml
 *.test-cache
 *.swp
 _ReSharper.*/
