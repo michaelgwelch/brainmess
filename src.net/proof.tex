@@ -19,11 +19,13 @@
 \newcommand{\inl}{\lstinline[breaklines=true]}
 \newtheorem*{invariant}{Invariant}
 \newcommand{\defined}{\mathrel{\text{::=}}}
+\newcommand{\navyblue}{\color{blue}}
 
 \begin{document}
 
-\title{Proof of Jump Algorithms Correctness}
+\title{Bracket Matching Algorithm Proof}
 \author{Michael Welch}
+\date{\today}
 \maketitle
 
 \section*{Introduction}
@@ -39,14 +41,14 @@ the code and write a proof that the algorithm is correct.
 
 In my implementation of Brainmess, there were only two methods that
 were not completely trivial, and therefore I thought about the proofs.
-The two methods are JumpForward and JumpBackward on my ProgramStream
-class. We will not write proofs for our code. I'm not that academic.
+The two methods have to do with finding matching brackets in the program.
+We will not write proofs for our code. I'm not that academic.
 However, you should be going thru a thought process like this as you decide
 if your algorithms are correct. It actually takes less time to think 
 thru all of this, then it does to type it all up and explain it.
 
 \section*{Loop Invariant Proofs}
-The proof of my JumpForward method, employs a technique called the
+The proof of my MatchForward method employs a technique called
 proof by loop invariant. This technique requires that one
 identify some important property that the loop has, show that this
 property is true initially and after every iteration of the loop,
@@ -63,34 +65,32 @@ The proof must show three things:
 \item Termination: The loop eventually terminates.
 \end{enumerate}
 
-Let's take a look at my algorithm for JumpForward. This algorithm
-is written as a function. (My actual implementation is a method
-that accesses fields. This implementation stands alone and is easier
-to talk about.) The function takes a program as a string, and
-the current program counter as an int. It returns the new value to use
-for the program counter after the jump is executed.
+Let's take a look at my algorithm for MatchForward. This function
+takes any string and an index into that string.
+It examines the string to find the matching bracket (by searching forward).
 
 The listing for the algorithm is in figure~\ref{fig:jumpforward}.
 
 \begin{figure}
-\caption{The listing of JumpForward}
+\caption{The listing of MatchForward}
 \label{fig:jumpforward}
 \begin{lstlisting}[numbers=left]
-internal int JumpForward(string prog, int pc)
+private static int MatchForward(this string sequence, int index)
 {
+    int pos = index + 1;
     int nestLevel = 1;
 
     while (nestLevel > 0)
     {
-        var instruction = prog[pc];
-        
-        if (instruction == ']') nestLevel--;
-        else if (instruction == '[') nestLevel++;
-        
-        pc++;
+        char character = sequence[pos];
+
+        if (character == '[') nestLevel++;
+        else if (character == ']') nestLevel--;
+
+        pos++;
     }
-	
-    return pc;
+
+    return pos - 1;
 }
 \end{lstlisting}
 \end{figure}
@@ -100,39 +100,47 @@ The following sections will lay out the proof.
 
 \subsection*{Preconditions and Postconditions}
 First, we need to identify the preconditions and postconditions. The
-precondition is that there is a \inl!'['! character at index value $q$, and
-that \inl!pc! currently has a value of $q + 1$. The
-character at index $q$ represents the location we are jumping from.
-(I used a \inl!Debug.Assert! in my actual code to make sure this condition
-always holds.) 
+precondition is that there is a \inl!'['! character at the position identified
+by the index. (You can see my method is private. I check the precondition
+in the calling method.)
 
-Another precondition is that \inl!program! is a well-formed program with
-matching jump bracket characters. While we can (and will) say something
+Another precondition is that \inl!sequence! is a well-formed string with
+matching bracket characters. While we can (and will) say something
 about what will happen in the presence of non-matching brackets, we
 don't really care if the algorithm works or not in that case.
 
-Given the second precondition we know that the character at index value
-$q$ has a matching \inl!']'! character at some index value. We'll name
-this location $r$ even though we don't know its specific value (that
-is what we will determine).
+\begin{figure}
+\caption{A line from hello.bm}
+\label{fig:hello}
+\begin{flushleft}
+\texttt{
+\ \ \ \ \ \ \ \emph{q}\ \ \ \ \ \ \ \ \ \ \ \ \emph{r}  \\
+++++++++[>+++++++++<-]>.<+++++[>++++++<-]>-.
+}
+\end{flushleft}
+\end{figure}
 
-The postcondition is that when we are done \inl!pc! will
-contain the value $r + 1$ (or in the case of a malformed program
-the program eventually terminates with an index out of bounds exception).
-This is what we will prove.
+Given the second precondition we know that the character at index value
+has a matching \inl!']'! character at some index value. We'll name
+this location $r$ even though we don't know its specific value (that
+is what we will determine). See figure~\ref{fig:hello}.
+
+The postcondition is that when we are done \inl!pos! will
+contain the value $r+1$ (or in the case of a malformed program
+the function eventually terminates with an index out of bounds exception).
+We then subtract 1 from \inl!pos! and return the value $r$.
 
 \subsection*{Loop Invariant Property}
 The property of the loop that is important to our proof is the following: 
 
 \begin{invariant}
 The \inl!nestLevel! always correctly indicates the nesting level of the
-program counter relative to the character at position $q$. 
+counter relative to the character at position $q$. 
 \end{invariant}
 
-A value of 0 means
-we are outside of the loop. A value of 1 means we are inside the loop.
-A value of 2 means we are inside of a loop that is nested inside
-of the loop.
+A value of 0 means we are outside of the loop. A value of 1 means we are inside
+the loop.  A value of 2 means we are inside of a loop that is nested inside of
+the loop, and so on.
 
 This is the invariant property. We will show that it holds before entering the
 loop.  We will also show that if it holds at the beginning of an
@@ -140,21 +148,21 @@ iteration then it will still hold after each iteration of the loop.
 
 
 \subsection*{Initialization}
-The invariant is trivially true after initialization. By the precondition,
-we know that the program counter is at $q + 1$ and therefore we are at a
-nesting level of 1 and thefore we initialize \inl!nestLevel! to the value 1
-on line 3.
+The invariant is trivially true after initialization. By the precondition, we
+know that the index is at $q$. We initialize \inl!pos! to $q+1$ and therefore
+we are at a nesting level of 1 and thefore we initialize \inl!nestLevel! to the
+value 1 on line 4.
 
 \subsection*{Maintenance}
 We assume that \inl!nestLevel! accurately
 reflects our current nesting level at beginning of an iteration.
 
 We test the condition that \inl!nestLevel > 0! is true. Inside of the loop
-we get the instruction at the program counter.
+we get the character at the \inl!pos!.
 
 We then have 3 cases to consider. The instruction is a \inl!'['!, or a
-\inl!']'! or some other character. No matter what we increment \inl!pc!  on
-line 12.
+\inl!']'! or some other character. No matter what we increment \inl!pos!  on
+line 13.
 
 So the 3 cases are:
 
@@ -176,9 +184,9 @@ accurately represents the nesting level when we end the iteration.
 \framebox[4in]{
 \begin{minipage}[t]{3.5in}
 {\Large{\bomb}}
-Note, there is a fourth case which only happens if a program is
-malformed. It is possible that the program counter has been incremented
-off the end of the program and we get an exception when retrieving the 
+Note, there is a fourth case which only happens if a sequence is
+malformed. It is possible that the counter has been incremented
+off the end of the string and we get an exception when retrieving the 
 insruction. This is guaranteed (by definition and this proof) not to happen 
 if the program is well-formed. 
 \end{minipage}
@@ -193,18 +201,21 @@ function must get smaller. If it every stays the same (or gets bigger) then
 there is a chance that we have an infinitie loop.
 
 Recall that based on our preconditions there is a \inl!'['! at index $q$,
-that \inl!pc! has a value of $q + 1$ and that we know there is a matching
+that \inl!pos! has a value of $q + 1$ and that we know there is a matching
 \inl!']'! at some index value $r$. On each iteration, we get one step closer
-to the matching bracket. So our bounding function is $r - pc + 1$.
+to the matching bracket. So our bounding function is the function that tells
+us how many characters we must inspect that are between $q$ and $r$. 
+This function is $f(r, pos) = r - pos + 1$.
 
 This bounding function tells us that we will execute the loop a finite
 number of times. And it tells us that it gets smaller with each iteration.
-This can be seen by remembering that the program counter is incremented on
-every iteration.
+This can be seen by remembering that the \inl!pos! is incremented on
+every iteration thereby causing the function value to decrease.
 
-Let's check this on the trivial case. Assume we have the program
-\inl!"[]"!. In this case $q=0$, $pc=1$, and $r=1$. Then at the beginning
-of the loop the value of our bounding function is $r - pc + 1$ or
+Let's check this on the trivial case just to make sure we aren't making an
+``off by one'' caluclation mistake. Assume we have the program
+\inl!"[]"!. In this case $q=0$, $pos=1$, and $r=1$. Then at the beginning
+of the loop the value of our bounding function is $r - pos + 1$ or
 $1 - 1 + 1 = 1$. This is correct. We will run the loop one time before
 finding our match.
 
@@ -212,15 +223,15 @@ finding our match.
 \subsection*{Putting it all Together}
 We have shown that our loop has an important property. It maintains the value
 of \inl!nestLevel! so that it always correctly indicates our nesting level
-relative to our start character. 
+relative to our start character at $q$. 
 
-We also know by inspection that we exit the loop as soon as the nesting
-level hits 0. And this only happens after we have processed the
-matching \inl!']'! character at position $r$. We also know that 
-\inl!pc! will have the value of $r+1$ at this time. (To see this fact
-let's consider our last iteration. We read the \inl!']'! character at position
-$r$ on line 7. On line 9 we decrement the nest level to 0. Then on line 12 we
-update the program counter to $r+1$.)
+We also know by inspection that we exit the loop after completing an iteration
+that sets the nestling level to 0.  And this only happens after we have
+processed the matching \inl!']'! character at position $r$. We also know that
+\inl!pos! will have the value of $r+1$ at this time. (To see this fact let's
+consider our last iteration. We read the \inl!']'! character at position $r$ on
+line 8. On line 11 we decrement the nest level to 0. Then on line 13 we update
+the \inl!pos! to $r+1$.) 
 
 This is the postcondition we meant to demonstrate. So we have shown that this
 algorithm successfully locates and returns the instruction after the matching
@@ -234,7 +245,12 @@ are. If your definition differs from mine, then you might determine
 that my algorithm fails.
 
 See figure~\ref{fig:grammar} for a context free grammar that formally defines
-what I mean by matching brackets. 
+what I mean by matching brackets. In the grammar the parentheses are used
+for grouping, and the `|' character means ``or''. The brackets actually
+mean the bracket character literals.
+
+So the $basicexpr$ can be expanded to a $bracketexpr$ or a $charexpr$. A
+$concatexpr$ is a $basicexpr$ followed by a $concatexpr$ or the empty string.
 
 
 \begin{figure}
@@ -244,13 +260,14 @@ what I mean by matching brackets.
 program & \defined concatexpr \\
 concatexpr & \defined basicexpr (concatexpr \mathop{|} \epsilon) \\
 basicexpr & \defined bracketexpr \mathop{|} charexpr \\
-bracketexpr & \defined \text{{\bf[} }concatexpr\text{ {\bf]}} \\
+bracketexpr & \defined \text{{\navyblue \bf[} }concatexpr\text{
+    {\navyblue\bf]}} \\
 charexpr & \defined regchar \\
 regchar & \defined \text{any character except [ or ]}
 \end{align*}
 \end{figure}
 
-\section{Why Software is Hard}
+\section*{Why Software is Hard}
 Look how many pages it took to prove this trivial algorithm. We needed
 to understand what matching brackets are. We needed to understand nesting level.
 We needed to understand every case inside of our loop. We needed to make
