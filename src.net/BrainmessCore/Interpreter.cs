@@ -22,7 +22,7 @@ namespace Welch.Brainmess
         /// <param name="tape">The tape to use as a memory story. If this is null, a default tape is used.</param>
         /// <param name="input">The input source to use. If this is null then Console.In is used.</param>
         /// <param name="output">The output source to use. If this is null then Console.Out is used.</param>
-        public Interpreter(IProgramStream program = null, Tape tape = null, TextReader input = null, TextWriter output = null)
+        public Interpreter(IProgramStream program, Tape tape = null, TextReader input = null, TextWriter output = null)
         {
             _program = program;
             _tape = tape ?? Tape.Default;
