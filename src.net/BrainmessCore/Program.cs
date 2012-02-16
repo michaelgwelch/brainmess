@@ -11,7 +11,7 @@ namespace Welch.Brainmess
     /// are tested 3) JumpForward and JumpBackward require they are called only in certain conditions
     /// which the Interpreter guarantees. 
     /// </summary>
-    public class ProgramStream : IProgramStream
+    public class Program : IProgram
     {
         // Mutable State
         int _programCounter; // = 0;
@@ -20,11 +20,11 @@ namespace Welch.Brainmess
         private readonly string _program;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Welch.Brainmess.ProgramStream"/> class
+        /// Initializes a new instance of the <see cref="Program"/> class
         /// with the characters from the specified program. The program counter is set to the first
         /// character in the program.
         /// </summary>
-        public ProgramStream(string program)
+        public Program(string program)
         {
             _program = program;
         }
@@ -88,15 +88,15 @@ namespace Welch.Brainmess
         }
 
         /// <summary>
-        /// Returns a new ProgramStream with the program counter initialized to i.
+        /// Returns a new Program with the program counter initialized to i.
         /// </summary>
         /// <param name="programString"> </param>
         /// <param name="initialProgramCounter"> </param>
         /// <returns></returns>
-        public static ProgramStream LoadState(string programString, int initialProgramCounter = 0)
+        public static Program LoadState(string programString, int initialProgramCounter = 0)
         {
             if (initialProgramCounter < 0) throw new ArgumentOutOfRangeException("initialProgramCounter");
-            ProgramStream program = new ProgramStream(programString)
+            Program program = new Program(programString)
                                         {
                                             _programCounter = initialProgramCounter
                                         };

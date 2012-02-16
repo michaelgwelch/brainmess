@@ -8,10 +8,10 @@ namespace Welch.Brainmess
     public class InstructionTests
     {
         // this is doing White Box testing. It takes advantage of the fact that the real logic
-        // is done in other classes, Tape, ProgramStream, etc. Most of the instructions are one line
-        // and need only one test. The bulk of the testing is then done on Tape and ProgramStream
+        // is done in other classes, Tape, Program, etc. Most of the instructions are one line
+        // and need only one test. The bulk of the testing is then done on Tape and Program
 
-        private static readonly ProgramStream _nullProgram  = null;
+        private static readonly Program _nullProgram  = null;
         private static readonly TextReader _nullInput = null;
         private static readonly TextWriter _nullOutput = null;
 
@@ -134,7 +134,7 @@ namespace Welch.Brainmess
         {
             // Arrange
             var tape = Tape.Default;
-            var mock = new Mock<IProgramStream>(MockBehavior.Strict);
+            var mock = new Mock<IProgram>(MockBehavior.Strict);
             mock.Setup(program => program.JumpForward());
 
             // Act
@@ -168,7 +168,7 @@ namespace Welch.Brainmess
         {
             // Arrange
             var tape = Tape.LoadState(new[] { 1, 2, 3 }, 1);
-            var mock = new Mock<IProgramStream>(MockBehavior.Strict);
+            var mock = new Mock<IProgram>(MockBehavior.Strict);
             mock.Setup(program => program.JumpBackward());
 
             // Act

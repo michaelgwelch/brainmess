@@ -11,13 +11,13 @@ namespace Welch.Brainmess
     /// <summary>
     /// Defines all of the instructions available in Brainmess. Each type of instruction
     /// defines its own behavior given an execution context that consists of a
-    /// <see cref="IProgramStream"/>, <see cref="Tape"/>, <see cref="TextReader"/> (for input),
+    /// <see cref="IProgram"/>, <see cref="Tape"/>, <see cref="TextReader"/> (for input),
     /// and a <see cref="TextWriter"/> ) (for output).
     /// </summary>
     public sealed class Instruction
     {
-        private readonly Action<IProgramStream, Tape, TextReader, TextWriter> _action;
-        private Instruction(Action<IProgramStream, Tape, TextReader, TextWriter> action)
+        private readonly Action<IProgram, Tape, TextReader, TextWriter> _action;
+        private Instruction(Action<IProgram, Tape, TextReader, TextWriter> action)
         {
             _action = action;
         }
@@ -25,7 +25,7 @@ namespace Welch.Brainmess
         /// <summary>
         /// Executes this instruction within the given context.
         /// </summary>
-        public void Execute(IProgramStream program, Tape tape, TextReader input, TextWriter output)
+        public void Execute(IProgram program, Tape tape, TextReader input, TextWriter output)
         {
             _action(program, tape, input, output);
         }

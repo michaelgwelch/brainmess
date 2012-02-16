@@ -16,7 +16,7 @@ namespace Welch.Brainmess
         {
             // Arrange
             //                                               0123456789
-            ProgramStream program = ProgramStream.LoadState("++[     ]   ", 3);
+            Program program = Program.LoadState("++[     ]   ", 3);
 
             // Act
             program.JumpForward();
@@ -31,7 +31,7 @@ namespace Welch.Brainmess
         {
             // Arrange
             //                                               0123456789
-            ProgramStream program = ProgramStream.LoadState("++[     ]   ", 9);
+            Program program = Program.LoadState("++[     ]   ", 9);
 
             // Act
             program.JumpBackward();
@@ -48,7 +48,7 @@ namespace Welch.Brainmess
         {
             // Arrange
             //                                               0123456789
-            ProgramStream program = ProgramStream.LoadState("++[>>.>>>abc]   ", 4);
+            Program program = Program.LoadState("++[>>.>>>abc]   ", 4);
 
             // Act
             var instruction = program.Fetch();
@@ -63,7 +63,7 @@ namespace Welch.Brainmess
             // Arrange
             // Arrange
             //                                               0123456789
-            ProgramStream program = ProgramStream.LoadState("++[>a.>>>abc]   ", 4);
+            Program program = Program.LoadState("++[>a.>>>abc]   ", 4);
 
             // Act
             var instruction = program.Fetch();
@@ -75,7 +75,7 @@ namespace Welch.Brainmess
         [TestMethod]
         public void Fetch_CurrentInstructionIsNoOpAndWeAreAtEndOfProgram_ShouldReturnNoOp()
         {
-            var program = new ProgramStream("a");
+            var program = new Program("a");
 
             // Act
             var instruction = program.Fetch();
@@ -89,7 +89,7 @@ namespace Welch.Brainmess
         {
             try
             {
-                ProgramStream.LoadState("+", -1);
+                Program.LoadState("+", -1);
                 Assert.Fail("Expected ArgumentOutOfRangeException");
             }
             catch (ArgumentOutOfRangeException)
@@ -105,7 +105,7 @@ namespace Welch.Brainmess
         {
             // Arrange
             //                                               0123456789
-            ProgramStream program = ProgramStream.LoadState("++[>>.>>]", 8);
+            Program program = Program.LoadState("++[>>.>>]", 8);
 
             // Act
             var endOfProgram = program.EndOfProgram;
@@ -119,7 +119,7 @@ namespace Welch.Brainmess
         {
             // Arrange
             //                                               0123456789
-            ProgramStream program = ProgramStream.LoadState("++[>>.>>]", 9);
+            Program program = Program.LoadState("++[>>.>>]", 9);
 
             // Act
             var endOfProgram = program.EndOfProgram;

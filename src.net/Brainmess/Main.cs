@@ -10,7 +10,7 @@ namespace Welch.Brainmess
         public static void Main(string[] args)
         {
 
-            var program = new ProgramStream(
+            var program = new Program(
                 @"+++++++++++ number of digits to output
 > #1
 + initial number
@@ -79,14 +79,14 @@ output #12 even if it’s zero
   [>>+>+<<<-]>>>[<<<+>>>-]<<[<+>-]>[<+>-]<<<-
 ]");
             /*	
-                program = new ProgramStream(@",
+                program = new Program(@",
     ------------------------------------------------
     [->++<]
     >
     ++++++++++++++++++++++++++++++++++++++++++++++++.");
         */
 
-            program = new ProgramStream(@"
+            program = new Program(@"
 ++++++++[<+++++++++>-]<.>+++++[<++++++>-]<-.
 +++++++..+++.>++++++++[<<++++>>-]<<.
 >>++++[<------>-]<.>++++[<++++++>-]<.

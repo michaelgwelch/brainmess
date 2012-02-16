@@ -18,7 +18,7 @@ namespace Welch.Brainmess
             // Arrange
 
             // Use strict behavior to make sure the interpreter stops after only one call.
-            var mock = new Mock<IProgramStream>(MockBehavior.Strict);
+            var mock = new Mock<IProgram>(MockBehavior.Strict);
             mock.Setup(prog => prog.EndOfProgram).Returns(true);
             var program = mock.Object;
             var interpreter = new Interpreter(program);
@@ -35,7 +35,7 @@ namespace Welch.Brainmess
         public void Run_WithOneInstruction()
         {
             // Arrange
-            var mock = new Mock<IProgramStream>(MockBehavior.Strict);
+            var mock = new Mock<IProgram>(MockBehavior.Strict);
             mock.Setup(prog => prog.EndOfProgram).ReturnsInOrder(false, true);
             mock.Setup(prog => prog.Fetch()).Returns(Instruction.Increment);
             var tape = Tape.Default;
@@ -66,7 +66,7 @@ namespace Welch.Brainmess
 +++.------.--------.<+.
 ";
             const string expectedString = "Hello World!";
-            var programStream = new ProgramStream(program);
+            var programStream = new Program(program);
             var tape = Tape.Default;
             var outputStream = new MemoryStream();
             var output = new StreamWriter(outputStream) {AutoFlush = true};
@@ -88,7 +88,7 @@ namespace Welch.Brainmess
             // Arrange - Create program, tape, input, and output. We'll verify at the end 
             //           that none of them were modified as a result of running the null program.
             var tape = Tape.Default;
-            var program = new ProgramStream("");
+            var program = new Program("");
             var input = new DummyInput(); // fails on Read
             var output = new DummyOutput(); // fails on Write
             var interpreter = new Interpreter(program, tape, input, output);

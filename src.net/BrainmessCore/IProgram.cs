@@ -1,9 +1,9 @@
 namespace Welch.Brainmess
 {
     /// <summary>
-    /// Defines the members of a ProgramStream object.
+    /// Defines the members of a Program object.
     /// </summary>
-    public interface IProgramStream
+    public interface IProgram
     {
         /// <summary>
         /// Reads the Instruction at the program counter and returns it.
