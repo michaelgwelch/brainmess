@@ -9,6 +9,13 @@ namespace Welch.Brainmess
     public class Interpreter
     {
         /// <summary>
+        /// Creates an interpreter that runs the empty program.
+        /// </summary>
+        public Interpreter() : this(new ProgramStream(""))
+        {
+            
+        }
+        /// <summary>
         /// Creates an instance of an Interpreter. Each of the parameters is optional and allows a null value.
         /// </summary>
         /// <param name="program">The program to execute. If this is null, the empty program is executed.</param>
