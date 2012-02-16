@@ -3,16 +3,21 @@ using System.IO;
 
 namespace Welch.Brainmess
 {
+
+    // Note: this could just as easily be an abstract base class with 9 private subclasses.
+    // My cyclomatic complexity is out of whack because of the hidden private constructor.
+
+
     /// <summary>
     /// Defines all of the instructions available in Brainmess. Each type of instruction
     /// defines its own behavior given an execution context that consists of a
     /// <see cref="IProgramStream"/>, <see cref="Tape"/>, <see cref="TextReader"/> (for input),
     /// and a <see cref="TextWriter"/> ) (for output).
     /// </summary>
-    public class Instruction
+    public sealed class Instruction
     {
         private readonly Action<IProgramStream, Tape, TextReader, TextWriter> _action;
-        protected Instruction(Action<IProgramStream, Tape, TextReader, TextWriter> action)
+        private Instruction(Action<IProgramStream, Tape, TextReader, TextWriter> action)
         {
             _action = action;
         }
@@ -70,7 +75,7 @@ namespace Welch.Brainmess
         /// value of the current tape cell, and if it is non-zero it does nothing. If the value is zero,
         /// then it advances the program to the instruction following the loop.
         /// </summary>
-        public static readonly Instruction TestAndJumpFoward =
+        public static readonly Instruction TestAndJumpForward =
             new Instruction((program, tape, input, output) => { if (tape.Current == 0) program.JumpForward(); });
 
         /// <summary>
@@ -110,7 +115,7 @@ namespace Welch.Brainmess
                 case ',':
                     return Input;
                 case '[':
-                    return TestAndJumpFoward;
+                    return TestAndJumpForward;
                 case ']':
                     return TestAndJumpBackward;
                 default:
