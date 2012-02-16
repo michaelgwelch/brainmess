@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Welch.Brainmess
 {
     /// <summary>
-    /// Extendsion methods for LinkedListNode class
+    /// Extension methods for LinkedListNode class
     /// </summary>
     public static class LinkedListNode
     {

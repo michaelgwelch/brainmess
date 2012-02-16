@@ -21,7 +21,7 @@ namespace Welch.Brainmess
         public void Current_ConstructDefault_ExpectCurrentIsZero()
         {
             // The "simplest" test. We create an instance and expect that Current is 0
-            Assert.AreEqual(0, Tape.Default().Current);
+            Assert.AreEqual(0, Tape.Default.Current);
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace Welch.Brainmess
         public void MoveForward_ConstructDefaultAndMoveFoward_ExpectPositionToEqualOne()
         {
             // Assemble
-            var tape = Tape.Default();
+            var tape = Tape.Default;
 
             // Act
             tape.MoveForward(); // Method being tested.
@@ -137,7 +137,7 @@ namespace Welch.Brainmess
         public void MoveBackward_ConstructFromSingleCellListMoveBackwardAndMutate_ExpectFirstCellToMatch()
         {
             // Assemble
-            var tape = Tape.Default();
+            var tape = Tape.Default;
 
             // Act
             tape.MoveBackward();

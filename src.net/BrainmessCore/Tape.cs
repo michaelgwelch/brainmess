@@ -23,14 +23,15 @@ namespace Welch.Brainmess
         /// <summary>
         /// Creates a tape with a value of 0 in every cell. 
         /// </summary>
-        public static Tape Default()
+        public static Tape Default
         {
-            return LoadState(Enumerable.Range(0,1));
+            get { return LoadState(Enumerable.Range(0, 1)); }
         }
 
         /// <summary>
         /// Creates a tape that has the specified values located sequentially somewhere in the middle
         /// of the tape. The cursor is set to point to the cell indicated by <paramref name="position"/>.
+        /// All other cells on the tape are set to 0.
         /// </summary>
         /// <param name="cells">A sequence of integers to load onto the new tape.</param>
         /// <param name="position">An "index" into <paramref name="cells"/> that indicates which one should
@@ -48,6 +49,7 @@ namespace Welch.Brainmess
             int counter = position;
             var currentNode = list.First;
             
+            // Find the linked list node that corresponds to the specified position.
             while(counter > 0)
             {
                 Debug.Assert(currentNode != null); // This is used to remove Resharper warning. Our checks above gaurantee this will never throw.
@@ -58,15 +60,42 @@ namespace Welch.Brainmess
             return new Tape(currentNode);
         }
 
+        /// <summary>
+        /// Clones the state of this instance and returns it as an 
+        /// instance of <see cref="State"/>.
+        /// </summary>
+        /// <returns></returns>
         public State GetState()
         {
             return State.From(this);
         }
 
+        /// <summary>
+        /// Represents the state of a Tape at a specific point in time.
+        /// All of the cells that have ever been visited are copied into an array
+        /// named Cells, and the current cell is indicated by an index into that
+        /// array named Position.
+        /// </summary>
         public class State
         {
+            /// <summary>
+            /// Indicate the cell that was current at the moment this instance
+            /// was created.
+            /// </summary>
             public int Position { get; private set; }
+            
+            /// <summary>
+            /// The sequence of integers that were on the tape (in the order they were on the 
+            /// tape) at the moment this instance was created.
+            /// </summary>
             public ReadOnlyCollection<int> Cells { get; private set; }
+
+            /// <summary>
+            /// Creates an instance of <see cref="State"/> by copying the state information
+            /// from <paramref name="tape"/>.
+            /// </summary>
+            /// <param name="tape"></param>
+            /// <returns></returns>
             public static State From(Tape tape)
             {
                 var list = tape._currentCell.List;

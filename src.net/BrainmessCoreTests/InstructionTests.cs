@@ -133,7 +133,7 @@ namespace Welch.Brainmess
         public void TestAndJumpForwardExecution_WithTapeEqualToZero_ShouldJump()
         {
             // Arrange
-            var tape = Tape.Default();
+            var tape = Tape.Default;
             var mock = new Mock<IProgramStream>(MockBehavior.Strict);
             mock.Setup(program => program.JumpForward());
 

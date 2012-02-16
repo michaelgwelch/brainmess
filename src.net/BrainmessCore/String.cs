@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace Welch.Brainmess
 {
@@ -9,55 +10,39 @@ namespace Welch.Brainmess
     {
 
         /// <summary>
-        /// Returns the index of the brace that matches the brace at the specified index of sequence.
+        /// Returns the index of the square bracket that matches the bracket at the specified index of sequence.
+        /// If the character at the specified index is not a bracket then an excpetion is thrown.
         /// </summary>
         public static int FindMatch(this string sequence, int index)
         {
-            if (sequence[index] == '[') return MatchForward(sequence, index);
-            if (sequence[index] == ']') return MatchBackward(sequence, index);
+            if (sequence[index] == '[') return FindMatch(sequence, index, TravelForward);
+            if (sequence[index] == ']') return FindMatch(sequence, index, TravelBackward);
             throw new ArgumentException("The character at index " + index + " is not a jump character");
 
         }
 
-        // Note: JumpForward and JumpBackward are mirror images of each other.
-        // We could a) write one method that takes delegates for each of the differences
-        // b) In one of them, reverse the string and calculate the index and call the otehr
-        // c) leave as is
+        private const int TravelForward = 1;
+        private const int TravelBackward = -1;
 
-        private static int MatchForward(string sequence, int index)
+        private static int FindMatch(string sequence, int index, int increment)
         {
-            int counter = index + 1;
+            // increment should be +1 to move forward, and -1 to move backward
+            Debug.Assert((increment == -1) || (increment == 1));
+
+            int position = index + increment;
             int nestLevel = 1;
 
             while (nestLevel > 0)
             {
-                char character = sequence[counter];
+                char character = sequence[position];
 
-                if (character == '[') nestLevel++;
-                else if (character == ']') nestLevel--;
+                if (character == '[') nestLevel = nestLevel + increment;
+                else if (character == ']') nestLevel = nestLevel - increment;
 
-                counter++;
+                position = position + increment;
             }
 
-            return counter - 1;
-        }
-
-        private static int MatchBackward(string sequence, int index)
-        {
-            int counter = index - 1;
-            int nestLevel = 1;
-
-            while (nestLevel > 0)
-            {
-                char character = sequence[counter];
-
-                if (character == '[') nestLevel--;
-                else if (character == ']') nestLevel++;
-
-                counter--;
-            }
-
-            return counter + 1;
+            return position - increment;
         }
 
 

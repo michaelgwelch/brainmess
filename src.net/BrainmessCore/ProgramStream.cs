@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace Welch.Brainmess
@@ -33,9 +34,15 @@ namespace Welch.Brainmess
         /// </summary>
         public Instruction Fetch()
         {
-            var instruction = _program[_programCounter];
-            _programCounter++;
-            return Instruction.FromInt(instruction);
+            Instruction instruction;
+            do
+            {
+                var character = _program[_programCounter];
+                instruction = Instruction.FromInt(character);
+                _programCounter++;
+            } while (instruction == Instruction.NoOperation && !EndOfProgram);
+
+            return instruction;
         }
 
         /// <summary>
@@ -72,16 +79,26 @@ namespace Welch.Brainmess
             _programCounter = _program.FindMatch(_programCounter - 1);
         }
 
+        /// <summary>
+        /// Gets the "address" of the next instruction to be fetched.
+        /// </summary>
         public int ProgramCounter
         {
             get { return _programCounter; }
         }
 
-        public static ProgramStream LoadState(string s, int i)
+        /// <summary>
+        /// Returns a new ProgramStream with the program counter initialized to i.
+        /// </summary>
+        /// <param name="programString"> </param>
+        /// <param name="initialProgramCounter"> </param>
+        /// <returns></returns>
+        public static ProgramStream LoadState(string programString, int initialProgramCounter = 0)
         {
-            ProgramStream program = new ProgramStream(s)
+            if (initialProgramCounter < 0) throw new ArgumentOutOfRangeException("initialProgramCounter");
+            ProgramStream program = new ProgramStream(programString)
                                         {
-                                            _programCounter = i
+                                            _programCounter = initialProgramCounter
                                         };
             return program;
         }

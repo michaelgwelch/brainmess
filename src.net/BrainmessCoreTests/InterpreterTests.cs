@@ -19,7 +19,7 @@ namespace Welch.Brainmess
             var mock = new Mock<IProgramStream>(MockBehavior.Strict);
             mock.Setup(prog => prog.EndOfProgram).Returns(true);
             var program = mock.Object;
-            var interpreter = new Interpreter(program, null, null, null);
+            var interpreter = new Interpreter(program);
 
             // Act
             interpreter.Run();
@@ -36,9 +36,9 @@ namespace Welch.Brainmess
             var mock = new Mock<IProgramStream>(MockBehavior.Strict);
             mock.Setup(prog => prog.EndOfProgram).ReturnsInOrder(false, true);
             mock.Setup(prog => prog.Fetch()).Returns(Instruction.Increment);
-            var tape = Tape.Default();
+            var tape = Tape.Default;
             var program = mock.Object;
-            var interpreter = new Interpreter(program, tape, null, null);
+            var interpreter = new Interpreter(program, tape);
 
             // Act
             interpreter.Run();
@@ -62,7 +62,7 @@ namespace Welch.Brainmess
 ";
             const string expectedString = "Hello World!";
             var programStream = new ProgramStream(program);
-            var tape = Tape.Default();
+            var tape = Tape.Default;
             var outputStream = new MemoryStream();
             var output = new StreamWriter(outputStream) {AutoFlush = true};
             var interpeter = new Interpreter(programStream, tape, null, output);
@@ -77,6 +77,13 @@ namespace Welch.Brainmess
             Assert.AreEqual(expectedString, actualString);
         }
 
+        [TestMethod]
+        public void Run_WithNullProgram()
+        {
+            // If it runs without exception, the test passes.
+            var interpreter = new Interpreter();
+            interpreter.Run();
+        }
         // ReSharper restore InconsistentNaming
 
     }

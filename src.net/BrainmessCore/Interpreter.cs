@@ -1,18 +1,26 @@
+using System;
 using System.IO;
 
 namespace Welch.Brainmess
 {
+    /// <summary>
+    /// Represents a Brainmess interpreter.
+    /// </summary>
     public class Interpreter
     {
-        // this class had all the references to all the dependencies so it makes sense to make it implement
-        // IExecutionContext. That decouples all of the Instrucions for the fact that there are 4 types of objects.
-
-        public Interpreter(IProgramStream program, Tape tape, TextReader input, TextWriter output)
+        /// <summary>
+        /// Creates an instance of an Interpreter. Each of the parameters is optional and allows a null value.
+        /// </summary>
+        /// <param name="program">The program to execute. If this is null, the empty program is executed.</param>
+        /// <param name="tape">The tape to use as a memory story. If this is null, a default tape is used.</param>
+        /// <param name="input">The input source to use. If this is null then Console.In is used.</param>
+        /// <param name="output">The output source to use. If this is null then Console.Out is used.</param>
+        public Interpreter(IProgramStream program = null, Tape tape = null, TextReader input = null, TextWriter output = null)
         {
-            _program = program;
-            _tape = tape;
-            _input = input;
-            _output = output;
+            _program = program ?? new ProgramStream(string.Empty);
+            _tape = tape ?? Tape.Default;
+            _input = input ?? Console.In;
+            _output = output ?? Console.Out;
         }
 
         private readonly IProgramStream _program;
@@ -21,7 +29,10 @@ namespace Welch.Brainmess
         private readonly TextReader _input;
 
 
-
+        /// <summary>
+        /// Runs the program given in the constructor within the context given
+        /// in the constructor.
+        /// </summary>
         public void Run()
         {
             while (!_program.EndOfProgram)

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Welch.Brainmess
@@ -43,8 +40,11 @@ namespace Welch.Brainmess
             Assert.AreEqual(2, program.ProgramCounter);
         }
 
+        // Fetch was modified to skip no ops, so now it has more complicated set of tests.
+        // ReSharper disable InconsistentNaming
+
         [TestMethod]
-        public void Fetch()
+        public void Fetch_NotANoOp_ShouldReturnNextInstruction()
         {
             // Arrange
             //                                               0123456789
@@ -56,6 +56,47 @@ namespace Welch.Brainmess
             // Assert
             Assert.AreEqual(Instruction.MoveForward, instruction);
         }
+
+        [TestMethod]
+        public void Fetch_CurrentInstructionIsANoOp_ShouldSkipAndReturnNextRealInstruction()
+        {
+            // Arrange
+            // Arrange
+            //                                               0123456789
+            ProgramStream program = ProgramStream.LoadState("++[>a.>>>abc]   ", 4);
+
+            // Act
+            var instruction = program.Fetch();
+
+            // Assert
+            Assert.AreEqual(Instruction.Output, instruction);
+        }
+
+        [TestMethod]
+        public void Fetch_CurrentInstructionIsNoOpAndWeAreAtEndOfProgram_ShouldReturnNoOp()
+        {
+            ProgramStream program = new ProgramStream("a");
+
+            // Act
+            var instruction = program.Fetch();
+
+            // Assert
+            Assert.AreEqual(Instruction.NoOperation, instruction);
+        }
+
+        [TestMethod]
+        public void LoadState_WithNegativeProgramCounter_ThrowsArgumentOutOfRangeException()
+        {
+            try
+            {
+                ProgramStream.LoadState("+", -1);
+                Assert.Fail("Expected ArgumentOutOfRangeException");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+            }
+        }
+
 
         // This is more black box testing from here. We can see from the code that only one path is taken.
 
@@ -86,5 +127,6 @@ namespace Welch.Brainmess
             // Assert
             Assert.IsTrue(endOfProgram);
         }
+        // ReSharper restore InconsistentNaming
     }
 }
