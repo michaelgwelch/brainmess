@@ -16,7 +16,7 @@ namespace Welch.Brainmess
             
         }
         /// <summary>
-        /// Creates an instance of an Interpreter. Each of the parameters is optional and allows a null value.
+        /// Creates an instance of an Interpreter. Each of the parameters except program is optional..
         /// </summary>
         /// <param name="program">The program to execute. If this is null, the empty program is executed.</param>
         /// <param name="tape">The tape to use as a memory story. If this is null, a default tape is used.</param>
@@ -24,7 +24,7 @@ namespace Welch.Brainmess
         /// <param name="output">The output source to use. If this is null then Console.Out is used.</param>
         public Interpreter(IProgramStream program = null, Tape tape = null, TextReader input = null, TextWriter output = null)
         {
-            _program = program ?? new ProgramStream(string.Empty);
+            _program = program;
             _tape = tape ?? Tape.Default;
             _input = input ?? Console.In;
             _output = output ?? Console.Out;

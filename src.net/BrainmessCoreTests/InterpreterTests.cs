@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Language.Flow;
@@ -50,6 +52,9 @@ namespace Welch.Brainmess
 
         }
 
+        // Ignored because it is an integration test and screws up actual coverage numbers.
+        [Ignore]
+        [TestCategory("Integration")]
         [TestMethod]
         public void Run_HelloWorld()
         {
@@ -78,14 +83,55 @@ namespace Welch.Brainmess
         }
 
         [TestMethod]
-        public void Run_WithNullProgram()
+        public void Run_WithEmptyProgram_ShouldNotChangeStateOfAnything()
         {
-            // If it runs without exception, the test passes.
-            var interpreter = new Interpreter();
+            // Arrange - Create program, tape, input, and output. We'll verify at the end 
+            //           that none of them were modified as a result of running the null program.
+            var tape = Tape.Default;
+            var program = new ProgramStream("");
+            var input = new DummyInput(); // fails on Read
+            var output = new DummyOutput(); // fails on Write
+            var interpreter = new Interpreter(program, tape, input, output);
+
+            // Act
             interpreter.Run();
+
+            // Assert
+            Assert.AreEqual(0, program.ProgramCounter);
+            var state = tape.GetState();
+            Assert.AreEqual(0, state.Position);
+            CollectionAssert.AreEqual(new[] {0}, state.Cells);
+        }
+
+        [TestMethod]
+        public void Run_WithDefaultInterpreter_DoesNotBlowUp()
+        {
+            new Interpreter().Run();
         }
         // ReSharper restore InconsistentNaming
 
+    }
+
+    public class DummyInput : TextReader
+    {
+        public override int Read()
+        {
+            Assert.Fail("Did not expect a Read");
+            return 0;
+        }
+    }
+
+    public class DummyOutput : TextWriter
+    {
+        public override void Write(char value)
+        {
+            Assert.Fail("Did not expect a Write.");
+        }
+
+        public override Encoding Encoding
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 
     public static class MoqExtensions
