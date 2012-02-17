@@ -15,37 +15,29 @@ namespace Welch.Brainmess
         /// </summary>
         public static int FindMatch(this string sequence, int index)
         {
-            if (sequence[index] == '[') return FindMatch(sequence, index, TravelForward);
-            if (sequence[index] == ']') return FindMatch(sequence, index, TravelBackward);
-            throw new ArgumentException("The character at index " + index + " is not a jump character");
+            int travelDirection;
+            if (sequence[index] == '[') travelDirection = TravelForward;
+            else if (sequence[index] == ']') travelDirection = TravelBackward;
+            else throw new ArgumentException("The character at index " + index + " is not a jump character");
 
-        }
-
-        private const int TravelForward = 1;
-        private const int TravelBackward = -1;
-
-        private static int FindMatch(string sequence, int index, int increment)
-        {
-            // increment should be +1 to move forward, and -1 to move backward
-            Debug.Assert((increment == -1) || (increment == 1));
-
-            int position = index + increment;
+            int position = index + travelDirection;
             int nestLevel = 1;
 
             while (nestLevel > 0)
             {
                 char character = sequence[position];
 
-                if (character == '[') nestLevel = nestLevel + increment;
-                else if (character == ']') nestLevel = nestLevel - increment;
+                if (character == '[') nestLevel = nestLevel + travelDirection;
+                else if (character == ']') nestLevel = nestLevel - travelDirection;
 
-                position = position + increment;
+                position = position + travelDirection;
             }
 
-            return position - increment;
+            return position - travelDirection;
         }
 
-
+        private const int TravelForward = 1;
+        private const int TravelBackward = -1;
     }
 }
 
