@@ -1,5 +1,7 @@
 module Instruction where
 
+import Context
+
 data Instruction = MoveForward
                  | MoveBackward
                  | Increment
@@ -18,3 +20,7 @@ parseInstruction '.' = Output
 parseInstruction ',' = Input
 parseInstruction '[' = TestAndJumpForward
 parseInstruction ']' = TestAndJumpBackward
+
+
+execute :: (Instruction -> Context) -> Context
+execute MoveForward (Context p t) = (Context p $ moveF t) 
