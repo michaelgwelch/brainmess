@@ -1,48 +1,33 @@
-module Tape where
+module Tape(Tape(), tape, createTape, moveF, moveR, get, set, inc, dec) where
 
-import Data.Sequence
--- naive approach that just uses a regular list.
+import Data.Sequence 
+import Prelude hiding (length)
 
-data ListTraveler = Iterate (Seq Int) Int deriving (Show, Eq)
+data Tape = Tape (Seq Int) Int deriving (Show, Eq)
 
-traveler :: ListTraveler
-traveler = Iterate (singleton 0) 0
-
-moveNext :: ListTraveler -> ListTraveler 
-moveNext (Iterate xs pos) | pos >= ((Data.Sequence.length xs) - 1) = (Iterate (xs |> 0) (pos + 1))
-                          | otherwise = Iterate xs (pos + 1)
-
-movePrev :: ListTraveler -> ListTraveler 
-movePrev (Iterate xs pos) | pos == 0 = Iterate (0 <| xs) 0
-                          | otherwise = Iterate xs (pos - 1)
-
-getCurrent :: ListTraveler -> Int
-getCurrent (Iterate xs pos) = index xs pos
-
-setCurrent :: ListTraveler -> Int -> ListTraveler
-setCurrent (Iterate xs pos) val = (Iterate (update pos val xs) pos)
-
-data Tape = Tape ListTraveler deriving (Show, Eq)
-
-createTape :: Seq Int -> Int -> Tape
-createTape is pos = Tape (Iterate is pos)
 tape :: Tape
-tape = Tape traveler
+tape = Tape (singleton 0) 0
 
-inc :: Tape -> Tape
-inc (Tape t) = Tape (setCurrent t (getCurrent t + 1))
+createTape :: [Int] -> Tape
+createTape = (flip Tape) 0 . fromList
 
-dec :: Tape -> Tape
-dec (Tape t) = Tape (setCurrent t (getCurrent t - 1))
+moveF :: Tape -> Tape 
+moveF (Tape xs pos) | pos >= ((length xs) - 1) = (Tape (xs |> 0) (pos + 1))
+                    | otherwise = Tape xs (pos + 1)
+
+moveR :: Tape -> Tape 
+moveR (Tape xs 0) = Tape (0 <| xs) 0
+moveR (Tape xs pos) = Tape xs (pos - 1)
 
 get :: Tape -> Int
-get (Tape t) = getCurrent t
+get (Tape xs pos) = index xs pos
 
 set :: Tape -> Int -> Tape
-set (Tape t) val = Tape $ setCurrent t val
+set (Tape xs pos) val = (Tape (update pos val xs) pos)
 
-moveF :: Tape -> Tape
-moveF (Tape t) = Tape $ moveNext t
+inc :: Tape -> Tape
+inc t = set t $ (get t) + 1
 
-moveR :: Tape -> Tape
-moveR (Tape t) = Tape $ movePrev t
+dec :: Tape -> Tape
+dec t = set t $ (get t) - 1
+
