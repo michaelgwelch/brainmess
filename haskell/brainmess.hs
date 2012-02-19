@@ -8,5 +8,5 @@ main :: IO ()
 main = do
             args <- getArgs
             prog <- readFile $ args !! 0
-            run (Program prog 0) tape
+            run (createProgram prog) tape
             return ()
