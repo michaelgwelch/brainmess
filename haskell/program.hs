@@ -1,8 +1,7 @@
-module Program where
+module Program(createProgram, endOfProgram, fetch, run) where
 import Tape
 import Data.Char
 import Data.Sequence
-import Debug.Trace
 import Prelude hiding (length, take, drop)
 
 -- The Program value constructor should be kept hidden
@@ -23,13 +22,14 @@ jumpForward (Program s p) = (Program s ((match s (p-1))+1))
 jumpBackward :: Program -> Program
 jumpBackward (Program s p) = (Program s (match s (p-1)))
 
-
+-- Finds the bracket that matches the one at index p of cs
 match :: Seq Char -> Int -> Int
 match cs p | (index cs p) == '[' = matchForward (viewl (drop (p+1) cs)) (p+1) 1 
            | (index cs p) == ']' = matchBackward (viewr (take p cs)) (p-1) 1 
            | otherwise = error "match: Current char is not '[' or ']'"
 
-
+-- Takes a ViewL Char to search, the current position in overall sequence,
+-- and the current nest level and returns the index of matching bracket.
 matchForward :: ViewL Char -> Int -> Int -> Int
 matchForward _ p 0 = (p-1)
 matchForward ('[' :< cs) p n = matchForward (viewl cs) (p+1) (n+1)
