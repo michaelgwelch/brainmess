@@ -1,10 +1,10 @@
-
+module Program where
 import Tape
 import Data.Char
-import System
+import Debug.Trace
 
 -- The Program value constructor should be kept hidden
-data Program = Program String Int
+data Program = Program String Int deriving (Show, Eq)
 
 -- probably inefficient (rethink later)
 -- I'm not sure if behind the scenes haskell isn't a little smart about strings
@@ -15,20 +15,25 @@ fetch :: Program -> (Program, Char)
 fetch (Program cs pos) = ((Program cs (pos+1)), cs !! pos)
 
 jumpForward :: Program -> Program
-jumpForward p = jump 1 p 1
+jumpForward (Program s p) = (Program s ((match s (p-1) 1)+1))
 
 jumpBackward :: Program -> Program
-jumpBackward p = jump 1 p (-1)
+jumpBackward (Program s p) = (Program s (match s (p-1) (-1)))
 
 
-jump:: Int -> Program -> Int -> Program
-jump 0 p i  = p
-jump n (Program cs pos) i = jump n' (Program cs (pos+1)) i
-               where current = cs !! pos
-                     n' = if (current=='[') then n+i
+match :: String -> Int -> Int -> Int
+match s p i = match' s (p+i) 1 i
+
+match' :: String -> Int -> Int -> Int -> Int
+{-match' s p n i | trace ("match'" ++ show s ++ " " ++ show p ++ " " ++ 
+    show n ++ " " ++ show i) False = undefined
+-}
+match' s p 0 i = p-i
+match' s p n i = match' s (p+i) n' i
+               where current = s !! p
+                     n' = if (current == '[') then n+i
                           else if (current == ']') then n-i
                           else n
-
 
 execute :: Char -> Program -> Tape -> IO Char -> (Char -> IO ()) 
            -> IO (Program, Tape)
@@ -55,9 +60,3 @@ run p t = do
             (p'',t') <- execute i p' t getChar putChar
             if (endOfProgram p'') then return (p'',t') else (run p'' t')
 
-main :: IO ()
-main = do
-            args <- getArgs
-            prog <- readFile $ args !! 1
-            run (Program prog 0) tape
-            return ()

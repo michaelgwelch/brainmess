@@ -2,7 +2,7 @@ module Tape where
 
 -- naive approach that just uses a regular list.
 
-data ListTraveler = Iterate [Int] Int deriving (Show)
+data ListTraveler = Iterate [Int] Int deriving (Show, Eq)
 
 traveler :: ListTraveler
 traveler = Iterate [0] 0
@@ -26,8 +26,10 @@ setCurrent (Iterate xs pos) val | pos == 0 = Iterate (val : tail xs) pos
                                         suffix = drop (pos+1) xs
 
 
-data Tape = Tape ListTraveler deriving (Show)
+data Tape = Tape ListTraveler deriving (Show, Eq)
 
+createTape :: [Int] -> Int -> Tape
+createTape is pos = Tape (Iterate is pos)
 tape :: Tape
 tape = Tape traveler
 

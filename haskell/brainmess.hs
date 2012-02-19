@@ -1,0 +1,12 @@
+module Main where
+
+import Program 
+import System
+import Tape
+
+main :: IO ()
+main = do
+            args <- getArgs
+            prog <- readFile $ args !! 0
+            run (Program prog 0) tape
+            return ()
