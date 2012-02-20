@@ -1,10 +1,10 @@
 module Execute where
 
-import Prog
+import Jumpable
 import Tape
 import Data.Char
 
-execute :: Prog a => Char -> a -> Tape -> IO Char -> (Char -> IO ()) 
+execute :: Jumpable a => Char -> a -> Tape -> IO Char -> (Char -> IO ()) 
            -> IO (a, Tape)
 execute '>' p t _ _ = return (p, moveF t)
 execute '<' p t _ _ = return (p, moveR t)
