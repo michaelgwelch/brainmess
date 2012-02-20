@@ -1,5 +1,7 @@
 module Program(createProgram, endOfProgram, fetch, run) where
+import Prog
 import Tape
+import Execute
 import Data.Char
 import Data.Sequence
 import Prelude hiding (length, take, drop)
@@ -42,24 +44,6 @@ matchBackward (cs :> '[') p n = matchBackward (viewr cs) (p-1) (n-1)
 matchBackward (cs :> ']') p n = matchBackward (viewr cs) (p-1) (n+1)
 matchBackward (cs :> _) p n = matchBackward (viewr cs) (p-1) n
 
-execute :: Char -> Program -> Tape -> IO Char -> (Char -> IO ()) 
-           -> IO (Program, Tape)
-execute '>' p t _ _ = return (p, moveF t)
-execute '<' p t _ _ = return (p, moveR t)
-execute '+' p t _ _ = return (p, inc t)
-execute '-' p t _ _ = return (p, dec t)
-execute '.' p t _ o = do
-                    o $ chr $ get t
-                    return (p, t)
-execute ',' p t i _ = do
-                    c <- i 
-                    let t' = set t $ ord c
-                    return (p, t')
-execute '[' p t _  _= if ((get t) == 0) then return ((jumpForward p), t) 
-                  else return (p, t)
-execute ']' p t _ _ = if ((get t) /= 0) then return ((jumpBackward p), t)
-                  else return (p, t)
-execute _ p t _ _ = return (p, t)
 
 run :: Program -> Tape -> IO (Program, Tape)
 run p t | (endOfProgram p) = return (p, t)
@@ -68,3 +52,7 @@ run p t = do
             (p'',t') <- execute i p' t getChar putChar
             run p'' t'
 
+
+instance Prog Program where
+    jumpF = jumpForward
+    jumpB = jumpBackward
