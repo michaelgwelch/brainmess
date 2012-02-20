@@ -67,16 +67,19 @@ namespace Welch.Brainmess
         {
             try
             {
-                LinkedListNode<int> node = null;
-// ReSharper disable ConditionIsAlwaysTrueOrFalse
+                LinkedListNode<int> node = GetNull();
                 node.MoveForward();
-// ReSharper restore ConditionIsAlwaysTrueOrFalse
                 Assert.Fail("Expected ArgumentNullException");
 
             } catch(ArgumentNullException)
             {
                 
             }
+        }
+
+        private static LinkedListNode<int> GetNull()
+        {
+            return null;
         }
 
         [Test]

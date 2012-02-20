@@ -15,7 +15,7 @@ namespace Welch.Brainmess
         public void JumpForward()
         {
             // Arrange
-            //                                               0123456789
+            //                                   0123456789
             Program program = Program.LoadState("++[     ]   ", 3);
 
             // Act
