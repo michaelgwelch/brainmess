@@ -27,13 +27,13 @@ namespace Welch.Brainmess
         [Test]
         public void Current_ConstructPrePopulatedTape_ExpectCurrentToMatch()
         {
-            // Assemble
+            // Arrange
             const int expectedValue = 55;
             var list = new LinkedList<int>();
             list.AddFirst(expectedValue);
 
             // Act
-            var tape = Tape.LoadState(list);
+            var tape = Tape.LoadState(list, 0);
 
             // Assert - The first value in the list should equal the value of the current cell on the tape.
             Assert.AreEqual(expectedValue, tape.Current);
@@ -43,108 +43,103 @@ namespace Welch.Brainmess
         public void SetCurrent_StateShouldChange()
         {
             // Arrange
-            var tape = Tape.LoadState(new[] { 1, 2, 1 }, 1);
+            var expectedTape = Tape.LoadState(new[] { 1, 23, 1 }, 1);
+            var actualTape = Tape.LoadState(new[] { 1, 2, 1 }, 1);
 
             // Act
-            tape.Current = 23;
+            actualTape.Current = 23;
 
             // Assert
-            CollectionAssert.AreEqual(new[] { 1, 23, 1 }, tape.GetState().Cells);
+            Assert.AreEqual(expectedTape, actualTape);
         }
 
         [Test]
         public void Increment_ConstructFromValues_ExpectIncrementToIncrementTheCell()
         {
-            // Assemble
-            var list = new LinkedList<int>(new [] {22});
-            var tape = Tape.LoadState(list);
+            // Arrange
+            var expectedTape = Tape.LoadState(new[] { 23 }, 0);
+            var actualTape = Tape.LoadState(new[] { 22 }, 0);
 
             // Act
-            tape.Increment();
+            actualTape.Increment();
 
             // Assert
-            Tape.State state = tape.GetState();
-            Assert.AreEqual(23, state.Cells[state.Position]);
+            Assert.AreEqual(expectedTape, actualTape);
 
         }
 
         [Test]
         public void Decrement_ConstructFromValues_ExpectDecrementToDecrementTheCell()
         {
-            // Assemble
-            var list = new LinkedList<int>(new[] {45});
-            var tape = Tape.LoadState(list);
+            // Arrange
+            var expectedTape = Tape.LoadState(new[] { 44 }, 0);
+            var actualTape = Tape.LoadState(new[] {45}, 0);
 
             // Act
-            tape.Decrement();
+            actualTape.Decrement();
 
             // Assert
-            Tape.State state = tape.GetState();
-            Assert.AreEqual(44, state.Cells[state.Position]);
+            Assert.AreEqual(expectedTape, actualTape);
         }
 
         [Test]
         public void MoveForward_ConstructDefaultAndMoveFoward_ExpectPositionToEqualOne()
         {
-            // Assemble
-            var tape = Tape.Default;
+            // Arrange
+            var expectedTape = Tape.LoadState(new[] { 0, 0 }, 1);
+            var actualTape = Tape.Default;
 
             // Act
-            tape.MoveForward(); // Method being tested.
+            actualTape.MoveForward(); // Method being tested.
 
             // Assert
-            Tape.State state = tape.GetState();
-            Assert.AreEqual(1, state.Position);
-
+            Assert.AreEqual(expectedTape, actualTape);
 
         }
 
         [Test]
         public void MoveForward_ConstructFromMultiCellListMoveForwardAndMutate_ExpectSecondCellMatchesValue()
         {
-            // Assemble
-            var initialList = new [] { 1, 3, 5, 7, 11, 13, 17, 19 };
-            const int position = 4;
-            var tape = Tape.LoadState(initialList, position);
+            // Arrange
+            var cells = new [] { 1, 3, 5, 7, 11, 13, 17, 19 };
+            var expectedTape = Tape.LoadState(cells, 5);
+            var actualTape = Tape.LoadState(cells, 4);
 
             // Act
-            tape.MoveForward();
+            actualTape.MoveForward();
 
             // Assert
-            var state = tape.GetState();
-            Assert.AreEqual(5, state.Position);
+            Assert.AreEqual(expectedTape, actualTape);
 
         }
 
         [Test]
         public void MoveBackward_ConstructFromMutiCellListMoveBackwardAndMutate_ExpectSecondFromLastCellMatchesValue()
         {
-            // Assemble - construct a tape from a list and set current cell to last value in list.
-            var initialList = new [] { 19, 17, 13, 11, 7, 5, 3, 1 };
-            const int startPosition = 7;
-            var tape = Tape.LoadState(initialList, startPosition);
+            // Arrange - construct a tape from a list and set current cell to last value in list.
+            var values = new [] { 19, 17, 13, 11, 7, 5, 3, 1 };
+            var expectedTape = Tape.LoadState(values, 6);
+            var actualTape = Tape.LoadState(values, 7);
 
             // Act
-            tape.MoveBackward();
+            actualTape.MoveBackward();
 
             // Assert
-            var state = tape.GetState();
-            const int endingPosition = 6;
-            Assert.AreEqual(endingPosition, state.Position);
+            Assert.AreEqual(expectedTape, actualTape);
         }
 
         [Test]
         public void MoveBackward_ConstructFromSingleCellListMoveBackwardAndMutate_ExpectFirstCellToMatch()
         {
-            // Assemble
-            var tape = Tape.Default;
+            // Arrange
+            var expectedTape = Tape.LoadState(new[] { 0, 0 }, 0);
+            var actualTape = Tape.Default;
 
             // Act
-            tape.MoveBackward();
+            actualTape.MoveBackward();
 
             // Assert
-            var state = tape.GetState();
-            Assert.AreEqual(0, state.Position);
+            Assert.AreEqual(expectedTape, actualTape);
 
         }
 
@@ -153,7 +148,7 @@ namespace Welch.Brainmess
         {
             try
             {
-                Tape.LoadState(null);
+                Tape.LoadState(null, 0);
                 Assert.Fail("Expect ArgumentNullException");
             }
             catch (ArgumentNullException)

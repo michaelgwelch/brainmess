@@ -11,9 +11,9 @@ namespace Welch.Brainmess
         // is done in other classes, Tape, Program, etc. Most of the instructions are one line
         // and need only one test. The bulk of the testing is then done on Tape and Program
 
-        private static readonly Program _nullProgram  = null;
-        private static readonly TextReader _nullInput = null;
-        private static readonly TextWriter _nullOutput = null;
+        private static readonly Program NullProgram = Identity<Program>(null);
+        private static readonly TextReader NullInput = Identity<TextReader>(null);
+        private static readonly TextWriter NullOutput = Identity<TextWriter>(null);
 
         // ReSharper disable InconsistentNaming
         [TestMethod]
@@ -21,15 +21,14 @@ namespace Welch.Brainmess
         {
             // Arrange
             const int startingPosition = 1;
-            var tape = Tape.LoadState(new[] { 1, 3, 5 }, startingPosition);
+            var expectedTape = Tape.LoadState(new[] { 1, 3, 5 }, 2);
+            var actualTape = Tape.LoadState(new[] { 1, 3, 5 }, startingPosition);
 
             // Act
-            Instruction.MoveForward.Execute(_nullProgram, tape, _nullInput, _nullOutput);
+            Instruction.MoveForward.Execute(NullProgram, actualTape, NullInput, NullOutput);
 
             // Assert
-            var actualEndingPosition = tape.GetState().Position;
-            const int expectedEndingPosition = 2;
-            Assert.AreEqual(expectedEndingPosition, actualEndingPosition);
+            Assert.AreEqual(expectedTape, actualTape);
         }
 
         [TestMethod]
@@ -37,56 +36,57 @@ namespace Welch.Brainmess
         {
             // Arrange
             const int startingPosition = 1;
-            var tape = Tape.LoadState(new[] { 1, 3, 5 }, startingPosition);
+            var expectedTape = Tape.LoadState(new[] { 1, 3, 5 }, 0);
+            var actualTape = Tape.LoadState(new[] { 1, 3, 5 }, startingPosition);
 
             // Act
-            Instruction.MoveBackward.Execute(_nullProgram, tape, _nullInput, _nullOutput);
+            Instruction.MoveBackward.Execute(NullProgram, actualTape, NullInput, NullOutput);
 
             // Assert
-            var actualEndingPosition = tape.GetState().Position;
-            const int expectedEndingPosition = 0;
-
-            Assert.AreEqual(expectedEndingPosition, actualEndingPosition);
+            Assert.AreEqual(expectedTape, actualTape);
         }
 
         [TestMethod]
         public void IncrementExecution_ShouldIncrementCurrentCell()
         {
             // Arrange
-            var tape = Tape.LoadState(new[] { 5, 7, 9 }, 1);
+            var expectedTape = Tape.LoadState(new[] { 5, 8, 9 }, 1);
+            var actualTape = Tape.LoadState(new[] { 5, 7, 9 }, 1);
 
             // Act
-            Instruction.Increment.Execute(_nullProgram, tape, _nullInput, _nullOutput);
+            Instruction.Increment.Execute(NullProgram, actualTape, NullInput, NullOutput);
 
             // Assert - Expect number at index 1 to have been incrmented
-            CollectionAssert.AreEqual(new[] { 5, 8, 9 }, tape.GetState().Cells);
+            Assert.AreEqual(expectedTape, actualTape);
         }
 
         [TestMethod]
         public void DecrementExecution_AtIndex1_ShouldDecrementTheValueAtIndex1()
         {
             // Arrange
-            var tape = Tape.LoadState(new[] { 5, 7, 9 }, 1);
+            var expectedTape = Tape.LoadState(new[] { 5, 6, 9 }, 1);
+            var actualTape = Tape.LoadState(new[] { 5, 7, 9 }, 1);
 
             // Act
-            Instruction.Decrement.Execute(_nullProgram, tape, _nullInput, _nullOutput);
+            Instruction.Decrement.Execute(NullProgram, actualTape, NullInput, NullOutput);
 
             // Assert - Expect number at index 1 to have been incrmented
-            CollectionAssert.AreEqual(new[] { 5, 6, 9 }, tape.GetState().Cells);
+            Assert.AreEqual(expectedTape, actualTape);
         }
 
         [TestMethod]
         public void InputExecution_ShouldReadFromInputAtWriteToTape()
         {
             // Arrange
-            var tape = Tape.LoadState(new[] { 10, 11, 12 }, 1);
+            var expectedTape = Tape.LoadState(new[] { 10, 65, 12 }, 1);
+            var actualTape = Tape.LoadState(new[] { 10, 11, 12 }, 1);
             var input = CreateReaderWithNextCharacterEqualTo((char)65);
 
             // Act
-            Instruction.Input.Execute(_nullProgram, tape, input, _nullOutput);
+            Instruction.Input.Execute(NullProgram, actualTape, input, NullOutput);
 
             // Assert
-            CollectionAssert.AreEqual(new[] { 10, 65, 12 }, tape.GetState().Cells);
+            Assert.AreEqual(expectedTape, actualTape);
 
         }
 
@@ -102,7 +102,7 @@ namespace Welch.Brainmess
                              };
 
             // Act
-            Instruction.Output.Execute(_nullProgram, tape, _nullInput, output);
+            Instruction.Output.Execute(NullProgram, tape, NullInput, output);
 
             // Assert
             var bytes = stream.ToArray();
@@ -111,22 +111,20 @@ namespace Welch.Brainmess
             Assert.AreEqual(57, reader.Read());
         }
 
+        
         [TestMethod]
         public void TestAndJumpFowardExecution_WithTapeNotEqualToZero_ShouldDoNothing()
         {
             // Arrange
-            var cells = new[] { 0, 24, 0 };
-            const int pos = 1;
-
-            var tape = Tape.LoadState(cells, pos);
+            var mock = new Mock<IProgram>(MockBehavior.Strict); // any call to program should cause failure.
+            var actualTape = Tape.LoadState(new[] { 1 }, 0);
+            var expectedTape = Tape.LoadState(new[] { 1 }, 0);
 
             // Act
-            Instruction.TestAndJumpForward.Execute(_nullProgram, tape, _nullInput, _nullOutput);
+            Instruction.TestAndJumpForward.Execute(mock.Object, actualTape, NullInput, NullOutput);
 
             // Assert
-            var state = tape.GetState();
-            Assert.AreEqual(pos, state.Position);
-            CollectionAssert.AreEqual(cells, state.Cells);
+            Assert.AreEqual(expectedTape, actualTape); // No change to tape
         }
 
         [TestMethod]
@@ -138,7 +136,7 @@ namespace Welch.Brainmess
             mock.Setup(program => program.JumpForward());
 
             // Act
-            Instruction.TestAndJumpForward.Execute(mock.Object, tape, _nullInput, _nullOutput);
+            Instruction.TestAndJumpForward.Execute(mock.Object, tape, NullInput, NullOutput);
 
             // Assert
             mock.VerifyAll();
@@ -149,18 +147,15 @@ namespace Welch.Brainmess
         public void TestAndJumpBackwardExecution_WithTapeEqualToZero_ShouldDoNothing()
         {
             // Arrange
-            var cells = new[] { 0, 0, 0 };
-            const int pos = 1;
-
-            var tape = Tape.LoadState(cells, pos);
+            var mock = new Mock<IProgram>(MockBehavior.Strict);
+            var expectedTape = Tape.LoadState(new[] { 0, 0, 0 }, 1);
+            var actualTape = Tape.LoadState(new[] { 0, 0, 0 }, 1);
 
             // Act
-            Instruction.TestAndJumpBackward.Execute(_nullProgram, tape, _nullInput, _nullOutput);
+            Instruction.TestAndJumpBackward.Execute(mock.Object, actualTape, NullInput, NullOutput);
 
             // Assert
-            var state = tape.GetState();
-            Assert.AreEqual(pos, state.Position);
-            CollectionAssert.AreEqual(cells, state.Cells);
+            Assert.AreEqual(expectedTape, actualTape);
         }
 
         [TestMethod]
@@ -172,7 +167,7 @@ namespace Welch.Brainmess
             mock.Setup(program => program.JumpBackward());
 
             // Act
-            Instruction.TestAndJumpBackward.Execute(mock.Object, tape, _nullInput, _nullOutput);
+            Instruction.TestAndJumpBackward.Execute(mock.Object, tape, NullInput, NullOutput);
 
             // Assert
             mock.VerifyAll();
@@ -185,7 +180,7 @@ namespace Welch.Brainmess
             // Arrange
 
             // Act
-            Instruction.NoOperation.Execute(_nullProgram, null, _nullInput, _nullOutput);
+            Instruction.NoOperation.Execute(NullProgram, null, NullInput, NullOutput);
 
             // Assert
             
@@ -271,6 +266,14 @@ namespace Welch.Brainmess
 
         }
 
+        /// <summary>
+        /// The Identity function. Returns the specified value.
+        /// Useful for quieting Resharper warnings about null.
+        /// </summary>
+        public static T Identity<T>(T value)
+        {
+            return value;
+        }
 
         // ReSharper restore InconsistentNaming
     }

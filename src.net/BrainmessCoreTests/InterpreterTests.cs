@@ -38,16 +38,16 @@ namespace Welch.Brainmess
             var mock = new Mock<IProgram>(MockBehavior.Strict);
             mock.Setup(prog => prog.EndOfProgram).ReturnsInOrder(false, true);
             mock.Setup(prog => prog.Fetch()).Returns(Instruction.Increment);
-            var tape = Tape.Default;
+            var expectedTape = Tape.LoadState(new[] { 1 }, 0);
+            var actualTape = Tape.Default;
             var program = mock.Object;
-            var interpreter = new Interpreter(program, tape);
+            var interpreter = new Interpreter(program, actualTape);
 
             // Act
             interpreter.Run();
 
             // Assert
-            var state = tape.GetState();
-            Assert.AreEqual(1, state.Cells[state.Position]);
+            Assert.AreEqual(expectedTape, actualTape);
 
 
         }
@@ -98,9 +98,7 @@ namespace Welch.Brainmess
 
             // Assert
             Assert.AreEqual(0, program.ProgramCounter);
-            var state = tape.GetState();
-            Assert.AreEqual(0, state.Position);
-            CollectionAssert.AreEqual(new[] {0}, state.Cells);
+            Assert.AreEqual(tape, Tape.Default);
         }
 
         [TestMethod]
@@ -117,7 +115,9 @@ namespace Welch.Brainmess
         public override int Read()
         {
             Assert.Fail("Did not expect a Read");
+// ReSharper disable HeuristicUnreachableCode
             return 0;
+// ReSharper restore HeuristicUnreachableCode
         }
     }
 

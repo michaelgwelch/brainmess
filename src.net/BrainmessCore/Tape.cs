@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Welch.Brainmess
@@ -25,7 +24,7 @@ namespace Welch.Brainmess
         /// </summary>
         public static Tape Default
         {
-            get { return LoadState(Enumerable.Range(0, 1)); }
+            get { return LoadState(Enumerable.Range(0, 1), 0); }
         }
 
         /// <summary>
@@ -36,7 +35,7 @@ namespace Welch.Brainmess
         /// <param name="cells">A sequence of integers to load onto the new tape.</param>
         /// <param name="position">An "index" into <paramref name="cells"/> that indicates which one should
         /// be considered the current cell for the initial state of the tape.</param>
-        public static Tape LoadState(IEnumerable<int> cells, int position = 0)
+        public static Tape LoadState(IEnumerable<int> cells, int position)
         {
             if (cells == null) throw new ArgumentNullException("cells");
             var array = cells.ToArray(); 
@@ -58,62 +57,6 @@ namespace Welch.Brainmess
             }
 
             return new Tape(currentNode);
-        }
-
-        /// <summary>
-        /// Clones the state of this instance and returns it as an 
-        /// instance of <see cref="State"/>.
-        /// </summary>
-        /// <returns></returns>
-        public State GetState()
-        {
-            return State.From(this);
-        }
-
-        /// <summary>
-        /// Represents the state of a Tape at a specific point in time.
-        /// All of the cells that have ever been visited are copied into an array
-        /// named Cells, and the current cell is indicated by an index into that
-        /// array named Position.
-        /// </summary>
-        public class State
-        {
-            /// <summary>
-            /// Indicate the cell that was current at the moment this instance
-            /// was created.
-            /// </summary>
-            public int Position { get; private set; }
-            
-            /// <summary>
-            /// The sequence of integers that were on the tape (in the order they were on the 
-            /// tape) at the moment this instance was created.
-            /// </summary>
-            public ReadOnlyCollection<int> Cells { get; private set; }
-
-            /// <summary>
-            /// Creates an instance of <see cref="State"/> by copying the state information
-            /// from <paramref name="tape"/>.
-            /// </summary>
-            /// <param name="tape"></param>
-            /// <returns></returns>
-            public static State From(Tape tape)
-            {
-                var list = tape._currentCell.List;
-                var node = list.First;
-                var position = 0;
-                while(node != tape._currentCell)
-                {
-                    Debug.Assert(node != null); // This quiets the Resharper warning. We no for sure this will never be null.
-                    node = node.Next;
-                    position++;
-                }
-
-                return new State
-                           {
-                               Cells = new ReadOnlyCollection<int>(tape._currentCell.List.ToArray()),
-                               Position = position
-                           };
-            }
         }
 
         private Tape(LinkedListNode<int> startingCell)
@@ -172,6 +115,25 @@ namespace Welch.Brainmess
             {
                 _currentCell.Value = value;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (!(obj is Tape)) return false;
+
+            Tape other = (Tape)obj;
+            return _currentCell.List.IsEqualTo(other._currentCell.List) &&
+                   _currentCell.IndexOf() == other._currentCell.IndexOf();
+        }
+
+        /// <summary>
+        /// Does not provide a userful implementation. Always returns 0.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return 0;
         }
     }
 }
