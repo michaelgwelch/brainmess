@@ -11,9 +11,9 @@ namespace Welch.Brainmess
         // is done in other classes, Tape, Program, etc. Most of the instructions are one line
         // and need only one test. The bulk of the testing is then done on Tape and Program
 
-        private static readonly Program NullProgram = Identity<Program>(null);
-        private static readonly TextReader NullInput = Identity<TextReader>(null);
-        private static readonly TextWriter NullOutput = Identity<TextWriter>(null);
+        private static readonly Program NullProgram = Identity.ValueOf<Program>(null);
+        private static readonly TextReader NullInput = Identity.ValueOf<TextReader>(null);
+        private static readonly TextWriter NullOutput = Identity.ValueOf<TextWriter>(null);
 
         // ReSharper disable InconsistentNaming
         [TestMethod]
@@ -264,15 +264,6 @@ namespace Welch.Brainmess
             MemoryStream newStream = new MemoryStream(stream.ToArray());
             return new StreamReader(newStream);
 
-        }
-
-        /// <summary>
-        /// The Identity function. Returns the specified value.
-        /// Useful for quieting Resharper warnings about null.
-        /// </summary>
-        public static T Identity<T>(T value)
-        {
-            return value;
         }
 
         // ReSharper restore InconsistentNaming

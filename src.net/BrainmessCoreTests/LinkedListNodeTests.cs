@@ -162,6 +162,70 @@ namespace Welch.Brainmess
             Assert.AreSame(after, cell.Next);
             Assert.AreEqual(expectedCellValue, cell.Value);
         }
+
+
+        [TestMethod]
+        public void IndexOf_SearchForFirstNode_ShouldReturn0()
+        {
+            // Arrange
+            var list = new LinkedList<int>(new[] { 1, 2, 3, 5, 8, 13 });
+            var firstNode = list.First;
+            const int expectedIndex = 0;
+
+            // Act
+            var actualIndex = firstNode.IndexOf();
+
+            // Assert
+            Assert.AreEqual(expectedIndex, actualIndex);
+        }
+
+        [TestMethod]
+        public void IndexOf_SearchForFifthNode_ShouldReturn4()
+        {
+            // Arrange
+            var list = new LinkedList<int>(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+            var fifthNode = list.Find(5); // This only works because 5 is the 5th element (which as an index of 4)
+            const int expectedIndex = 4;
+
+            // Act
+            var actualIndex = fifthNode.IndexOf();
+
+            // Assert
+            Assert.AreEqual(expectedIndex, actualIndex);
+
+        }
+
+        [TestMethod]
+        public void IndexOf_WithNullNode_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            var node = Identity.ValueOf<LinkedListNode<int>>(null);
+
+            try
+            {
+                // Act
+                node.IndexOf();
+                Assert.Fail("Expected ArgumentNullException");
+            }
+            catch (ArgumentNullException)
+            {}
+        }
+
+        [TestMethod]
+        public void IndexOf_WithANodeNotInAList_ShouldThrowArgumentException()
+        {
+            // Arrange
+            var node = new LinkedListNode<int>(3);
+
+            try
+            {
+                // Act
+                node.IndexOf();
+                Assert.Fail("Expected ArgumentException");
+            }
+            catch (ArgumentException)
+            { }
+        }
     }
     // ReSharper restore InconsistentNaming
 }
