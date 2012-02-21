@@ -1,5 +1,5 @@
 module Program(createProgram, endOfProgram, fetch, run) where
-import Prog
+import Jumpable
 import Tape
 import Execute
 import Data.Char
@@ -53,6 +53,6 @@ run p t = do
             run p'' t'
 
 
-instance Prog Program where
+instance Jumpable Program where
     jumpF = jumpForward
     jumpB = jumpBackward

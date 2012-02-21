@@ -37,8 +37,8 @@ namespace Welch.Brainmess
         public void FindMatch_ForwardWithNoNesting()
         {
             // Arrange
-            //                           1111111111222222
-            //                 01234567890123456789012345
+            //                                 1111111111222222
+            //                       01234567890123456789012345
             const string sequence = "abcd[   djskd dksj] dsksld";
 
             // Act
