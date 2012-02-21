@@ -9,7 +9,7 @@ import Data.Sequence as Seq
 import Data.Foldable (toList)
 
 -- | Represents an infinte list of cells containing numbers.
-data Tape = Tape (Seq Int) Int deriving (Eq)
+data Tape = Tape (Seq Int) Int deriving (Eq, Show)
 
 -- | A default tape whose cells are all initialized to 0.
 tape :: Tape
@@ -50,6 +50,3 @@ inc t = set t $ (get t) + 1
 dec :: Tape -> Tape
 dec t = set t $ (get t) - 1
 
-
-instance Show Tape where
-    show (Tape xs p) = "At index " ++ show p ++ " in " ++ show (toList xs)
