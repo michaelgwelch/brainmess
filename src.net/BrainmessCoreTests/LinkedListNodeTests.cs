@@ -67,7 +67,7 @@ namespace Welch.Brainmess
         {
             try
             {
-                LinkedListNode<int> node = GetNull();
+                LinkedListNode<int> node = Identity.ValueOf<LinkedListNode<int>>(null);
                 node.MoveForward();
                 Assert.Fail("Expected ArgumentNullException");
 
@@ -75,11 +75,6 @@ namespace Welch.Brainmess
             {
                 
             }
-        }
-
-        private static LinkedListNode<int> GetNull()
-        {
-            return null;
         }
 
         [Test]
@@ -221,11 +216,88 @@ namespace Welch.Brainmess
             {
                 // Act
                 node.IndexOf();
+
+                // Assert
                 Assert.Fail("Expected ArgumentException");
             }
             catch (ArgumentException)
             { }
         }
+
+        [TestMethod]
+        public void GetNodeAtIndex_IfListIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            LinkedList<string> list = Identity.ValueOf<LinkedList<string>>(null);
+
+            try
+            {
+                // Act
+                list.GetNodeAtIndex(5);
+
+                // Assert
+                Assert.Fail("Expected ArgumentNullException");
+            }
+            catch (ArgumentNullException)
+            {
+            }
+            
+        }
+
+        [TestMethod]
+        public void GetNodeAtIndex_IfIndexIsNegative_ShouldThrowArgumentOutOfRangeException()
+        {
+            // Arrange
+            LinkedList<string> strings = new LinkedList<string>();
+
+            try
+            {
+                // Act
+                strings.GetNodeAtIndex(-1);
+
+                // Assert
+                Assert.Fail("Expected ArgumentOutOfRange Exception");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+
+            }
+
+        }
+
+        [TestMethod]
+        public void GetNodeAtIndex_IfIndexEqualsLength_ShouldThrowArgumentOutOfRangeException()
+        {
+            // Arrange
+            LinkedList<int> nums = new LinkedList<int>(new[] { 1, 3 });
+
+            try
+            {
+                // Act
+                nums.GetNodeAtIndex(2);
+
+                // Assert
+                Assert.Fail("Expected ArgumentOutOfRangeException");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void GetNodeAtIndex_WithIndexEqualToOne_ShouldReturnSecondNode()
+        {
+            // Arrange
+            LinkedList<int> nums = new LinkedList<int>(new[] { 1, 3, 5 });
+
+            // Act
+            var node = nums.GetNodeAtIndex(1);
+
+            // Assert
+            Assert.AreEqual(3, node.Value);
+        }
+
+
     }
     // ReSharper restore InconsistentNaming
 }

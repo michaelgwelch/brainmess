@@ -52,6 +52,23 @@ namespace Welch.Brainmess
             return index;
 
         }
+
+        public static LinkedListNode<T> GetNodeAtIndex<T>(this LinkedList<T> list, int index)
+        {
+            if (list == null) throw new ArgumentNullException("list");
+            if (index < 0) throw new ArgumentOutOfRangeException("index");
+
+            var currentNode = list.First;
+
+            // Find the linked list node that corresponds to the specified position.
+            while (index > 0 && currentNode != null)
+            {
+                currentNode = currentNode.Next;
+                index--;
+            }
+            if (currentNode == null) throw new ArgumentOutOfRangeException("index");
+            return currentNode;
+        }
     }
 }
 

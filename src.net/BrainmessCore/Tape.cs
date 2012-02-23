@@ -45,17 +45,7 @@ namespace Welch.Brainmess
             if (position > array.Length - 1) throw new ArgumentOutOfRangeException("position");
 
             var list = new LinkedList<int>(array);
-            int counter = position;
-            var currentNode = list.First;
-            
-            // Find the linked list node that corresponds to the specified position.
-            while(counter > 0)
-            {
-                Debug.Assert(currentNode != null); // This is used to remove Resharper warning. Our checks above gaurantee this will never throw.
-                currentNode = currentNode.Next;
-                counter--;
-            }
-
+            var currentNode = list.GetNodeAtIndex(position);
             return new Tape(currentNode);
         }
 
