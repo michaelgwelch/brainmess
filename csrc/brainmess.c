@@ -17,10 +17,12 @@ gchar getChar()
 int main(gint argc, gchar** args) 
 {
     if (argc != 2) exit(-1);
+    FILE* file = fopen(args[1], "r");
+    if (file == NULL) exit(-2);
+    
     Tape* t = tape_new();
 
-    FILE* file = fopen(args[1], "r");
-    
+
     GString* program_string = g_string_sized_new(200);
     const CHARS = 100;
     gchar* buffer = malloc(CHARS * sizeof(gchar));
