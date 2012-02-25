@@ -3,10 +3,12 @@
 --   each of which contain a number. The tape also has a /cursor/ which
 --   keeps track of the /current/ cell. The current cell is the one that
 --   all of the functions in this module operate on.
-module Tape(Tape(), tape, createTape, moveF, moveR, get, set, inc, dec) where
+module Tape(Tape(), tape, createTape, moveF, moveR, get, set, inc, dec,
+    showTape) where
 
 import Data.Sequence as Seq
-import Data.Foldable (toList)
+import Data.Foldable as F (toList, foldr)
+import ShowSeq
 
 -- | Represents an infinte list of cells containing numbers.
 data Tape = Tape (Seq Int) Int deriving (Eq, Show)
@@ -49,4 +51,17 @@ inc t = set t $ (get t) + 1
 -- | Decrements the current cell by 1.
 dec :: Tape -> Tape
 dec t = set t $ (get t) - 1
+
+-- | Shows the sequence as a tape
+showTape :: Tape -> String
+showTape (Tape xs i) = showSeqAsInf xs i
+{-showTape :: Tape -> String
+showTape (Tape xs i) = "..., " ++ showSeq left ++ "_" ++ show mid ++
+    "_, " ++ showSeq right ++ "..."
+    where (l,mid,r) = splitAt3 xs i
+          left = (truncl 5 (padl 5 0 l))
+          right = (truncr 5 (padr 5 0 r))
+-}
+--showSeq :: Show a => Seq a -> String
+--showSeq xs = F.foldr (\x -> \cs -> show x ++ ", " ++ cs) "" xs
 
