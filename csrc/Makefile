@@ -2,7 +2,7 @@
 INC=/usr/local/include/glib-2.0 /usr/local/lib/glib-2.0/include
 IDIR=$(foreach d, $(INC), -I$d)
 CC=gcc
-CFLAGS=$(IDIR)
+CFLAGS=$(IDIR) -g
 
 ODIR=obj
 LDIR =/usr/local/lib
@@ -13,7 +13,7 @@ LIBS=-lglib-2.0
 #DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 DEPS = tape.h
 
-_OBJ = prog.o tape.o
+_OBJ = brainmess.o tape.o execute.o program.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 

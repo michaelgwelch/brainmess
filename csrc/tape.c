@@ -3,12 +3,41 @@
 
 const gpointer GPTR_ZERO = GINT_TO_POINTER(0);
 
+// NOTES:
+// What do you do in a C program if an argument is NULL
+// and that isn't expected?
+
+struct _Tape 
+{
+    GList *currentCell;
+};
+
+int index_of_node_in_list(GList *node)
+{
+    int index = 0;
+    GList *current = node;
+
+    while(current != NULL)
+    {
+        current = g_list_previous(current);
+        index++;
+    }
+
+    return index;
+}
+
 Tape* tape_new()
 {
     Tape* newTape;
     newTape = malloc(sizeof(*newTape));
     newTape->currentCell = g_list_append(NULL, 0);
     return newTape;
+}
+
+void tape_free(Tape *tape)
+{
+    g_list_free(g_list_first(tape->currentCell));
+    free(tape);
 }
 
 GList* nextCell(GList *list)
@@ -37,7 +66,7 @@ void tape_set(Tape *tape, int value)
     tape->currentCell->data = GINT_TO_POINTER(value);
 }
 
-int tape_get(Tape *tape)
+int tape_get(const Tape *tape)
 {
     return GPOINTER_TO_INT(tape->currentCell->data);
 }
@@ -68,7 +97,7 @@ void append_next(gpointer data, gpointer string)
 }
 
 const gboolean RETURN_BUFFER = FALSE;
-gchar* tape_to_string(Tape* tape)
+gchar* tape_to_string(const Tape* tape)
 {
     GString *result = g_string_new("Tape [");
     GList *current = g_list_first(tape->currentCell);
@@ -76,4 +105,36 @@ gchar* tape_to_string(Tape* tape)
     g_list_foreach(current->next, (GFunc) append_next, result);
     g_string_append(result, "]");
     return g_string_free(result, RETURN_BUFFER);
+}
+
+gboolean tape_equals(const Tape *tape1, const Tape *tape2)
+{
+    GList* iter1 = g_list_first(tape1->currentCell);
+    GList* iter2 = g_list_first(tape2->currentCell);
+
+    gboolean equal = TRUE;
+    while(iter1 != NULL && iter2 != NULL)
+    {
+        if (iter1->data != iter2->data)
+        {
+            equal = FALSE;
+            break;
+        }
+        iter1 = g_list_next(iter1);
+        iter2 = g_list_next(iter2);
+    }
+
+    if (equal)
+    {
+        equal = iter1 == iter2;
+    }
+
+    if (equal)
+    {
+        gint index1 = index_of_node_in_list(tape1->currentCell);
+        gint index2 = index_of_node_in_list(tape2->currentCell);
+        equal = (index1 == index2);
+    }
+
+    return equal;
 }
