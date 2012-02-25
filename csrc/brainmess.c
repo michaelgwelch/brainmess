@@ -16,10 +16,10 @@ gchar getChar()
 
 int main(gint argc, gchar** args) 
 {
+    if (argc != 2) exit(-1);
     Tape* t = tape_new();
 
     FILE* file = fopen(args[1], "r");
-    // Todo: use GString to build up and read whole file
     
     GString* program_string = g_string_sized_new(200);
     const CHARS = 100;
