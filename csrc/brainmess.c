@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "tape.h"
 #include "program.h"
 #include "execute.h"
