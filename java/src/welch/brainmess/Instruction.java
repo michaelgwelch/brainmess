@@ -12,7 +12,7 @@ public enum Instruction
 	 */
 	MoveForward
 	{
-		public void execute(ExecutionContext context) { context.moveForward(); }
+		public void execute(IExecutionContext context) { context.moveForward(); }
 	},
 	
 	/**
@@ -20,7 +20,7 @@ public enum Instruction
 	 */
 	MoveBackward
 	{
-		public void execute(ExecutionContext context) { context.moveBackward(); }
+		public void execute(IExecutionContext context) { context.moveBackward(); }
 	},
 	
 	/**
@@ -28,7 +28,7 @@ public enum Instruction
 	 */
 	Increment
 	{
-		public void execute(ExecutionContext context) { context.increment(); }
+		public void execute(IExecutionContext context) { context.increment(); }
 	},
 	
 	/**
@@ -36,7 +36,7 @@ public enum Instruction
 	 */
 	Decrement
 	{
-		public void execute(ExecutionContext context) { context.decrement(); }
+		public void execute(IExecutionContext context) { context.decrement(); }
 	},
 	
 	/**
@@ -45,7 +45,7 @@ public enum Instruction
 	 */
 	Input
 	{
-		public void execute(ExecutionContext context) { context.input(); }
+		public void execute(IExecutionContext context) { context.input(); }
 	},
 	
 	/**
@@ -54,7 +54,7 @@ public enum Instruction
 	 */
 	Output
 	{
-		public void execute(ExecutionContext context) { context.ouput(); }
+		public void execute(IExecutionContext context) { context.ouput(); }
 	},
 	
 	/**
@@ -62,7 +62,7 @@ public enum Instruction
 	 */
 	TestAndJumpForward
 	{
-		public void execute(ExecutionContext context) { context.testAndJumpForward(); }
+		public void execute(IExecutionContext context) { context.testAndJumpForward(); }
 	},
 	
 	/**
@@ -70,7 +70,7 @@ public enum Instruction
 	 */
 	TestAndJumpBackward
 	{
-		public void execute(ExecutionContext context) { context.testAndJumpBackward(); }
+		public void execute(IExecutionContext context) { context.testAndJumpBackward(); }
 	},
 	
 	/**
@@ -78,7 +78,7 @@ public enum Instruction
 	 */
 	NOP
 	{
-		public void execute(ExecutionContext context) { }
+		public void execute(IExecutionContext context) { }
 	};
 	
 	
@@ -86,7 +86,7 @@ public enum Instruction
 	 * Executes the current instruction.
 	 * @param context The execution environment in which to execute the instruction.
 	 */
-	public abstract void execute(ExecutionContext context);
+	public abstract void execute(IExecutionContext context);
 	
 	/**
 	 * Parses an Instruction from the specified character value.

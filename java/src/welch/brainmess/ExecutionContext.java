@@ -14,7 +14,7 @@ import java.io.Reader;
  * @author Michael Welch
  *
  */
-public class ExecutionContext
+public class ExecutionContext implements IExecutionContext
 {
 
 	private final Tape tape;
@@ -39,7 +39,7 @@ public class ExecutionContext
 	public static void main(String[] args)
 	{
 		Program p = new Program(args[0]);
-		ExecutionContext context = new ExecutionContext(p, System.out, System.in);
+		IExecutionContext context = new ExecutionContext(p, System.out, System.in);
 		
 		while (!p.isEndOfProgram())
 		{
@@ -48,28 +48,48 @@ public class ExecutionContext
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see welch.brainmess.IExecutionContext#moveForward()
+	 */
+	@Override
 	public void moveForward()
 	{
 		tape.moveForward();
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see welch.brainmess.IExecutionContext#moveBackward()
+	 */
+	@Override
 	public void moveBackward()
 	{
 		tape.moveBackward();
 	}
 
+	/* (non-Javadoc)
+	 * @see welch.brainmess.IExecutionContext#increment()
+	 */
+	@Override
 	public void increment()
 	{
 		tape.increment();
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see welch.brainmess.IExecutionContext#decrement()
+	 */
+	@Override
 	public void decrement()
 	{
 		tape.decrement();
 	}
 
+	/* (non-Javadoc)
+	 * @see welch.brainmess.IExecutionContext#input()
+	 */
+	@Override
 	public void input()
 	{
 		int value;
@@ -83,6 +103,10 @@ public class ExecutionContext
 		tape.setCurrent(value);
 	}
 
+	/* (non-Javadoc)
+	 * @see welch.brainmess.IExecutionContext#ouput()
+	 */
+	@Override
 	public void ouput()
 	{
 		int value = tape.getCurrent();
@@ -90,12 +114,10 @@ public class ExecutionContext
 		output.flush();
 	}
 
-	/**
-	 * Tests the current cell. If it is 0 this jumps the
-	 * program forward to the matching ']' instruction.
-	 * The next instruction to be fetched will then be the one
-	 * immeidately following the ']' instruction.
+	/* (non-Javadoc)
+	 * @see welch.brainmess.IExecutionContext#testAndJumpForward()
 	 */
+	@Override
 	public void testAndJumpForward()
 	{
 		if (tape.getCurrent() == 0)
@@ -104,12 +126,10 @@ public class ExecutionContext
 		}
 	}
 
-	/**
-	 * Tests the current cell. If it is not 0 this jumps back
-	 * to the matching '[' instruction. The next instruction
-	 * to be fetched will then be the one immediately following the
-	 * '['.
+	/* (non-Javadoc)
+	 * @see welch.brainmess.IExecutionContext#testAndJumpBackward()
 	 */
+	@Override
 	public void testAndJumpBackward()
 	{
 		if (tape.getCurrent() != 0)
