@@ -9,7 +9,7 @@ public class TestTape
 	public void testConstructor()
 	{
 		// Should have one element set to 0.
-		assertEquals("[0]", new Tape().toString());
+		assertEquals("[*0*]", new Tape().toString());
 	}
 	
 	@Test
@@ -17,7 +17,7 @@ public class TestTape
 	{
 		Tape tape = new Tape();
 		tape.increment();
-		assertEquals("[1]", tape.toString());
+		assertEquals("[*1*]", tape.toString());
 	}
 	
 	@Test
@@ -27,7 +27,7 @@ public class TestTape
 		// increment first cell, so we can verify new cell comes before
 		tape.increment();
 		tape.moveBackward();
-		assertEquals("[0, 1]", tape.toString());
+		assertEquals("[*0*, 1]", tape.toString());
 	}
 	
 	@Test
@@ -37,7 +37,7 @@ public class TestTape
 		// increment first cell, so we can verify new cell comes after
 		tape.increment();
 		tape.moveForward();
-		assertEquals("[1, 0]", tape.toString());
+		assertEquals("[1, *0*]", tape.toString());
 	}
 	
 	@Test
@@ -45,7 +45,7 @@ public class TestTape
 	{
 		Tape tape = new Tape();
 		tape.decrement();
-		assertEquals("[-1]", tape.toString());
+		assertEquals("[*-1*]", tape.toString());
 	}
 	
 	@Test
