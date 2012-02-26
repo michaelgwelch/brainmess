@@ -95,7 +95,29 @@ public class Tape
 	 */
 	public String toString()
 	{
-		return list.toString();
+		StringBuilder builder = new StringBuilder();
+		int current = currentIndex();
+		
+		builder.append("[");
+		int i = 0;
+		boolean first = true;
+		for (int val : list)
+		{
+			if (!first)
+			{
+				builder.append(", ");
+			}
+			else 
+			{
+				first = false;
+			}
+			if (i == current) builder.append("*");
+			builder.append(val);
+			if (i == current) builder.append("*");
+			i++;
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 	
 	
