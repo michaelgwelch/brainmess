@@ -21,7 +21,7 @@ production and test.
 
 <table>
     <tr>
-        <td>Directory</td><td>Description</td>
+        <th>Directory</th><th>Description</th>
     </tr>
     <tr>
         <td>java</td><td>A Java implementation. A few unit tests.
