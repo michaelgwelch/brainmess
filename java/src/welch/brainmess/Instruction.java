@@ -16,75 +16,75 @@ public enum Instruction
 	/**
 	 * Represents the instruction that moves the tape forward one cell.
 	 */
-	MoveForward
+	MOVE_FORWARD
 	{
-		public void execute(IExecutionContext context) { context.moveForward(); }
+		public void execute(ExecutionContext context) { context.moveForward(); }
 	},
 	
 	/**
 	 * Represents the instruction that moves the tape backward one cell.
 	 */
-	MoveBackward
+	MOVE_BACKWARD
 	{
-		public void execute(IExecutionContext context) { context.moveBackward(); }
+		public void execute(ExecutionContext context) { context.moveBackward(); }
 	},
 	
 	/**
 	 * Represents the instruction that increments the value of the current cell.
 	 */
-	Increment
+	INCREMENT
 	{
-		public void execute(IExecutionContext context) { context.increment(); }
+		public void execute(ExecutionContext context) { context.increment(); }
 	},
 	
 	/**
 	 * Represents the instruction that decrements the value of the current cell.
 	 */
-	Decrement
+	DECREMENT
 	{
-		public void execute(IExecutionContext context) { context.decrement(); }
+		public void execute(ExecutionContext context) { context.decrement(); }
 	},
 	
 	/**
 	 * Represents the instruction that inputs a character and stores its integer
 	 * value on the tape at the current location.
 	 */
-	Input
+	INPUT
 	{
-		public void execute(IExecutionContext context) { context.input(); }
+		public void execute(ExecutionContext context) { context.input(); }
 	},
 	
 	/**
 	 * Represents the instruction that reads the value of the current cell and outputs
 	 * the character it represents.
 	 */
-	Output
+	OUTPUT
 	{
-		public void execute(IExecutionContext context) { context.ouput(); }
+		public void execute(ExecutionContext context) { context.ouput(); }
 	},
 	
 	/**
 	 * Represents the test and jump forward instruction.
 	 */
-	TestAndJumpForward
+	TEST_AND_JUMP_FORWARD
 	{
-		public void execute(IExecutionContext context) { context.testAndJumpForward(); }
+		public void execute(ExecutionContext context) { context.testAndJumpForward(); }
 	},
 	
 	/**
 	 * Represents the test and jump backward instruction.
 	 */
-	TestAndJumpBackward
+	TEST_AND_JUMP_BACKWARD
 	{
-		public void execute(IExecutionContext context) { context.testAndJumpBackward(); }
+		public void execute(ExecutionContext context) { context.testAndJumpBackward(); }
 	},
 	
 	/**
 	 * A no operation instruction. Used for all non-instruction characters in the program.
 	 */
-	NOP
+	NO_OPERATION
 	{
-		public void execute(IExecutionContext context) { }
+		public void execute(ExecutionContext context) { }
 	};
 	
 	
@@ -92,7 +92,7 @@ public enum Instruction
 	 * Executes the current instruction.
 	 * @param context The execution environment in which to execute the instruction.
 	 */
-	public abstract void execute(IExecutionContext context);
+	public abstract void execute(ExecutionContext context);
 	
 	/**
 	 * Parses an Instruction from the specified character value.
@@ -104,31 +104,31 @@ public enum Instruction
 		switch(value)
 		{
 		case '>':
-			return Instruction.MoveForward;
+			return Instruction.MOVE_FORWARD;
 			
 		case '<':
-			return Instruction.MoveBackward;
+			return Instruction.MOVE_BACKWARD;
 			
 		case '+':
-			return Instruction.Increment;
+			return Instruction.INCREMENT;
 			
 		case '-':
-			return Instruction.Decrement;
+			return Instruction.DECREMENT;
 			
 		case '.':
-			return Instruction.Output;
+			return Instruction.OUTPUT;
 			
 		case ',':
-			return Instruction.Input;
+			return Instruction.INPUT;
 			
 		case '[':
-			return Instruction.TestAndJumpForward;
+			return Instruction.TEST_AND_JUMP_FORWARD;
 			
 		case ']':
-			return Instruction.TestAndJumpBackward;
+			return Instruction.TEST_AND_JUMP_BACKWARD;
 			
 		default:
-			return Instruction.NOP;
+			return Instruction.NO_OPERATION;
 		}
 	}
 	

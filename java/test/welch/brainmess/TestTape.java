@@ -3,6 +3,15 @@ package welch.brainmess;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+// In these tests I take a different approach than normal. I compare
+// expected string representations of tapes with the actual strings 
+// returned by toString of the tape under test.
+
+// I normally wouldn't do this. However, I see Fowler and lots
+// of java test examples that do this. Seems very fragile. What if you
+// want to change your string representation? Every test breaks.
+// However, it is very easy to understand the test.
+
 public class TestTape
 {
 	@Test
@@ -52,7 +61,7 @@ public class TestTape
 	public void testCurrentIndexOnNewTape()
 	{
 		Tape tape = new Tape();
-		assertEquals(0, tape.currentIndex());
+		assertEquals("[*0*]", tape.toString());
 	}
 	
 	@Test
@@ -62,7 +71,7 @@ public class TestTape
 		Tape tape = new Tape();
 		tape.moveForward();
 		tape.moveBackward();
-		assertEquals(0, tape.currentIndex());
+		assertEquals("[*0*, 0]", tape.toString());
 	}
 	
 	@Test
@@ -72,42 +81,8 @@ public class TestTape
 		Tape tape = new Tape();
 		tape.moveBackward();
 		tape.moveBackward();
-		assertEquals(0, tape.currentIndex());
+		assertEquals("[*0*, 0, 0]", tape.toString());
 	}
 	
-	@Test
-	public void testForwardSeries()
-	{
-		Tape tape = new Tape();
-		for (int i = 0; i < 10; i++)
-		{
-			assertEquals(i, tape.currentIndex());
-			tape.moveForward();
-		}
-		
-		for (int i = 10; i >= 0; i--)
-		{
-			assertEquals(i, tape.currentIndex());
-			tape.moveBackward();
-		}
-		
-	}
-	
-	@Test
-	public void testBackwardSeries()
-	{
-		Tape tape = new Tape();
-		for (int i = 0; i < 10; i++)
-		{
-			assertEquals(0, tape.currentIndex());
-			tape.moveBackward();
-		}
-		
-		for (int i = 0; i < 10; i++)
-		{
-			assertEquals(i, tape.currentIndex());
-			tape.moveForward();
-		}
-	}
 
 }

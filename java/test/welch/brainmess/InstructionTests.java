@@ -11,7 +11,7 @@ public class InstructionTests {
 
 		// Arrange
 		Mockery mock = new Mockery();
-		final IExecutionContext context = mock.mock(IExecutionContext.class);
+		final ExecutionContext context = mock.mock(ExecutionContext.class);
 		
 		
 		mock.checking(new Expectations() {{
@@ -20,7 +20,7 @@ public class InstructionTests {
 		
 		
 		// Act
-		Instruction.MoveForward.execute(context);
+		Instruction.MOVE_FORWARD.execute(context);
 		
 		// Assert
 		mock.assertIsSatisfied();
@@ -32,7 +32,7 @@ public class InstructionTests {
 
 		// Arrange
 		Mockery mock = new Mockery();
-		final IExecutionContext context = mock.mock(IExecutionContext.class);
+		final ExecutionContext context = mock.mock(ExecutionContext.class);
 		
 		
 		mock.checking(new Expectations() {{
@@ -41,7 +41,7 @@ public class InstructionTests {
 		
 		
 		// Act
-		Instruction.MoveBackward.execute(context);
+		Instruction.MOVE_BACKWARD.execute(context);
 		
 		// Assert
 		mock.assertIsSatisfied();
@@ -51,14 +51,14 @@ public class InstructionTests {
 	public void testAndJumpForward_Execute() {
 		// Arrange
 		Mockery mock = new Mockery();
-		final IExecutionContext context = mock.mock(IExecutionContext.class);
+		final ExecutionContext context = mock.mock(ExecutionContext.class);
 		
 		mock.checking(new Expectations() {{
 			oneOf(context).testAndJumpForward();
 		}});
 		
 		// Act
-		Instruction.TestAndJumpForward.execute(context);
+		Instruction.TEST_AND_JUMP_FORWARD.execute(context);
 		
 		// Assert
 		mock.assertIsSatisfied();
