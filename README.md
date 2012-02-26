@@ -42,6 +42,7 @@ production and test.
         Compiles with ghc. Just type ghc brainmess.hs to compile.</td>
     </tr>
     <tr>
-        <td>csrc</td><td>A C implementation. No unit tests.</td>
+        <td>csrc</td><td>A C implementation. No unit tests (I plan to
+        try CUnit.) Should compile by just typing make.</td>
     </tr>
 </table>
