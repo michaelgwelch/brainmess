@@ -1,143 +1,58 @@
 package welch.brainmess;
 
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-
 /**
- * Represents the execution environment for executing a brain mess program.
- * It also has a main method that is the entry point for executing a program.
- * @author Michael Welch
+ * Represents and encapsulates the entire environment that a brainmess program runs within.
+ * This exposes all of the methods that an instruction needs access to execute itself.
+ * @author mgwelch
  *
  */
-public class ExecutionContext implements IExecutionContext
-{
+public interface ExecutionContext {
 
-	private final Tape tape;
-	private final Program program;
-	private final PrintWriter output;
-	private final Reader input;
-	
-	
-	public ExecutionContext(Program program, PrintStream output, InputStream input)
-	{
-		this.program = program;
-		this.output = new PrintWriter(output);
-		this.input = new InputStreamReader(input);
-		tape = new Tape();
-	}
-	
 	/**
-	 * Executes a brain mess program.
-	 * @param args The first value in args is expected to be the name of a file
-	 * that contains the brain mess program to execute.
+	 * Tells the tape to move forward
 	 */
-	public static void main(String[] args)
-	{
-		Program p = new Program(args[0]);
-		IExecutionContext context = new ExecutionContext(p, System.out, System.in);
-		
-		while (!p.isEndOfProgram())
-		{
-			p.fetch().execute(context);
-		}
-	}
-	
-	
-	/* (non-Javadoc)
-	 * @see welch.brainmess.IExecutionContext#moveForward()
-	 */
-	@Override
-	public void moveForward()
-	{
-		tape.moveForward();
-		
-	}
+	public abstract void moveForward();
 
-	/* (non-Javadoc)
-	 * @see welch.brainmess.IExecutionContext#moveBackward()
+	/**
+	 * Tells the tape to move backward.
 	 */
-	@Override
-	public void moveBackward()
-	{
-		tape.moveBackward();
-	}
+	public abstract void moveBackward();
 
-	/* (non-Javadoc)
-	 * @see welch.brainmess.IExecutionContext#increment()
+	/**
+	 * Increments the current cell of the tape by one.
 	 */
-	@Override
-	public void increment()
-	{
-		tape.increment();
-	}
-	
+	public abstract void increment();
 
-	/* (non-Javadoc)
-	 * @see welch.brainmess.IExecutionContext#decrement()
+	/**
+	 * Decrements the current cell of the tape by one.
 	 */
-	@Override
-	public void decrement()
-	{
-		tape.decrement();
-	}
+	public abstract void decrement();
 
-	/* (non-Javadoc)
-	 * @see welch.brainmess.IExecutionContext#input()
+	/**
+	 * Reads a character from the input and writes its
+	 * integer value to the current cell of the tape.
 	 */
-	@Override
-	public void input()
-	{
-		int value;
-		try
-		{
-			value = input.read();
-		} catch (IOException e)
-		{
-			throw new RuntimeException("An input exception was encountered. Program must terminate", e);
-		}
-		tape.setCurrent(value);
-	}
+	public abstract void input();
 
-	/* (non-Javadoc)
-	 * @see welch.brainmess.IExecutionContext#ouput()
+	/**
+	 * Reads the value from the current cell of the tape
+	 * and writes it as a character to the output.
 	 */
-	@Override
-	public void ouput()
-	{
-		int value = tape.getCurrent();
-		output.write((char)value);
-		output.flush();
-	}
+	public abstract void ouput();
 
-	/* (non-Javadoc)
-	 * @see welch.brainmess.IExecutionContext#testAndJumpForward()
+	/**
+	 * Tests the current cell of the tape. If it is 0 this jumps the
+	 * program forward to the the matching ']' instruction.
+	 * The next instruction to be fetched will then be the one
+	 * immediately following the ']' instruction.
 	 */
-	@Override
-	public void testAndJumpForward()
-	{
-		if (tape.getCurrent() == 0)
-		{
-			program.jumpForward();
-		}
-	}
+	public abstract void testAndJumpForward();
 
-	/* (non-Javadoc)
-	 * @see welch.brainmess.IExecutionContext#testAndJumpBackward()
+	/**
+	 * Tests the current cell. If it is not 0 this jumps back
+	 * to the matching '[' instruction. The next instruction
+	 * to be fetched will then be the '[' instruction.
 	 */
-	@Override
-	public void testAndJumpBackward()
-	{
-		if (tape.getCurrent() != 0)
-		{
-			program.jumpBackward();
-		}
-	}
+	public abstract void testAndJumpBackward();
 
 }
-
-	

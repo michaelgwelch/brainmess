@@ -85,7 +85,7 @@ public class Tape
 	 * Returns the index value of the current cell.
 	 * @return
 	 */
-	public int currentIndex()
+	private int currentIndex()
 	{
 		return traveler.currentIndex();
 	}
