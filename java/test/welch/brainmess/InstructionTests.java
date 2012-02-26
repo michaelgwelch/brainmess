@@ -48,7 +48,7 @@ public class InstructionTests {
 	}
 	
 	@Test
-	public void increment_Execute() {
+	public void testAndJumpForward_Execute() {
 		// Arrange
 		Mockery mock = new Mockery();
 		final IExecutionContext context = mock.mock(IExecutionContext.class);

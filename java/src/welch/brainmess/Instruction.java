@@ -1,5 +1,11 @@
 package welch.brainmess;
 
+// In this implementation is Instruction really pulling its weight?
+// In it's form it is a) switching on character to create an Instruction
+// b) Using the instruction to call appropriate method on IExecutionContext.
+// It certainly is easy to understand, and the predefined instances make
+// it easy to create an Instruction and test it.
+
 /**
  * Represents a Brain Mess Instruction.
  * @author Michael Welch
