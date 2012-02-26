@@ -45,4 +45,7 @@ production and test.
         <td>csrc</td><td>A C implementation. No unit tests (I plan to
         try CUnit.) Should compile by just typing make.</td>
     </tr>
+    <tr>
+        <td>scripts</td><td>Some sample brainmess programs.</td>
+    </tr>
 </table>
