@@ -40,7 +40,29 @@ testInput = TestCase $
 testOutput = TestCase $
     do
          out <- newIORef '_'
-         (_,_) <- execute '.' p (set tape 65) (return ' ') (writeIORef out)
+         execute '.' p (set tape 65) (return ' ') (writeIORef out)
          val <- readIORef out
          assertEqual "Expect 'A' which is 65" 'A' val
          
+
+data Stream = Stream [Char] (IORef Int)
+
+-- Create a stream for input
+stream :: Stream -> IO Char
+stream (Stream cs pi) = do
+                            index <- readIORef pi
+                            let val = cs !! index
+                            writeIORef pi (index + 1)
+                            return val
+        
+testStream :: IO ()
+testStream = do
+                 pi <- newIORef 0
+                 let s = Stream "abc" pi
+                 c1 <- stream s
+                 c2 <- stream s
+                 c3 <- stream s                  
+                 putStrLn $ show c1
+                 putStrLn $ show c2
+                 putStrLn $ show c3
+                 return ()
