@@ -45,20 +45,19 @@ testOutput = TestCase $
          assertEqual "Expect 'A' which is 65" 'A' val
          
 
-data Stream = Stream [Char] (IORef Int)
+data InputStream = InputStream (IORef [Char])
 
 -- Create a stream for input
-stream :: Stream -> IO Char
-stream (Stream cs pi) = do
-                            index <- readIORef pi
-                            let val = cs !! index
-                            writeIORef pi (index + 1)
-                            return val
+stream :: InputStream -> IO Char
+stream (InputStream ref) = do
+                            (c : cs) <- readIORef ref 
+                            writeIORef ref cs
+                            return c 
         
 testStream :: IO ()
 testStream = do
-                 pi <- newIORef 0
-                 let s = Stream "abc" pi
+                 ref <- newIORef "ABCD"
+                 let s = InputStream ref
                  c1 <- stream s
                  c2 <- stream s
                  c3 <- stream s                  
@@ -66,3 +65,24 @@ testStream = do
                  putStrLn $ show c2
                  putStrLn $ show c3
                  return ()
+
+
+data OutputStream = OutputStream (IORef [Char])
+
+writeStream :: OutputStream -> Char -> IO ()
+writeStream (OutputStream ps) c = 
+    do
+        cs <- readIORef ps
+        writeIORef ps (c:cs)
+
+
+testWriteStream :: IO ()
+testWriteStream = 
+    do
+        ps <- newIORef ""
+        let ostream = OutputStream ps
+        writeStream ostream 'a'
+        writeStream ostream 'b'
+        writeStream ostream 'c'
+        ps' <- readIORef ps
+        putStrLn ps'
