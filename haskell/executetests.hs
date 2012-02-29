@@ -1,4 +1,4 @@
-module Execut_Test where
+module Execute_Test where
 
 import Data.IORef
 import Jumpable
@@ -48,23 +48,20 @@ testOutput = TestCase $
 data InputStream = InputStream (IORef [Char])
 
 -- Create a stream for input
-stream :: InputStream -> IO Char
-stream (InputStream ref) = do
+readStream :: InputStream -> IO Char
+readStream (InputStream ref) = do
                             (c : cs) <- readIORef ref 
                             writeIORef ref cs
                             return c 
         
-testStream :: IO ()
-testStream = do
-                 ref <- newIORef "ABCD"
+testStream :: String -> IO ()
+testStream [] = return ()
+testStream (x:xs) = do
+                 ref <- newIORef (x:xs)
                  let s = InputStream ref
-                 c1 <- stream s
-                 c2 <- stream s
-                 c3 <- stream s                  
-                 putStrLn $ show c1
-                 putStrLn $ show c2
-                 putStrLn $ show c3
-                 return ()
+                 c <- readStream s
+                 putStrLn $ show c
+                 testStream xs
 
 
 data OutputStream = OutputStream (IORef [Char])
@@ -86,3 +83,5 @@ testWriteStream =
         writeStream ostream 'c'
         ps' <- readIORef ps
         putStrLn ps'
+
+
