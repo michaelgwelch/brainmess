@@ -26,4 +26,4 @@ brainmess: $(OBJ)
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core 
+	rm -f $(ODIR)/*.o *~ core brainmess
