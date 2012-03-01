@@ -4,7 +4,7 @@ Brainmess
 This project contains multiple implementations of interpreters for the language
 I call [Brainmess](http://en.wikipedia.org/wiki/Brainfuck). (Note, this links
 to the wikipedia article that describes the language and gives it's *real*
-name. The real name may by NSFW.)
+name. The real name may be NSFW.)
 
 I've normally taken the approach that the tape should be "infinite" in
 both directions and therefore I tend to use a linked list.
@@ -12,7 +12,12 @@ both directions and therefore I tend to use a linked list.
 I've used this programming exercise during Refactoring study groups, with
 an emphasis on clean code and testability rather than on 
 efficiency. Therefore, the implementations tend to be more "verbose" than
-the implementations discussed at the Wikipedia site.
+the implementations discussed at the Wikipedia site. Some implementations
+are more verbose than others to try to see which ones are easier to test
+and which are harder. Also the program can be examined to see which
+are easy to understand and which are more difficult. This is a simple
+enough program that every version should be easy to understand. If it is not,
+that's a problem.
 
 This abstraction presents itself as interfaces an extension methods in C#.
 In Haskell, I created my own class to break the module circular dependencies.
