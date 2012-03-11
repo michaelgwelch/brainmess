@@ -49,3 +49,5 @@ production and test.
         <td>scripts</td><td>Some sample brainmess programs.</td>
     </tr>
 </table>
+
+Other implementations that I plan to tackle: C++, Objective C, Javascript.
