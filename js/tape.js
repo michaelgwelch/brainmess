@@ -24,7 +24,6 @@ var Tape = function() {
                 result += cells[i].toString();
             }
             return result;
-        },
-        index: function() { return index; }
+        }
     }
 };
