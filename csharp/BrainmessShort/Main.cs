@@ -17,7 +17,6 @@ namespace BrainmessShort
             int pc = 0;
             int[] tape = new int[5000];
             int tc = 2500;
-            int nestLevel;
             while(pc < program.Length)
             {
                 char instruction = program[pc];
@@ -45,33 +44,57 @@ namespace BrainmessShort
                 case '[':
                     if (tape[tc] == 0)
                     {
-                        nestLevel = 1;
-                        while(nestLevel > 0)
-                        {
-                            instruction = program[pc];
-                            if (instruction == '[') nestLevel++;
-                            else if (instruction == ']') nestLevel--;
-                            pc++;
-                        }
+                        pc = JumpForward(program, pc);
                     }
-                    break;
+                        break;
                 case ']':
                     if (tape[tc] != 0)
                     {
-                        pc -= 2;
-                        nestLevel = 1;
-                        while(nestLevel > 0)
-                        {
-                            instruction = program[pc];
-                            if (instruction == '[') nestLevel--;
-                            else if (instruction == ']') nestLevel++;
-                            pc--;
-                        }
-                        pc++;
+                        pc = JumpBackward(program, pc);
                     }
                     break;
                 }
             }
         }
-    }
+
+       private static int JumpForward(string program, int pc)
+       {
+           int nestLevel = 1;
+           while (nestLevel > 0)
+           {
+               char instruction = program[pc];
+               if (instruction == '[')
+               {
+                   nestLevel++;
+               }
+               else if (instruction == ']')
+               {
+                   nestLevel--;
+               }
+               pc++;
+           }
+           return pc;
+       }
+
+       private static int JumpBackward(string program, int pc)
+       {
+           pc -= 2;
+           int nestLevel = 1;
+           while (nestLevel > 0)
+           {
+               char instruction = program[pc];
+               if (instruction == '[')
+               {
+                   nestLevel--;
+               }
+               else if (instruction == ']')
+               {
+                   nestLevel++;
+               }
+               pc--;
+           }
+           pc++;
+           return pc;
+       }
+   }
 }
