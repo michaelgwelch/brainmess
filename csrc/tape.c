@@ -34,6 +34,25 @@ Tape* tape_new()
     return newTape;
 }
 
+Tape* tape_load(int* nums, int length, int current)
+{
+    Tape* newTape = tape_new();
+
+    int i = 0;
+    GList* currentCell;
+    while (i < length)
+    {
+        tape_set(newTape, nums[i]);
+        if (i == current)
+        {
+            currentCell = newTape->currentCell;
+        }
+        i++;
+    }
+
+    newTape->currentCell = currentCell;
+    return newTape;
+}
 void tape_free(Tape *tape)
 {
     g_list_free(g_list_first(tape->currentCell));

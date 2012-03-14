@@ -7,6 +7,7 @@ typedef struct _Tape Tape;
 
 
 Tape* tape_new();
+Tape* tape_load(int* nums, int length, int current);
 void tape_free(Tape *tape);
 gchar* tape_to_string(const Tape *tape);
 void tape_increment(Tape *tape);
