@@ -59,42 +59,37 @@ namespace BrainmessShort
 
        private static int JumpForward(string program, int pc)
        {
-           int nestLevel = 1;
-           while (nestLevel > 0)
-           {
-               char instruction = program[pc];
-               if (instruction == '[')
-               {
-                   nestLevel++;
-               }
-               else if (instruction == ']')
-               {
-                   nestLevel--;
-               }
-               pc++;
-           }
-           return pc;
+           const int increment = 1;
+           return FindMatch(program, pc - 1, increment) + 1;
        }
 
        private static int JumpBackward(string program, int pc)
        {
-           pc -= 2;
+           const int increment = -1;
+           return FindMatch(program, pc - 1, increment);
+       }
+
+       /// <summary>
+       /// Finds the match for the bracket pointed to by
+       /// pc in the program. Increment tells the algorithm
+       /// which way to search.
+       /// </summary>
+       /// <param name="program"></param>
+       /// <param name="pc"></param>
+       /// <param name="increment"></param>
+       /// <returns></returns>
+       private static int FindMatch(string program, int pc, int increment)
+       {
            int nestLevel = 1;
+           pc += increment;
            while (nestLevel > 0)
            {
                char instruction = program[pc];
-               if (instruction == '[')
-               {
-                   nestLevel--;
-               }
-               else if (instruction == ']')
-               {
-                   nestLevel++;
-               }
-               pc--;
+               if (instruction == '[') nestLevel += increment;
+               else if (instruction == ']') nestLevel -= increment;
+               pc += increment;
            }
-           pc++;
-           return pc;
+           return pc - increment;
        }
    }
 }
