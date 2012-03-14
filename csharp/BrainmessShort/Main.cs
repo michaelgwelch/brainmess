@@ -44,52 +44,17 @@ namespace BrainmessShort
                 case '[':
                     if (tape[tc] == 0)
                     {
-                        pc = JumpForward(program, pc);
+                        pc = program.FindMatch(pc - 1) + 1;
                     }
                         break;
                 case ']':
                     if (tape[tc] != 0)
                     {
-                        pc = JumpBackward(program, pc);
+                        pc = program.FindMatch(pc - 1);
                     }
                     break;
                 }
             }
         }
-
-       private static int JumpForward(string program, int pc)
-       {
-           const int increment = 1;
-           return FindMatch(program, pc - 1, increment) + 1;
-       }
-
-       private static int JumpBackward(string program, int pc)
-       {
-           const int increment = -1;
-           return FindMatch(program, pc - 1, increment);
-       }
-
-       /// <summary>
-       /// Finds the match for the bracket pointed to by
-       /// pc in the program. Increment tells the algorithm
-       /// which way to search.
-       /// </summary>
-       /// <param name="program"></param>
-       /// <param name="pc"></param>
-       /// <param name="increment"></param>
-       /// <returns></returns>
-       private static int FindMatch(string program, int pc, int increment)
-       {
-           int nestLevel = 1;
-           pc += increment;
-           while (nestLevel > 0)
-           {
-               char instruction = program[pc];
-               if (instruction == '[') nestLevel += increment;
-               else if (instruction == ']') nestLevel -= increment;
-               pc += increment;
-           }
-           return pc - increment;
-       }
    }
 }
