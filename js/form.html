@@ -12,8 +12,13 @@
  <textarea id="prog" name="prog" cols=80 rows=20 wrap="hard"></textarea>
  <input type="button" name="runButton" value="Run" onClick="main();"/>
  <br>
+ <label>Input</label>
+ <input type="text" id="input" disabled="true"
+    onKeyPress="brainmess.resume(event);"></input>
+ <br>
  <label>Output</label>
  </form>
+
 
  <pre name="stuf" id="output"></pre>
 </body>
