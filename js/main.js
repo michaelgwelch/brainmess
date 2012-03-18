@@ -10,7 +10,6 @@ function main() {
        outputText.appendData(String.fromCharCode(char));
     }
 
-
     var context = new Context(p, input, output);
 
     while(!p.endOfProgram()) {

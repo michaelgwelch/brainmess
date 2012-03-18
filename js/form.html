@@ -1,38 +1,6 @@
 <html>
 <head>
- <title>JavaScript Example 03</title>
- <script language="JavaScript">
-
- function poller() {
-   var result = "";
-
-   return {
-     poll: function() {
-       var input = document.ioForm.inputField.value;
-       if (!input) setTimeout("getInput()",100)
-       else result = input;
-     }
-     
-     
-   }
- }
-
- function getInput()
- {
-    var input = document.ioForm.inputField.value;
-    if (!input) setTimeout("getInput()", 100)
-
-    return input;
- }
-
- function writeOutput(char)
-{
-  var preTag = document.getElementById("output");
-  if (preTag.firstChild) preTag.appendChild(String.fromCharCode(char));
-  else preTag.firstChild = String.fromCharCode(char);
-}
-
- </script>
+ <title>Brainmess</title>
  <script src="main.js"></script>
  <script src="program.js"></script>
  <script src="tape.js"></script>
@@ -40,14 +8,9 @@
 </head>
 <body>
  <form name="ioForm">
- <label>Program</label>
- <textarea id="prog" name="prog" cols=40 rows=10 wrap="hard"></textarea>
+ <label>Program</label><br>
+ <textarea id="prog" name="prog" cols=80 rows=20 wrap="hard"></textarea>
  <input type="button" name="runButton" value="Run" onClick="main();"/>
- <br>
- <label>Input</label>
- <input type="text" name="inputField" />
- <input type="button" name="actionButton" value="OK"
-              onClick="getInput();" />
  <br>
  <label>Output</label>
  </form>
