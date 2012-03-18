@@ -1,6 +1,9 @@
 <html>
 <head>
  <title>Brainmess</title>
+ <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+ <script type='text/javascript' src="knockout-2.0.0.js"></script>
+
  <script src="main.js"></script>
  <script src="program.js"></script>
  <script src="tape.js"></script>
@@ -16,10 +19,22 @@
  <input type="text" id="input" disabled="true"
     onKeyPress="brainmess.resume(event);"></input>
  <br>
- <label>Output</label>
  </form>
 
 
- <pre name="stuf" id="output"></pre>
+ <!-- This is a *view* of the output -->
+ Output: <p data-bind="text: programOutput"></p>
+
+ <!-- This is my viewmodel -->
+
+    <script type="text/javascript">
+        var myViewModel = {
+            programOutput: ko.observable(""),
+        };
+    </script>
+    <script type="text/javascript">
+        ko.applyBindings(myViewModel);
+    </script>
+
 </body>
 </html>

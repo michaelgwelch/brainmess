@@ -39,17 +39,9 @@ var Brainmess = function() {
     return {
         // creates a new context based on paramters
         // and starts execution of the program
-        run: function(programText, inputNode, outputNode) {
+        run: function(programText, inputNode, outputCallback) {
             var p = new Program(programText);
-            var outputText = document.createTextNode("");
-            if (outputNode.firstChild) {
-                outputNode.removeChild(outputNode.firstChild);
-            }
-            outputNode.appendChild(outputText);
-            var output = function(char)  {
-                outputText.appendData(String.fromCharCode(char));
-            };
-            context = new Context(p, inputNode, output);
+            context = new Context(p, inputNode, outputCallback);
             execute();
         },
         resume: function(event) {
@@ -64,5 +56,7 @@ var brainmess = new Brainmess();
 function main() {
     brainmess.run(document.getElementById("prog").value, 
         document.getElementById("input"),
-        document.getElementById("output"));
+        function(newText) {
+            myViewModel.programOutput(newText);
+        });
 }

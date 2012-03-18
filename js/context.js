@@ -1,5 +1,6 @@
-var Context = function(prog, inputNode, output) {
+var Context = function(prog, inputNode, outputCallback) {
     var tape = new Tape();
+    var outputString = "";
     return {
         enableInput: function() { 
             inputNode.disabled=false; 
@@ -24,7 +25,9 @@ var Context = function(prog, inputNode, output) {
             tape.set(charCode);
         },
         output: function() {
-            output(tape.get());
+            // deal with appending strings later.
+            outputString += String.fromCharCode(tape.get());
+            if (outputCallback) outputCallback(outputString);
         }
     };
 }
