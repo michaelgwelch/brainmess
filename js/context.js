@@ -1,19 +1,20 @@
-var Context = function() {
+var Context = function(prog, input, output) {
+    var tape = new Tape();
     return {
-        forward: function(prog, tape, input, output) { tape.forward(); },
-        backward: function(prog, tape, input, output) { tape.backward(); },
-        inc: function(prog, tape, input, output) { tape.inc(); },
-        dec: function(prog, tape, input, output) { tape.dec(); },
-        testAndJumpForward: function(prog, tape, input, output) {
+        forward: function() { tape.forward(); },
+        backward: function() { tape.backward(); },
+        inc: function() { tape.inc(); },
+        dec: function() { tape.dec(); },
+        testAndJumpForward: function() {
             if (tape.get() === 0) prog.jumpForward();
         },
-        testAndJumpBackward: function(prog, tape, input, output) {
+        testAndJumpBackward: function() {
             if (tape.get() !== 0) prog.jumpBackward();
         },
-        input: function(prog, tape, input, output) { 
+        input: function() { 
             tape.set(input());
         },
-        output: function(prog, tape, input, output) {
+        output: function() {
             output(tape.get());
         }
     };
