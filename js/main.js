@@ -4,6 +4,7 @@ function main() {
     var input = undefined;
     var preTag = document.getElementById("output");
     var outputText = document.createTextNode("");
+    if (preTag.firstChild) preTag.removeChild(preTag.firstChild);
     preTag.appendChild(outputText);
     var output = function(char)  {
        outputText.appendData(String.fromCharCode(char));
