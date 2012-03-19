@@ -1,14 +1,7 @@
-var Context = function(prog, inputNode, outputCallback) {
+var Context = function(prog, outputCallback) {
     var tape = new Tape();
     var outputString = "";
     return {
-        enableInput: function() { 
-            inputNode.disabled=false; 
-            inputNode.value="";
-        },
-        disableInput: function() {
-            inputNode.disabled = true;
-        },
         endOfProgram: function() { return prog.endOfProgram(); },
         fetch: function() { return prog.fetch(); },
         forward: function() { tape.forward(); },

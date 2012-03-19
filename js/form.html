@@ -1,4 +1,11 @@
 <html>
+<style>
+body {
+background-image: url("bookelement6.jpg");
+background-position: 50% 50%;
+background-repeat: no-repeat;
+}
+</style>
 <head>
  <title>Brainmess</title>
  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -18,21 +25,29 @@
  <label>Input</label>
  <input type="text" id="input" disabled="true"
     onKeyPress="brainmess.resume(event);"></input>
+
  <br>
  </form>
 
 
  <!-- This is a *view* of the output -->
+ Input: <input type="text" data-bind="event: {keydown: input}, enable: inputEnabled"/>
+ <p>
  Output: <p data-bind="text: programOutput"></p>
 
  <!-- This is my viewmodel -->
 
     <script type="text/javascript">
-        var myViewModel = {
-            programOutput: ko.observable(""),
-        };
-    </script>
-    <script type="text/javascript">
+        function MyViewModel() {
+            var self = this;
+            this.programOutput = ko.observable("");
+            this.inputEnabled = ko.observable(false);
+            this.input = function(data, event) {
+                self.inputEnabled = false;
+                brainmess.resume(event.charCode);
+            };
+        }
+        var myViewModel = new MyViewModel();
         ko.applyBindings(myViewModel);
     </script>
 
