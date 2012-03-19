@@ -1,27 +1,27 @@
-var Context = function(prog, outputCallback) {
+var Context = function (prog, outputCallback) {
     var tape = new Tape();
     var outputString = "";
     return {
-        endOfProgram: function() { return prog.endOfProgram(); },
-        fetch: function() { return prog.fetch(); },
-        forward: function() { tape.forward(); },
-        backward: function() { tape.backward(); },
-        inc: function() { tape.inc(); },
-        dec: function() { tape.dec(); },
-        testAndJumpForward: function() {
+        endOfProgram: function () { return prog.endOfProgram(); },
+        fetch: function () { return prog.fetch(); },
+        forward: function () { tape.forward(); },
+        backward: function () { tape.backward(); },
+        inc: function () { tape.inc(); },
+        dec: function () { tape.dec(); },
+        testAndJumpForward: function () {
             if (tape.get() === 0) prog.jumpForward();
         },
-        testAndJumpBackward: function() {
+        testAndJumpBackward: function () {
             if (tape.get() !== 0) prog.jumpBackward();
         },
-        input: function(charCode) { 
+        input: function (charCode) {
             tape.set(charCode);
         },
-        output: function() {
+        output: function () {
             // deal with appending strings later.
             outputString += String.fromCharCode(tape.get());
             if (outputCallback) outputCallback(outputString);
         }
     };
-}
+};
 

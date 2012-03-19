@@ -1,11 +1,11 @@
 var Brainmess = function() {
     var context = undefined;
-
+    var inputEvent = undefined;
     var execute = function() {
         while(!context.endOfProgram()) {
             var i = context.fetch();
             if (i === ",") {
-                context.enableInput();
+                inputEvent();
                 break;// break out of while
             }
             switch(i) {
@@ -39,9 +39,10 @@ var Brainmess = function() {
     return {
         // creates a new context based on paramters
         // and starts execution of the program
-        run: function(programText, outputCallback) {
+        run: function(programText, inputCallback, outputCallback) {
             var p = new Program(programText);
             context = new Context(p, outputCallback);
+            inputEvent = inputCallback;
             execute();
         },
         resume: function(charCode) {
@@ -51,10 +52,4 @@ var Brainmess = function() {
     };
 
 };
-var brainmess = new Brainmess();
-function main() {
-    brainmess.run(document.getElementById("prog").value, 
-        function(newText) {
-            myViewModel.programOutput(newText);
-        });
-}
+

@@ -1,55 +1,62 @@
 <html>
-<style>
-body {
-background-image: url("bookelement6.jpg");
-background-position: 50% 50%;
-background-repeat: no-repeat;
-}
-</style>
 <head>
- <title>Brainmess</title>
- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
- <script type='text/javascript' src="knockout-2.0.0.js"></script>
+    <title>Brainmess</title>
 
- <script src="main.js"></script>
- <script src="program.js"></script>
- <script src="tape.js"></script>
- <script src="context.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type='text/javascript' src="knockout-2.0.0.js"></script>
+
 </head>
 <body>
- <form name="ioForm">
- <label>Program</label><br>
- <textarea id="prog" name="prog" cols=80 rows=20 wrap="hard"></textarea>
- <input type="button" name="runButton" value="Run" onClick="main();"/>
- <br>
- <label>Input</label>
- <input type="text" id="input" disabled="true"
-    onKeyPress="brainmess.resume(event);"></input>
-
- <br>
- </form>
-
-
- <!-- This is a *view* of the output -->
- Input: <input type="text" data-bind="event: {keydown: input}, enable: inputEnabled"/>
- <p>
- Output: <p data-bind="text: programOutput"></p>
-
- <!-- This is my viewmodel -->
+    <form name="ioForm">
+    <label>Program</label>
+    <br>
+    <textarea id="prog" name="prog" cols="80" rows="20" wrap="hard"></textarea>
+    <input type="button" name="runButton" value="Run" data-bind="click: run" />
+    <br>
+    </form>
+    <div>
+        <!-- This is a *view* of the output -->
+        Input:
+        <input type="text" data-bind="event: {keypress: input}, enable: inputEnabled, hasFocus: inputEnabled" />
+        <div>Input so far:
+            <div data-bind="text: inputHistory"></div>
+        </div>
+        <p>
+            Output:
+        <p data-bind="text: programOutput"></p>
+    </div>
+    <!-- This is my viewmodel -->
+    <script src="brainmess.js"></script>
+    <script src="program.js"></script>
+    <script src="tape.js"></script>
+    <script src="context.js"></script>
 
     <script type="text/javascript">
         function MyViewModel() {
             var self = this;
+            var brainmess = new Brainmess();
+
             this.programOutput = ko.observable("");
             this.inputEnabled = ko.observable(false);
-            this.input = function(data, event) {
-                self.inputEnabled = false;
+            this.input = function (data, event) {
+                self.inputEnabled(false);
+                self.inputHistory(self.inputHistory() + String.fromCharCode(event.charCode));
                 brainmess.resume(event.charCode);
             };
+            this.run = function () {
+                var element = $("#prog");
+                brainmess.run(element.val(),
+                    function () {
+                        self.inputEnabled(true);
+                    },
+                    function (newText) {
+                        myViewModel.programOutput(newText);
+                    });
+            };
+            this.inputHistory = ko.observable("");
         }
         var myViewModel = new MyViewModel();
         ko.applyBindings(myViewModel);
     </script>
-
 </body>
 </html>
