@@ -2,7 +2,7 @@ var Brainmess = function() {
     var context = undefined;
     var inputEvent = undefined;
     var instructionExecutedCallback = undefined;
-    var execute = function() {
+    var execute = function(singleStep) {
         while(!context.endOfProgram()) {
             var i = context.fetch();
             if (i === ",") {
@@ -35,21 +35,25 @@ var Brainmess = function() {
 
             }
             instructionExecutedCallback(context.memory());
+            if (singleStep) break;
         }
     };
 
     return {
         // creates a new context based on paramters
         // and starts execution of the program
-        run: function(programText, inputCallback, outputCallback) {
+        run: function(programText, inputCallback, outputCallback, singleStep) {
             var p = new Program(programText);
             context = new Context(p, outputCallback);
             inputEvent = inputCallback;
-            execute();
+            execute(singleStep);
         },
         resume: function(charCode) {
             context.input(charCode);
             execute();
+        },
+        nextStep: function(singleStep) {
+            execute(singleStep)
         },
         
         instructionExecuted: function(callback) {

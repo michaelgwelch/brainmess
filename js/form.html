@@ -12,6 +12,8 @@
     <br>
     <textarea id="prog" name="prog" cols="80" rows="20" wrap="hard"></textarea>
     <input type="button" name="runButton" value="Run" data-bind="click: run" />
+        <input type="checkbox" data-bind="checked: singleStep" />
+        <input type="button" name="nextButton" value="Next" data-bind="click: next" />
     <br>
     </form>
     <div>
@@ -25,7 +27,7 @@
             Output:
         <p data-bind="text: programOutput"></p>
         <div>
-            Tape: <div data-bind="text: tapePrefix"></div><div data-bind="text: tapeCurrent"></div><div>rest</div>
+            Tape: <label data-bind="text: tapePrefix"></label><strong data-bind="text: tapeCurrent"></strong><label data-bind="text: tapeSuffix"></label>
         </div>
     </div>
     <!-- This is my viewmodel -->
@@ -37,6 +39,8 @@
     <script type="text/javascript">
         function MyViewModel() {
             var self = this;
+            var splitter = new TapeSlitter();
+
             var brainmess = new Brainmess();
 
             this.programOutput = ko.observable("");
@@ -57,22 +61,27 @@
                     },
                     function (newText) {
                         self.programOutput(newText);
-                    });
+                    },
+                    self.singleStep());
             };
             
+            this.next = function () {
+                brainmess.nextStep(self.singleStep());
+            };
             this.inputHistory = ko.observable("");
             
             this.tapePrefix = ko.observable("");
             this.tapeCurrent = ko.observable("");
             this.tapeSuffix = ko.observable("");
+
+            this.singleStep = ko.observable(true);
             
-            brainmess.instructionExecuted(function(tapeString) {
- 				var currentIndex = tapeString.indexOf("->");
- 				self.tapePrefix(tapeString.substring(0, currentIndex - 1));
- 				var restOfTape = tapeString.substring(currentIndex, tapeString.length);
- 				var currentValue = restOfTape.substring(2, restOfTape.indexOf(","));
- 				self.tapeCurrent(currentValue); 
-            	
+            brainmess.instructionExecuted(function (tapeString) {
+                var splitObject = splitter.split(tapeString);
+                self.tapePrefix(splitObject.prefix + ",");
+                self.tapeCurrent(splitObject.current);
+                self.tapeSuffix(splitObject.suffix);
+          	
             });
         }
 
