@@ -21,6 +21,9 @@ var Context = function (prog, outputCallback) {
             // deal with appending strings later.
             outputString += String.fromCharCode(tape.get());
             if (outputCallback) outputCallback(outputString);
+        },
+        memory: function() {
+            return tape.toString();
         }
     };
 };

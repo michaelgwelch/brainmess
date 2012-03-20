@@ -24,6 +24,9 @@
         <p>
             Output:
         <p data-bind="text: programOutput"></p>
+        <div>
+            Tape: <div data-bind="text: tapePrefix"></div><div data-bind="text: tapeCurrent"></div><div>rest</div>
+        </div>
     </div>
     <!-- This is my viewmodel -->
     <script src="brainmess.js"></script>
@@ -37,12 +40,15 @@
             var brainmess = new Brainmess();
 
             this.programOutput = ko.observable("");
+            
             this.inputEnabled = ko.observable(false);
+            
             this.input = function (data, event) {
                 self.inputEnabled(false);
                 self.inputHistory(self.inputHistory() + String.fromCharCode(event.charCode));
                 brainmess.resume(event.charCode);
             };
+            
             this.run = function () {
                 var element = $("#prog");
                 brainmess.run(element.val(),
@@ -50,13 +56,27 @@
                         self.inputEnabled(true);
                     },
                     function (newText) {
-                        myViewModel.programOutput(newText);
+                        self.programOutput(newText);
                     });
             };
+            
             this.inputHistory = ko.observable("");
+            
+            this.tapePrefix = ko.observable("");
+            this.tapeCurrent = ko.observable("");
+            this.tapeSuffix = ko.observable("");
+            
+            brainmess.instructionExecuted(function(tapeString) {
+ 				var currentIndex = tapeString.indexOf("->");
+ 				self.tapePrefix(tapeString.substring(0, currentIndex - 1));
+ 				var restOfTape = tapeString.substring(currentIndex, tapeString.length);
+ 				var currentValue = restOfTape.substring(2, restOfTape.indexOf(","));
+ 				self.tapeCurrent(currentValue); 
+            	
+            });
         }
-        var myViewModel = new MyViewModel();
-        ko.applyBindings(myViewModel);
+
+        ko.applyBindings(new MyViewModel());
     </script>
 </body>
 </html>

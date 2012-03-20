@@ -1,6 +1,7 @@
 var Brainmess = function() {
     var context = undefined;
     var inputEvent = undefined;
+    var instructionExecutedCallback = undefined;
     var execute = function() {
         while(!context.endOfProgram()) {
             var i = context.fetch();
@@ -33,6 +34,7 @@ var Brainmess = function() {
         
 
             }
+            instructionExecutedCallback(context.memory());
         }
     };
 
@@ -49,6 +51,10 @@ var Brainmess = function() {
             context.input(charCode);
             execute();
         },
+        
+        instructionExecuted: function(callback) {
+            instructionExecutedCallback = callback;
+        }
     };
 
 };
