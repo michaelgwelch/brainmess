@@ -21,13 +21,30 @@
     
     <!-- Masthead
      ================================================== -->
-    <div name="ioForm" class="container">
-    <header class="jumbotron subhead" id="overview">
-        <h1>Brainmess Interpreter</h1>
-        <p class="lead">Run your Brainmess program.
-    </header>
+    <div class="container">
+        <header class="jumbotron subhead" id="overview">
+            <h1>Brainmess Interpreter</h1>
+            <p class="lead">Run your Brainmess program.
+        </header>
 
-    <h2>Program</h2>
+        
+        <h2>Program</h2>
+        <div class="row">
+            <div class="span12">+++>>>...---</div>
+        </div>
+        <br>
+        
+        <h2>Tape</h2>
+        <div class="row">
+            <div class="span12"></div>
+        </div>
+        
+        <br>
+        <h2>Input</h2>
+        <div class="controls-group">
+            <input type="text"
+        </div>
+    </div>
     
     <textarea class="span8" id="prog" name="prog" cols="80" rows="20" wrap="hard"></textarea>
             
@@ -98,7 +115,6 @@
             this.singleStep = ko.observable(true);
             
             brainmess.instructionExecuted(function (tapeString) {
-                                          
                 var splitObject = splitter.split(tapeString);
                 self.tapePrefix(splitObject.prefix + ",");
                 self.tapeCurrent(splitObject.current);

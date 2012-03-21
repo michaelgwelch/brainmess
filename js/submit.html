@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head data-offset="50">
+    <meta charset="utf-8">
+    <title>Brainmess · Interactive Interpreter</title>
+                    
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    
+                    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type='text/javascript' src="knockout-2.0.0.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <header class="jumbotron subhead" id="overview">
+            <h1>Brainmess Interpreter</h1>
+            <p class="lead">Run your Brainmess program.
+        </header>
+        <div>
+            <fieldset>
+                <legend>Type your program</legend>
+                <div class="control-group">
+                    <label class="control-label" for="myprogram">Program</label>
+                    <div class="controls">
+                        <textarea class="span12" rows="20" id="myprogram"></textarea>
+                        <text class="span12" id="oneliner"><pre>++++-----[[[[]]]]</pre></text>
+                    </div>
+                </div>
+                <div>
+                    <button id="submit" class="btn btn-primary">Submit Program</button>
+                </div>    
+            </fieldset>
+        </div>
+    </div>
+    <script>
+        $("#submit").click(function() {
+                           $("#myprogram").hide(600);
+                           });
+        $("#submit").click(function() {
+                           $("#oneliner").show(600);
+                           });
+        $("#oneliner").hide();
+                           
+    </script>
+</body>
+</html>

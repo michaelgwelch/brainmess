@@ -4,6 +4,7 @@ var Brainmess = function() {
     var instructionExecutedCallback = undefined;
     var execute = function(singleStep) {
         while(!context.endOfProgram()) {
+            var sendCallback = true;
             var i = context.fetch();
             if (i === ",") {
                 inputEvent();
@@ -31,11 +32,16 @@ var Brainmess = function() {
                 case "]":
                     context.testAndJumpBackward();
                     break;
+                default:
+                    sendCallback = false;
+                    break;
         
 
             }
-            instructionExecutedCallback(context.memory());
-            if (singleStep) break;
+            if (sendCallback) {
+                instructionExecutedCallback(context.memory());
+                if (singleStep) break;
+            }
         }
     };
 
