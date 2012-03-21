@@ -1,0 +1,15 @@
+﻿.nav-pills > li > pre {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  width: 21px;
+  text-align: center;
+}
+.nav-pills > .active > pre {
+  color: #ffffff;
+  background-color: #0088cc;
+}
