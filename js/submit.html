@@ -3,47 +3,54 @@
 <head data-offset="50">
     <meta charset="utf-8">
     <title>Brainmess · Interactive Interpreter</title>
-                    
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    
-                    
+    <link href="css/welch.css" rel="stylesheet" >
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type='text/javascript' src="knockout-2.0.0.js"></script>
-
 </head>
 <body>
     <div class="container">
         <header class="jumbotron subhead" id="overview">
             <h1>Brainmess Interpreter</h1>
-            <p class="lead">Run your Brainmess program.
+            <p class="lead">
+                Run your Brainmess program.
         </header>
-        <div>
-            <fieldset>
-                <legend>Type your program</legend>
+        <div id="ProgramSubmissionView">
+            <div class="container">
+                <label>Type your program</label>
                 <div class="control-group">
                     <label class="control-label" for="myprogram">Program</label>
                     <div class="controls">
                         <textarea class="span12" rows="20" id="myprogram"></textarea>
-                        <text class="span12" id="oneliner"><pre>++++-----[[[[]]]]</pre></text>
+                        <pre style="margin-left: 0" class="span12" id="oneliner">++++-----[[[[]]]]</pre>
                     </div>
                 </div>
-                <div>
-                    <button id="submit" class="btn btn-primary">Submit Program</button>
-                </div>    
-            </fieldset>
+            </div>
+            <div>
+                <button id="submit" class="btn btn-primary">Submit Program</button>
+            </div>
         </div>
+        <div id="TapeView">
+            <ul class="nav nav-pills" data-bind="foreach: tapeCells">
+                <li data-bind="css:{active: isCurrent}"><pre data-bind="text: value"></pre></li>
+            </ul>
+            <button data-bind="click: inc">Increment</button>
+            <button data-bind="click: dec">Decrement</button>
+            <button data-bind="click: forward">Forward</button>
+            <button data-bind="click: backward">Backward</button>
+        </div>
+
     </div>
+    <script src="Scripts/jquery.easing.1.3.js"></script>
     <script>
-        $("#submit").click(function() {
-                           $("#myprogram").hide(600);
-                           });
-        $("#submit").click(function() {
-                           $("#oneliner").show(600);
-                           });
+        $("#submit").click(function () {
+            $("#myprogram").slideUp(100);
+            $("#oneliner").slideDown(100);
+        });
         $("#oneliner").hide();
-                           
     </script>
+    <script src="BrainmessViewModel.js"></script>
 </body>
 </html>
