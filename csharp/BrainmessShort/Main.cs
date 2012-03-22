@@ -20,12 +20,27 @@ namespace BrainmessShort
             new Brainmess(reader.ReadToEnd()).Run();
             reader.Close();
         }
+
+        char Fetch()
+        {
+            return program[pc];
+        }
+
+        int JumpForward()
+        {
+            return program.FindMatch(pc - 1) + 1;
+        }
+
+        int JumpBackward()
+        {
+            return program.FindMatch(pc - 1);
+        }
         
         public void Run() 
         {
             while(pc < program.Length)
             {
-                char instruction = program[pc];
+                char instruction = Fetch ();
                 pc++;
                 switch(instruction)
                 {
@@ -50,13 +65,13 @@ namespace BrainmessShort
                 case '[':
                     if (tape[tc] == 0)
                     {
-                        pc = program.FindMatch(pc - 1) + 1;
+                        pc = JumpForward ();
                     }
                         break;
                 case ']':
                     if (tape[tc] != 0)
                     {
-                        pc = program.FindMatch(pc - 1);
+                        pc = JumpBackward ();
                     }
                     break;
                 }
