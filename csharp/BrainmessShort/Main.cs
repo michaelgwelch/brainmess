@@ -38,9 +38,17 @@ namespace BrainmessShort
             pc = program.FindMatch(pc - 1);
         }
         
+        bool EndOfProgram
+        {
+            get
+            {
+                return (pc >= program.Length);
+            }
+        }
+        
         public void Run() 
         {
-            while(pc < program.Length)
+            while(!EndOfProgram)
             {
                 char instruction = Fetch();
                 switch(instruction)
