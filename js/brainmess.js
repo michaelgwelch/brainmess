@@ -1,3 +1,11 @@
+// There are many different "events" on this object
+// move -
+// modify
+// newCell
+
+
+
+
 var Brainmess = function() {
     var context = undefined;
     var inputEvent = undefined;
@@ -54,9 +62,9 @@ var Brainmess = function() {
             inputEvent = inputCallback;
             execute(singleStep);
         },
-        resume: function(charCode) {
+        resume: function(charCode, singleStep) {
             context.input(charCode);
-            execute();
+            execute(singleStep);
         },
         nextStep: function(singleStep) {
             execute(singleStep)
@@ -64,6 +72,10 @@ var Brainmess = function() {
         
         instructionExecuted: function(callback) {
             instructionExecutedCallback = callback;
+        },
+        
+        memory: function() {
+            return context.memory();
         }
     };
 
