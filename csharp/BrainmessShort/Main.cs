@@ -23,25 +23,26 @@ namespace BrainmessShort
 
         char Fetch()
         {
-            return program[pc];
+            var instruction = program[pc];
+            pc++;
+            return instruction;
         }
 
-        int JumpForward()
+        void JumpForward()
         {
-            return program.FindMatch(pc - 1) + 1;
+            pc = program.FindMatch(pc - 1) + 1;
         }
 
-        int JumpBackward()
+        void JumpBackward()
         {
-            return program.FindMatch(pc - 1);
+            pc = program.FindMatch(pc - 1);
         }
         
         public void Run() 
         {
             while(pc < program.Length)
             {
-                char instruction = Fetch ();
-                pc++;
+                char instruction = Fetch();
                 switch(instruction)
                 {
                 case '>': 
@@ -65,13 +66,13 @@ namespace BrainmessShort
                 case '[':
                     if (tape[tc] == 0)
                     {
-                        pc = JumpForward ();
+                        JumpForward();
                     }
                         break;
                 case ']':
                     if (tape[tc] != 0)
                     {
-                        pc = JumpBackward ();
+                        JumpBackward();
                     }
                     break;
                 }
