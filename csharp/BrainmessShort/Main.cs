@@ -5,13 +5,13 @@ namespace BrainmessShort
 {
    public class Brainmess
    {
-        private readonly string program;
-        private int pc = 0;
+        private readonly Program _program;
+        
         private readonly int[] tape = new int[5000];
         private int tc = 2500;
-        public Brainmess(string program) 
+        public Brainmess(string programString) 
         {
-            this.program = program;
+            _program = new Program(programString);
         }
         
         public static void Main(string[] args)
@@ -20,37 +20,12 @@ namespace BrainmessShort
             new Brainmess(reader.ReadToEnd()).Run();
             reader.Close();
         }
-
-        char Fetch()
-        {
-            var instruction = program[pc];
-            pc++;
-            return instruction;
-        }
-
-        void JumpForward()
-        {
-            pc = program.FindMatch(pc - 1) + 1;
-        }
-
-        void JumpBackward()
-        {
-            pc = program.FindMatch(pc - 1);
-        }
-        
-        bool EndOfProgram
-        {
-            get
-            {
-                return (pc >= program.Length);
-            }
-        }
         
         public void Run() 
         {
-            while(!EndOfProgram)
+            while(!_program.EndOfProgram)
             {
-                char instruction = Fetch();
+                char instruction = _program.Fetch();
                 switch(instruction)
                 {
                 case '>': 
@@ -74,13 +49,13 @@ namespace BrainmessShort
                 case '[':
                     if (tape[tc] == 0)
                     {
-                        JumpForward();
+                        _program.JumpForward();
                     }
                         break;
                 case ']':
                     if (tape[tc] != 0)
                     {
-                        JumpBackward();
+                        _program.JumpBackward();
                     }
                     break;
                 }
