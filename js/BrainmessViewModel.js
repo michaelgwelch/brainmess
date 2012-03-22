@@ -9,6 +9,7 @@ function BrainmessTapeCell(val, current) {
 function BrainmessViewModel() {
 
     self = this;
+    var brainmess = new Brainmess();
 
     var currentIndex = function () {
         var i;
@@ -17,11 +18,15 @@ function BrainmessViewModel() {
             if (cells[i].isCurrent()) return i;
         }
     };
+    
+    self.output = ko.observable("");
+    self.tapeCells = ko.observableArray([
+                                         new BrainmessTapeCell("0", true)
+                                         ]);
+
     // Operations - only called on MoveForward, so creates a 0 cell that is current
-    self.addCell = function () {
-        self.tapeCells()[self.tapeCells().length - 1].isCurrent(false);
-        self.tapeCells.push(new BrainmessTapeCell(0, true));
-    }
+
+    // forward, backward, inc, dec should be delted at some point
     self.forward = function () {
         var index = currentIndex();
         self.tapeCells()[index].isCurrent(false);
@@ -42,13 +47,29 @@ function BrainmessViewModel() {
         var value = self.tapeCells()[index].value();
         self.tapeCells()[index].value(parseInt(value) - 1);
     };
-    self.output = ko.observable("");
-    self.tapeCells = ko.observableArray([
-            new BrainmessTapeCell("32"),
-            new BrainmessTapeCell("45"),
-            new BrainmessTapeCell("1"),
-            new BrainmessTapeCell("23", true)
-        ]);
+    
+
+    self.moveTo = function (from, to) {
+        self.tapeCells()[from].isCurrent(false);
+        self.tapeCells()[to].isCurrent(true);
+    }
+    
+    self.addCell = function(index, value) {
+        var cells = self.tapeCells();
+        
+        // we expect index to always be at the end of list
+        if (index !== cells.length) throw new Error("unexpected action from model");
+        // we expect value to be 0 but we can handle anything
+        
+        cells.push(new BrainmessTapeCell(value));
+    }
+    
+    // The cell specified by index has had its value changed
+    // The index isn't really needed as we can loop thru and find the
+    // current cell.
+    self.modifyCell = function(index, value){
+        self.tapeCells()[index].value(value);
+    }
 
 };
 
