@@ -28,7 +28,8 @@ var Tape = function() {
             }
             return result;
         },
-        index: function () { return index; }
+        index: function () { return index; },
+        iterator: function() { return Iterator(cells); }
     }
 };
 
