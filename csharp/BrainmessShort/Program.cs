@@ -13,6 +13,13 @@ namespace BrainmessShort
             pc = 0;
         }
         
+        public static Program LoadState(string programString, int pc)
+        {
+            Program program = new Program(programString);
+            program.pc = pc;
+            return program;
+        }
+        
         public bool EndOfProgram
         {
             get
@@ -36,6 +43,14 @@ namespace BrainmessShort
         public void JumpBackward()
         {
             pc = program.FindMatch(pc - 1);
+        }
+        
+        public int ProgramCounter
+        {
+            get
+            {
+                return pc;
+            }
         }
     }
 }
