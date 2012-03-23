@@ -1,4 +1,7 @@
-var Program = function(programString) {
+
+"use strict";
+
+var Program = function (programString) {
     var pc = 0;
 
     return {

@@ -3,7 +3,7 @@
 // modify
 // newCell
 
-
+"use strict";
 
 
 var Brainmess = function() {
@@ -56,7 +56,6 @@ var Brainmess = function() {
         run: function (programText, inputCallback, outputCallback, singleStep) {
             var p = new Program(programText);
             context = new Context(p, inputCallback, outputCallback);
-            inputEvent = inputCallback;
             execute(singleStep);
             return {
                 resume: function (singleStep, charCode) {

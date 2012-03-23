@@ -11,5 +11,17 @@
     <script type="text/javascript" src="program.js"></script>
     <script type="text/javascript" src="context.js"></script>
     <script type="text/javascript" src="brainmess.js"></script>
+    <script type="text/javascript">
+        "use strict";
+        var bm = new Brainmess();
+        var outputString = "";
+        var runContext = undefined;
+        var outputCallback = function (newText) { outputString = newText; };
+        var inputCallback = function () { alert("Waiting for input"); };
+        var runHello = function () { bm.run(helloWorld, inputCallback, outputCallback); return outputString; };
+        var runFibo = function () { bm.run(fibo, inputCallback, outputCallback); return outputString; };
+        var runDouble = function () { runContext = bm.run(double, function () { }, outputCallback); return "Type 'resumeDouble(x)' where x is in {0,1,2,3,4}"; };
+        var resumeDouble = function (x) { runContext.resume(false, x); return outputString; };
+    </script>
 </body>
 </html>
