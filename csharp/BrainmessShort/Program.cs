@@ -37,6 +37,14 @@ namespace BrainmessShort
         {
             pc = program.FindMatch(pc - 1);
         }
+        
+        public int ProgramCounter
+        {
+            get
+            {
+                return pc;
+            }
+        }
     }
 }
 
