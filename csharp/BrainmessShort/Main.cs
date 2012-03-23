@@ -20,6 +20,38 @@ namespace BrainmessShort
             new Brainmess(reader.ReadToEnd()).Run();
             reader.Close();
         }
+
+        int MoveForward()
+        {
+            return tc++;
+        }
+
+        int MoveBackward()
+        {
+            return tc--;
+        }
+
+        int Increment()
+        {
+            return tape[tc]++;
+        }
+
+        int Decrement()
+        {
+            return tape[tc]--;
+        }
+
+        int Current
+        {
+            get
+            {
+                return tape[tc];
+            }
+            set
+            {
+                tape[tc] = value;
+            }
+        }
         
         public void Run() 
         {
@@ -29,31 +61,31 @@ namespace BrainmessShort
                 switch(instruction)
                 {
                 case '>': 
-                    tc++;
+                    MoveForward();
                     break;
                 case '<':
-                    tc--;
+                    MoveBackward();
                     break;
                 case '+':
-                    tape[tc]++;
+                    Increment();
                     break;
                 case '-':
-                    tape[tc]--;
+                    Decrement();
                     break;
                 case '.':
-                    Console.Write((char)tape[tc]);
+                    Console.Write((char)Current);
                     break;
                 case ',':
-                    tape[tc] = Console.Read();
+                    Current = Console.Read();
                     break;
                 case '[':
-                    if (tape[tc] == 0)
+                    if (Current == 0)
                     {
                         _program.JumpForward();
                     }
                         break;
                 case ']':
-                    if (tape[tc] != 0)
+                    if (Current != 0)
                     {
                         _program.JumpBackward();
                     }
