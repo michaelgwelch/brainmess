@@ -1,9 +1,29 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-    <title></title>
+    <title>Brainmess · Interactive Interpreter</title>
+    <link href="css/bootstrap.css" rel="stylesheet"/>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet"/>
+    <link href="css/welch.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="container">
+        <header class="jumbotron subhead">
+            <h1>Brainmess Interpreter</h1>
+            <p class="lead">Run your Brainmess Program</p>
+        </header>
+        <div id="ProgramView">
+            <label>Program</label>
+            <pre data-bind="text: helloProgram"></pre>
+        </div>
+
+        <div id="OutputView">
+            <label>Output</label>
+            <pre data-bind="text: output"></pre>
+        </div>
+        
+    </div>
+    <!-- My Model Scripts -->
     <script type="text/javascript" src="double.js"></script>
     <script type="text/javascript" src="fibo.js"></script>
     <script type="text/javascript" src="hello.js"></script>
@@ -11,6 +31,13 @@
     <script type="text/javascript" src="program.js"></script>
     <script type="text/javascript" src="context.js"></script>
     <script type="text/javascript" src="brainmess.js"></script>
+
+    <!-- Knockout -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="knockout-2.0.0.js"></script>
+    
+    <!-- My ViewModel -->
+    <script type="text/javascript" src="BrainmessViewModel.js"></script>
     <script type="text/javascript">
         "use strict";
         var bm = new Brainmess();

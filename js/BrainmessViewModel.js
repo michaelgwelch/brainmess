@@ -1,19 +1,24 @@
-﻿
+﻿"use strict";
+
 function BrainmessTapeCell(val, current) {
 
-    this.value = ko.observable(val);
-    this.isCurrent = ko.observable(current);
+    var self = this;
+
+    self.value = ko.observable(val);
+    self.isCurrent = ko.observable(current);
 
 };
 
 function BrainmessViewModel() {
 
-    self = this;
+    var self = this;
     var brainmess = new Brainmess();
 
+    // properties
     self.singleStep = ko.observable(false);
     self.output = ko.observable("");
     self.tapeCells = ko.observableArray([]);
+    self.helloProgram = ko.observable(helloWorld);
 
     var runContext = undefined;
 
@@ -25,6 +30,8 @@ function BrainmessViewModel() {
     var displayOutput = function (newText) {
         self.output(newText);
     };
+
+
 
     // Operations - only called on MoveForward, so creates a 0 cell that is current
     self.run = function () {
