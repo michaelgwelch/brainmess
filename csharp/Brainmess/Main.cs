@@ -39,12 +39,4 @@ namespace Welch.Brainmess
 
 
     }
-
-    public static class StreamExtensions
-    {
-        public static TextReader CreateReader(this Stream stream)
-        {
-            return new StreamReader(stream);
-        }
-    }
 }
