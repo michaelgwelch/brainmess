@@ -1,4 +1,6 @@
-var Tape = function() {
+
+"use strict";
+var Tape = function () {
     var cells = [0];
     var index = 0;
 
@@ -18,17 +20,18 @@ var Tape = function() {
         },
         get: function() { return cells[index]; },
         set: function(v) { cells[index] = v; },
-        toString: function() { 
-            var result = "";
-            var i = 0;
-            for(i = 0; i < cells.length; i++) {
-                if (i !== 0) result += ",";
-                if (i === index) result += "->";
-                result += cells[i].toString();
-            }
-            return result;
-        },
-        index: function () { return index; }
+        //toString: function() { 
+        //    var result = "";
+        //    var i = 0;
+        //    for(i = 0; i < cells.length; i++) {
+        //        if (i !== 0) result += ",";
+        //        if (i === index) result += "->";
+        //        result += cells[i].toString();
+        //    }
+        //    return result;
+        //},
+        index: function () { return index; },
+        iterator: function() { return Iterator(cells); }
     }
 };
 
@@ -36,28 +39,28 @@ var Tape = function() {
 // and return an object that contains a string representation
 // of the current cell, the cells prior to the current cell (prefix),
 // and the cells after the current cell (suffix)
-var TapeSlitter = function () {
-    return {
-        split: function (tapeString) {
-            tapeString += ",";
+//var TapeSlitter = function () {
+//    return {
+//        split: function (tapeString) {
+//            tapeString += ",";
 
-            var indexOfCurrent = tapeString.indexOf("->");
-            var prefixString = tapeString.substring(0, indexOfCurrent - 1);
+//            var indexOfCurrent = tapeString.indexOf("->");
+//            var prefixString = tapeString.substring(0, indexOfCurrent - 1);
 
-            var endOfCurrent = tapeString.indexOf(",", indexOfCurrent);
-            var currentString = tapeString.substring(indexOfCurrent + 2, endOfCurrent);
+//            var endOfCurrent = tapeString.indexOf(",", indexOfCurrent);
+//            var currentString = tapeString.substring(indexOfCurrent + 2, endOfCurrent);
 
-            var endString = tapeString.substring(endOfCurrent + 1, tapeString.length - 1);
+//            var endString = tapeString.substring(endOfCurrent + 1, tapeString.length - 1);
 
 
-            return {
-                prefix: prefixString,
-                current: currentString,
-                suffix: endString,
-            };
-        }
-    }
-}
+//            return {
+//                prefix: prefixString,
+//                current: currentString,
+//                suffix: endString,
+//            };
+//        }
+//    }
+//}
 
 
 

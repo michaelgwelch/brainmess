@@ -16,8 +16,8 @@ namespace Welch.Brainmess
 
             if (File.Exists(commandLine.Path))
             {
-                var file = File.OpenRead(commandLine.Path).CreateReader();
-                var interpreter = new Interpreter(new Program(file.ReadToEnd()));
+                var fileContents = File.ReadAllText(commandLine.Path);
+                var interpreter = new Interpreter(new Program(fileContents));
                 interpreter.Run();
             }
         }
@@ -38,13 +38,5 @@ namespace Welch.Brainmess
 
 
 
-    }
-
-    public static class StreamExtensions
-    {
-        public static TextReader CreateReader(this Stream stream)
-        {
-            return new StreamReader(stream);
-        }
     }
 }

@@ -3,19 +3,18 @@
 // modify
 // newCell
 
-
+"use strict";
 
 
 var Brainmess = function() {
     var context = undefined;
-    var inputEvent = undefined;
-    var instructionExecutedCallback = undefined;
+
     var execute = function(singleStep) {
         while(!context.endOfProgram()) {
-            var sendCallback = true;
+            var noop = false;
             var i = context.fetch();
             if (i === ",") {
-                inputEvent();
+                context.input();
                 break;// break out of while
             }
             switch(i) {
@@ -41,42 +40,36 @@ var Brainmess = function() {
                     context.testAndJumpBackward();
                     break;
                 default:
-                    sendCallback = false;
+                    noop = true;
                     break;
         
 
             }
-            if (sendCallback) {
-                instructionExecutedCallback(context.memory());
-                if (singleStep) break;
+            if (!noop && singleStep) {
+                break; // out of while loop - we are singleStepping, but not thru NoOps.
             }
         }
     };
 
     return {
-        // creates a new context based on paramters
-        // and starts execution of the program
-        run: function(programText, inputCallback, outputCallback, singleStep) {
+
+        run: function (programText, inputCallback, outputCallback, singleStep) {
             var p = new Program(programText);
-            context = new Context(p, outputCallback);
-            inputEvent = inputCallback;
+            context = new Context(p, inputCallback, outputCallback);
             execute(singleStep);
+            return {
+                resume: function (singleStep, charCode) {
+                    if (charCode) {
+                        context.input(charCode);
+                    }
+                    execute(singleStep);
+                },
+                memoryView: function () {
+                    return context.memory();
+                }
+            };
         },
-        resume: function(charCode, singleStep) {
-            context.input(charCode);
-            execute(singleStep);
-        },
-        nextStep: function(singleStep) {
-            execute(singleStep)
-        },
-        
-        instructionExecuted: function(callback) {
-            instructionExecutedCallback = callback;
-        },
-        
-        memory: function() {
-            return context.memory();
-        }
+
     };
 
 };
