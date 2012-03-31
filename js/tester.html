@@ -12,15 +12,24 @@
             <h1>Brainmess Interpreter</h1>
             <p class="lead">Run your Brainmess Program</p>
         </header>
+        <div>
+            <label>Choose program</label>
+            <div class='btn-group'>
+                <button class='btn' data-bind='click: chooseHello'>Hello</button>
+                <button class='btn' data-bind='click: chooseFibo'>Fibonacci</button>
+            </div>
+        </div>
         <div id="ProgramView">
             <label>Program</label>
-            <pre data-bind="text: helloProgram"></pre>
+            <pre id='program' data-bind="text: program"></pre>
         </div>
 
         <div id="OutputView">
             <label>Output</label>
             <pre data-bind="text: output"></pre>
         </div>
+        <button class='btn' data-bind='click: run'>Run</div>
+            
         
     </div>
     <!-- My Model Scripts -->
@@ -47,8 +56,11 @@
         var inputCallback = function () { alert("Waiting for input"); };
         var runHello = function () { bm.run(helloWorld, inputCallback, outputCallback); return outputString; };
         var runFibo = function () { bm.run(fibo, inputCallback, outputCallback); return outputString; };
-        var runDouble = function () { runContext = bm.run(double, function () { }, outputCallback); return "Type 'resumeDouble(x)' where x is in {0,1,2,3,4}"; };
-        var resumeDouble = function (x) { runContext.resume(false, x); return outputString; };
+        var runDouble = function () { runContext = bm.run(double, function () { }, outputCallback); return "Type 'resumeDouble(x)' where x is in {48,49,50,51,52}"; };
+        var resumeDouble = function (x) { 
+            if ( x < 48 || x > 52) throw new Error("This program only works for '0', '1', '2', '3', '4'");
+            runContext.resume(false, x); 
+            return outputString; };
     </script>
 </body>
 </html>

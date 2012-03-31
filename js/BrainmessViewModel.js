@@ -18,7 +18,7 @@ function BrainmessViewModel() {
     self.singleStep = ko.observable(false);
     self.output = ko.observable("");
     self.tapeCells = ko.observableArray([]);
-    self.helloProgram = ko.observable(helloWorld);
+    self.program = ko.observable(helloWorld);
 
     var runContext = undefined;
 
@@ -34,6 +34,14 @@ function BrainmessViewModel() {
 
 
     // Operations - only called on MoveForward, so creates a 0 cell that is current
+    
+    self.chooseHello = function() {
+        self.program(helloWorld);
+    };
+    
+    self.chooseFibo = function() {
+        self.program(fibo);
+    }
     self.run = function () {
         runContext = brainmess.run($("#program").val(),
             prepareForInput,
