@@ -7,24 +7,24 @@ namespace BrainmessShort
         private readonly int[] tape = new int[5000];
         private int tc = 2500;
         
-        public int MoveForward()
+        public void MoveForward()
         {
-            return tc++;
+            tc++;
         }
         
-        public int MoveBackward()
+        public void MoveBackward()
         {
-            return tc--;
+            tc--;
         }
         
-        public int Increment()
+        public void Increment()
         {
-            return tape[tc]++;
+            tape[tc]++;
         }
         
-        public int Decrement()
+        public void Decrement()
         {
-            return tape[tc]--;
+            tape[tc]--;
         }
         
         public int Current
