@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Linq;
 using System.Reflection.Emit;
 using System.IO;
-namespace Bfc
+namespace Bmc
 {
     class MainClass
     {
@@ -136,7 +136,7 @@ namespace Bfc
                     ilg.Emit(OpCodes.Ldloc_S, 1);
                     ilg.Emit(OpCodes.Ldelem_I4);
                     ilg.Emit(OpCodes.Ldc_I4_S, 0);
-                    ilg.Emit(OpCodes.Beq,nests[nextNestMarkerIndex].LoopEnd);
+                    ilg.Emit(OpCodes.Beq,nests[nextNestMarkerIndex].LoopEnd);//if the current tape value == 0 jump past loop end
 
                     nextNestMarkerIndex++;
                     break;

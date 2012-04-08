@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bfc", "Bfc\Bfc.csproj", "{B6BB83A3-C7E6-4D17-976D-CAB5F344ABA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bmc", "bmc\bmc.csproj", "{B6BB83A3-C7E6-4D17-976D-CAB5F344ABA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +15,6 @@ Global
 		{B6BB83A3-C7E6-4D17-976D-CAB5F344ABA6}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Bfc\Bfc.csproj
+		StartupItem = bmc\bmc.csproj
 	EndGlobalSection
 EndGlobal
