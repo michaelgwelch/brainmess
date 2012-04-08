@@ -73,62 +73,28 @@ namespace Bfc
             //initialize indexer into array (start at 2500)
             ilg.Emit(OpCodes.Ldc_I4,2500);
             ilg.Emit(OpCodes.Stloc,1);
-
+            var generator = new BrainmessIlGenerator(ilg);
             foreach(var instruction in program)
             {
                 switch(instruction)
                 {
                 case '>':
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldc_I4_S, 1);
-                    ilg.Emit(OpCodes.Add);
-                    ilg.Emit(OpCodes.Stloc,1);
+                    generator.MoveTape(1);
                     break;
                 case '<':
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldc_I4_S, 1);
-                    ilg.Emit(OpCodes.Sub);
-                    ilg.Emit(OpCodes.Stloc,1);
+                    generator.MoveTape(-1);
                     break;
                 case '+':
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldelem_I4);
-                    //Time to add 1 and restore value
-                    ilg.Emit(OpCodes.Ldc_I4_S, 1);
-                    ilg.Emit(OpCodes.Add);
-                    ilg.Emit(OpCodes.Stelem_I4);
-
+                    generator.AddValue(1);
                     break;
                 case '-':
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldelem_I4);
-                    //Time to subtract 1 and restore value
-                    ilg.Emit(OpCodes.Ldc_I4_S, 1);
-                    ilg.Emit(OpCodes.Sub);
-                    ilg.Emit(OpCodes.Stelem_I4);
+                    generator.AddValue(-1);
                     break;
                 case '.':
-                    //write tape[tc] to console
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldelem_I4);
-                    ilg.Emit(OpCodes.Call, typeof(Console).GetMethod("Write", new Type[] {typeof(char)} ));
+                    generator.WriteCurrent();
                     break;
                 case ',':
-                    //Not supported yet
-                    //tape[tc] = Console.Read();
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Call, typeof(Console).GetMethod("Read", new Type[] {} ));
-                    ilg.Emit(OpCodes.Stelem_I4);
+                    generator.ReadAndStoreInput();
                     break;
                 case '[':
                     ilg.MarkLabel(nests[nestLevel].JmpLabel);
