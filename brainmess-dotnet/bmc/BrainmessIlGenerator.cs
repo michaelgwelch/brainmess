@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.IO;
 
-namespace Bfc
+namespace Bmc
 {
     public class BrainmessIlGenerator
     {
