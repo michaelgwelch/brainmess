@@ -8,7 +8,7 @@
     <ProjectGuid>{B6BB83A3-C7E6-4D17-976D-CAB5F344ABA6}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Bfc</RootNamespace>
-    <AssemblyName>bfc</AssemblyName>
+    <AssemblyName>bmc</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">

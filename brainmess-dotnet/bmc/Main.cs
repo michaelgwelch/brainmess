@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Linq;
 using System.Reflection.Emit;
 using System.IO;
-namespace Bfc
+namespace Bmc
 {
     class MainClass
     {
@@ -57,13 +57,13 @@ namespace Bfc
             LocalBuilder tcVar = ilg.DeclareLocal(typeof(int));//index 1 local var
             tcVar.SetLocalSymInfo("tc");
 
-            int nestLevel =0;//The index of the next [ label nestLevel-1 is the index of the most recent [
+            int nextNestMarkerIndex =0;//The index of the next [ label nestLevel-1 is the index of the most recent [
 
             var nestCount = program.Count(x=>x=='[');//How many nestings are there?
             NestHelper[] nests = new NestHelper[nestCount];
             for(int i =0; i<nestCount; i++)
             {
-                nests[i] =new  NestHelper(){JmpLabel = ilg.DefineLabel(), HasBeenClosed =false};
+                nests[i] =new  NestHelper(){LoopStart = ilg.DefineLabel(), LoopEnd=ilg.DefineLabel(), HasBeenClosed =false};
             }
 
             //initialize tape array
@@ -97,18 +97,21 @@ namespace Bfc
                     generator.ReadAndStoreInput();
                     break;
                 case '[':
-                    ilg.MarkLabel(nests[nestLevel].JmpLabel);
-                    nestLevel++;
-                    break;
-                case ']':
+                    ilg.MarkLabel(nests[nextNestMarkerIndex].LoopStart);
                     ilg.Emit(OpCodes.Ldloc_S, 0);
                     ilg.Emit(OpCodes.Ldloc_S, 1);
                     ilg.Emit(OpCodes.Ldelem_I4);
                     ilg.Emit(OpCodes.Ldc_I4_S, 0);
+                    ilg.Emit(OpCodes.Beq,nests[nextNestMarkerIndex].LoopEnd);//if the current tape value == 0 jump past loop end
+
+                    nextNestMarkerIndex++;
+                    break;
+                case ']':
                     //if current index on tape !=0 jump to denestLevel;
-                    NestHelper nestBeingClosed = nests.Take(nestLevel).Last(x=>!x.HasBeenClosed);
+                    NestHelper nestBeingClosed = nests.Take(nextNestMarkerIndex).Last(x=>!x.HasBeenClosed);
                     nestBeingClosed.HasBeenClosed = true;
-                    ilg.Emit(OpCodes.Bne_Un,nestBeingClosed.JmpLabel);
+                    ilg.Emit(OpCodes.Br,nestBeingClosed.LoopStart);
+                    ilg.MarkLabel(nestBeingClosed.LoopEnd);
                     break;
                 }
             }
@@ -117,7 +120,8 @@ namespace Bfc
         }
         private class NestHelper
         {
-            public Label JmpLabel;
+            public Label LoopEnd;
+            public Label LoopStart;
             public bool HasBeenClosed;
         }
     }

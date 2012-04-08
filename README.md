@@ -1,7 +1,7 @@
 Brainmess
 =========
 
-This project contains multiple implementations of interpreters for the language
+This project contains multiple implementations of interpreters and compilers for the language
 I call [Brainmess](http://en.wikipedia.org/wiki/Brainfuck). (Note, this links
 to the wikipedia article that describes the language and gives it's *real*
 name. The real name may by NSFW.)
@@ -10,7 +10,7 @@ I've normally taken the approach that the tape should be "infinite" in
 both directions and therefore I tend to use a linked list.
 
 I've used this programming exercise during Refactoring study groups, with
-an emphasis on clean code and testability rather than on 
+an emphasis on clean code and testability rather than on
 efficiency. Therefore, the implementations tend to be more "verbose" than
 the implementations discussed at the Wikipedia site.
 
@@ -22,10 +22,6 @@ production and test.
 <table>
     <tr>
         <th>Directory</th><th>Description</th>
-    </tr>
-    <tr>
-        <td>brainmess-dotnet</td>
-        <td>A .net brainmess compiler. No unit tests.</td>
     </tr>
     <tr>
         <td>java</td><td>A Java implementation. A few unit tests.
@@ -51,6 +47,10 @@ production and test.
     </tr>
     <tr>
         <td>scripts</td><td>Some sample brainmess programs.</td>
+    </tr>
+    <tr>
+        <td>brainmess-dotnet</td>
+        <td>A .net brainmess compiler. No unit tests.</td>
     </tr>
 </table>
 
