@@ -11,7 +11,7 @@ namespace Bmc
         {
             if(args.Length <2)
             {
-                Console.Error.WriteLine("Usage: bcf.exe <srcfile> <output>");
+                Console.Error.WriteLine("Usage: bmc.exe <srcfile> <output>");
                 return;
             }
 
@@ -33,7 +33,6 @@ namespace Bmc
             typeof(int), new Type[] { typeof(string[]) });
 
 
-            // Emit the ubiquitous "Hello, World!" method, in IL
             var src = File.ReadAllText(args[0]);
             BrainmessCompiler(fb.GetILGenerator(),src);
 
@@ -50,113 +49,38 @@ namespace Bmc
 
         private static void BrainmessCompiler(ILGenerator ilg, string program)
         {
-            //no program counter is needed as clr has that built in
-            //initialize int array (5000) in size
-            LocalBuilder tapeVar = ilg.DeclareLocal(typeof(int[]));//index 0 local var
-            tapeVar.SetLocalSymInfo("tape");
-            LocalBuilder tcVar = ilg.DeclareLocal(typeof(int));//index 1 local var
-            tcVar.SetLocalSymInfo("tc");
-
-            int nextNestMarkerIndex =0;//The index of the next [ label nestLevel-1 is the index of the most recent [
-
-            var nestCount = program.Count(x=>x=='[');//How many nestings are there?
-            NestHelper[] nests = new NestHelper[nestCount];
-            for(int i =0; i<nestCount; i++)
-            {
-                nests[i] =new  NestHelper(){LoopStart = ilg.DefineLabel(), LoopEnd=ilg.DefineLabel(), HasBeenClosed =false};
-            }
-
-            //initialize tape array
-            ilg.Emit(OpCodes.Ldc_I4, 5000);
-            ilg.Emit(OpCodes.Newarr, typeof(int));
-            ilg.Emit(OpCodes.Stloc,0);
-            //initialize indexer into array (start at 2500)
-            ilg.Emit(OpCodes.Ldc_I4,2500);
-            ilg.Emit(OpCodes.Stloc,1);
-
+            var generator = new BrainmessIlGenerator(ilg,program.Count(x=>x=='['),5000);
             foreach(var instruction in program)
             {
                 switch(instruction)
                 {
                 case '>':
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldc_I4_S, 1);
-                    ilg.Emit(OpCodes.Add);
-                    ilg.Emit(OpCodes.Stloc,1);
+                    generator.MoveTape(1);
                     break;
                 case '<':
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldc_I4_S, 1);
-                    ilg.Emit(OpCodes.Sub);
-                    ilg.Emit(OpCodes.Stloc,1);
+                    generator.MoveTape(-1);
                     break;
                 case '+':
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldelem_I4);
-                    //Time to add 1 and restore value
-                    ilg.Emit(OpCodes.Ldc_I4_S, 1);
-                    ilg.Emit(OpCodes.Add);
-                    ilg.Emit(OpCodes.Stelem_I4);
-
+                    generator.AddValue(1);
                     break;
                 case '-':
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldelem_I4);
-                    //Time to subtract 1 and restore value
-                    ilg.Emit(OpCodes.Ldc_I4_S, 1);
-                    ilg.Emit(OpCodes.Sub);
-                    ilg.Emit(OpCodes.Stelem_I4);
+                    generator.AddValue(-1);
                     break;
                 case '.':
-                    //write tape[tc] to console
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldelem_I4);
-                    ilg.Emit(OpCodes.Call, typeof(Console).GetMethod("Write", new Type[] {typeof(char)} ));
+                    generator.WriteCurrent();
                     break;
                 case ',':
-                    //Not supported yet
-                    //tape[tc] = Console.Read();
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Call, typeof(Console).GetMethod("Read", new Type[] {} ));
-                    ilg.Emit(OpCodes.Stelem_I4);
+                    generator.ReadAndStoreInput();
                     break;
                 case '[':
-                    ilg.MarkLabel(nests[nextNestMarkerIndex].LoopStart);
-                    ilg.Emit(OpCodes.Ldloc_S, 0);
-                    ilg.Emit(OpCodes.Ldloc_S, 1);
-                    ilg.Emit(OpCodes.Ldelem_I4);
-                    ilg.Emit(OpCodes.Ldc_I4_S, 0);
-                    ilg.Emit(OpCodes.Beq,nests[nextNestMarkerIndex].LoopEnd);//if the current tape value == 0 jump past loop end
-
-                    nextNestMarkerIndex++;
+                    generator.BeginLoop();
                     break;
                 case ']':
-                    //if current index on tape !=0 jump to denestLevel;
-                    NestHelper nestBeingClosed = nests.Take(nextNestMarkerIndex).Last(x=>!x.HasBeenClosed);
-                    nestBeingClosed.HasBeenClosed = true;
-                    ilg.Emit(OpCodes.Br,nestBeingClosed.LoopStart);
-                    ilg.MarkLabel(nestBeingClosed.LoopEnd);
+                    generator.EndLoop();
                     break;
                 }
             }
-            ilg.Emit(OpCodes.Ldc_I4_0);
-            ilg.Emit(OpCodes.Ret);//return 0
-        }
-        private class NestHelper
-        {
-            public Label LoopEnd;
-            public Label LoopStart;
-            public bool HasBeenClosed;
+            generator.FinalizeProgram();
         }
     }
 }
