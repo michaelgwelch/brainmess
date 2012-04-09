@@ -1,4 +1,6 @@
-var Tape = function() {
+
+"use strict";
+var Tape = function () {
     var cells = [0];
     var index = 0;
 

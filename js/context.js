@@ -1,3 +1,4 @@
+"use strict";
 var Context = function (prog, inputCallback, outputCallback) {
     var tape = new Tape();
     var outputString = "";
