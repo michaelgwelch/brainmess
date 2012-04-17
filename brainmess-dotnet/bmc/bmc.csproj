@@ -46,6 +46,7 @@
     <Compile Include="Lexigraph\WriteOutCurrentValue.cs" />
     <Compile Include="Lexigraph\IInstruction.cs" />
     <Compile Include="IGenerator.cs" />
+    <Compile Include="Lexigraph\InstructionContainer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

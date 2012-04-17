@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Linq;
 using System.Reflection.Emit;
 using System.IO;
+using System.Collections.Generic;
+using Bmc.Lexigraph;
 namespace Bmc
 {
     class MainClass

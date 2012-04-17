@@ -12,7 +12,7 @@ namespace Bmc.Lexigraph
 
         public void Emit(IGenerator codeEmittor)
         {
-            codeEmittor.AddValue(x);
+            codeEmittor.AddValue(_x);
         }
     }
 }

@@ -15,10 +15,6 @@ namespace bmcTests
         public int LoopEnds { get; private set; }
         public int ProgramFinalizes { get; private set; }
 
-        public void FinalizeProgram ()
-        {
-            ProgramFinalizes++;
-        }
 
         public void MoveTape (int x)
         {

@@ -6,8 +6,8 @@ namespace Bmc.Lexigraph
 {
     public class WhileLoop : IInstruction
     {
-        private IEnumerable<IInstruction> _instructions;
-        public WhileLoop (IEnumerable<IInstruction> instructions)
+        private InstructionContainer _instructions;
+        public WhileLoop (InstructionContainer instructions)
         {
             _instructions = instructions;
         }
@@ -15,10 +15,7 @@ namespace Bmc.Lexigraph
         public void Emit(IGenerator codeEmittor)
         {
             codeEmittor.BeginLoop();
-            foreach(var i in instructions)
-            {
-                i.Emit(codeEmittor);
-            }
+            _instructions.Emit(codeEmittor);
             codeEmittor.EndLoop();
         }
     }
