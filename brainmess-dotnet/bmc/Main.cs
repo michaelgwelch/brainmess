@@ -21,7 +21,6 @@ namespace Bmc
 
         private static void BrainmessCompiler(string outputPath, string program)
         {
-
             var generator = new BrainmessIlGenerator(outputPath,program.Count(x=>x=='['),5000);
             foreach(var instruction in program)
             {

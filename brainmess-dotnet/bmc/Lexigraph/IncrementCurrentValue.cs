@@ -2,10 +2,17 @@ using System;
 
 namespace Bmc.Lexigraph
 {
-    public class IncrementCurrentValue
+    public class IncrementCurrentValue: IInstruction
     {
-        public IncrementCurrentValue ()
+        private int _x;
+        public IncrementCurrentValue (int x)
         {
+            _x=x;
+        }
+
+        public void Emit(IGenerator codeEmittor)
+        {
+            codeEmittor.AddValue(x);
         }
     }
 }

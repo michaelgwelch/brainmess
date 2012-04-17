@@ -7,6 +7,10 @@ namespace Bmc.Lexigraph
         public WriteOutCurrentValue ()
         {
         }
+        public void Emit(IGenerator codeEmittor)
+        {
+            codeEmittor.WriteCurrent();
+        }
     }
 }
 

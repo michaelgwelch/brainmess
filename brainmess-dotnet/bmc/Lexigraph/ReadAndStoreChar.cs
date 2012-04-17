@@ -7,6 +7,11 @@ namespace Bmc.Lexigraph
         public ReadAndStoreChar ()
         {
         }
+
+        public void Emit(IGenerator codeEmittor)
+        {
+            codeEmittor.ReadAndStoreInput();
+        }
     }
 }
 
