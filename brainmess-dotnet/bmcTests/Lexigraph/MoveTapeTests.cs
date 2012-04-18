@@ -4,16 +4,25 @@ using Bmc.Lexigraph;
 
 namespace bmcTests
 {
-	[TestFixture()]
+    [TestFixture]
     public class MoveTapeTests
     {
-		[Test()]
-        public void Advance_Tape_By_One ()
+        [Test]
+        public void Inc_Tape_By_One ()
         {
-            var tapeMove = new MoveTape(1);
+            var instruction = new MoveTape(1);
             var m = new MockGenerator();
-            tapeMove.Emit(m);
-            Assert.AreEqual(1, m.ValueIncrements);
+            instruction.Emit(m);
+            Assert.AreEqual(1, m.TapeAdvances);
+        }
+
+        [Test]
+        public void Dec_Tape_By_One ()
+        {
+            var instruction = new MoveTape(-1);
+            var m = new MockGenerator();
+            instruction.Emit(m);
+            Assert.AreEqual(1, m.TapeBacks);
         }
     }
 }

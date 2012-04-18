@@ -41,6 +41,11 @@
   <ItemGroup>
     <Compile Include="Lexigraph\MoveTapeTests.cs" />
     <Compile Include="MockGenerator.cs" />
+    <Compile Include="Lexigraph\ReadAndStoreCharTests.cs" />
+    <Compile Include="Lexigraph\IncrementCurrentValueTests.cs" />
+    <Compile Include="Lexigraph\WriteOutCurrentValueTests.cs" />
+    <Compile Include="Lexigraph\InstructionContainerTests.cs" />
+    <Compile Include="Lexigraph\WhileLoopTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

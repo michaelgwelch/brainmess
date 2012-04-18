@@ -24,7 +24,7 @@ namespace bmcTests
             }
             if(x < 0)
             {
-                TapeBacks+=x;
+                TapeBacks-=x;
             }
         }
 
@@ -36,7 +36,7 @@ namespace bmcTests
             }
             if(x < 0)
             {
-                ValueDecrements+=x;
+                ValueDecrements-=x;
             }
         }
 
