@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9D078062-E934-4C7F-BFFA-D23343EB3FD8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>bmcTests</RootNamespace>
+    <AssemblyName>bmcTests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.core, Version=2.5.10.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Package>nunit</Package>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.10.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Package>nunit</Package>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Lexigraph\MoveTapeTests.cs" />
+    <Compile Include="MockGenerator.cs" />
+    <Compile Include="Lexigraph\ReadAndStoreCharTests.cs" />
+    <Compile Include="Lexigraph\IncrementCurrentValueTests.cs" />
+    <Compile Include="Lexigraph\WriteOutCurrentValueTests.cs" />
+    <Compile Include="Lexigraph\InstructionContainerTests.cs" />
+    <Compile Include="Lexigraph\WhileLoopTest.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Lexigraph\" />
+    <Folder Include="..\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bmc\bmc.csproj">
+      <Project>{B6BB83A3-C7E6-4D17-976D-CAB5F344ABA6}</Project>
+      <Name>bmc</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

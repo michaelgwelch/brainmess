@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Linq;
 using System.Reflection.Emit;
 using System.IO;
+using System.Collections.Generic;
+using Bmc.Lexigraph;
 namespace Bmc
 {
     class MainClass
@@ -21,38 +23,48 @@ namespace Bmc
 
         private static void BrainmessCompiler(string outputPath, string program)
         {
-
             var generator = new BrainmessIlGenerator(outputPath,program.Count(x=>x=='['),5000);
+            var containerStack = new Stack<List<IInstruction>>();
+            containerStack.Push(new List<IInstruction>());
             foreach(var instruction in program)
             {
                 switch(instruction)
                 {
                 case '>':
-                    generator.MoveTape(1);
+                    containerStack.Peek().Add(new MoveTape(1));
                     break;
                 case '<':
-                    generator.MoveTape(-1);
+                    containerStack.Peek().Add(new MoveTape(-1));
                     break;
                 case '+':
-                    generator.AddValue(1);
+                    containerStack.Peek().Add(new IncrementCurrentValue(1));
                     break;
                 case '-':
-                    generator.AddValue(-1);
+                    containerStack.Peek().Add(new IncrementCurrentValue(-1));
                     break;
                 case '.':
-                    generator.WriteCurrent();
+                    containerStack.Peek().Add(new WriteOutCurrentValue());
                     break;
                 case ',':
-                    generator.ReadAndStoreInput();
+                    containerStack.Peek().Add(new ReadAndStoreChar());
                     break;
                 case '[':
-                    generator.BeginLoop();
+                    containerStack.Push(new List<IInstruction>());
                     break;
                 case ']':
-                    generator.EndLoop();
+                    var instructions = containerStack.Pop();
+                    containerStack.Peek().Add(new WhileLoop(new InstructionContainer(instructions)));
                     break;
                 }
             }
+            var lexedProgram =new InstructionContainer(containerStack.Pop());
+
+            if(containerStack.Count >0)
+            {
+                throw new ArgumentException("Invalid program");
+            }
+
+            lexedProgram.Emit(generator);
             generator.FinalizeProgram();
         }
     }

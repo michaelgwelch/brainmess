@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B6BB83A3-C7E6-4D17-976D-CAB5F344ABA6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Bfc</RootNamespace>
+    <RootNamespace>Bmc</RootNamespace>
     <AssemblyName>bmc</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
@@ -39,6 +39,17 @@
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BrainmessIlGenerator.cs" />
+    <Compile Include="Lexigraph\WhileLoop.cs" />
+    <Compile Include="Lexigraph\ReadAndStoreChar.cs" />
+    <Compile Include="Lexigraph\IncrementCurrentValue.cs" />
+    <Compile Include="Lexigraph\MoveTape.cs" />
+    <Compile Include="Lexigraph\WriteOutCurrentValue.cs" />
+    <Compile Include="Lexigraph\IInstruction.cs" />
+    <Compile Include="IGenerator.cs" />
+    <Compile Include="Lexigraph\InstructionContainer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Lexigraph\" />
+  </ItemGroup>
 </Project>

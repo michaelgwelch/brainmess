@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Bmc
 {
-    public class BrainmessIlGenerator
+    public class BrainmessIlGenerator : IGenerator
     {
         private ILGenerator _ilg;
         private AssemblyBuilder _ab;
